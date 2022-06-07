@@ -1,0 +1,99 @@
+<?xml version="1.0"?>
+<!-- =================================================================================================================================
+  - @file       lidar.urdf.xacro
+  - @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+  - @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+  - @date       Sunday, 13th March 2022 12:34:06 pm
+  - @modified   Wednesday, 25th May 2022 11:44:44 pm
+  - @project    engineering-thesis
+  - @brief      Definition of the Gazebo plugins for URDF model of the LIDAR sensors of the WUT Velmwheel robot
+  - 
+  - 
+  - @see https://github.com/SICKAG/sick_scan_xd
+  - @copyright Krzysztof Pierczyk © 2022
+  - ================================================================================================================================== -->
+<robot name="lidar" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <!-- ================================================= Gazebo specification ================================================== -->
+
+    <xacro:macro name="lidar"  params="name">
+
+        <!-- LIDAR base -->
+        <gazebo reference="${name}_base">
+            <visual name="${name}_base">
+                <material>
+                    <script>
+                        <uri>file://materials/scripts/lidar.material</uri>
+                        <name>lidar/base</name>
+                    </script>
+                </material>
+            </visual>
+        </gazebo>
+
+        <!-- LIDAR hat -->
+        <gazebo reference="${name}_hat">
+            <visual name="${name}_hat">
+                <material>
+                    <script>
+                        <uri>file://materials/scripts/lidar.material</uri>
+                        <name>lidar/base</name>
+                    </script>
+                </material>
+            </visual>
+        </gazebo>
+
+        <!-- LIDAR core -->
+        <gazebo reference="${name}_core">
+
+            <!-- Visual geometry -->
+            <visual name="${name}_core">
+                <material>
+                    <script>
+                        <uri>file://materials/scripts/lidar.material</uri>
+                        <name>lidar/glass</name>
+                    </script>
+                </material>
+            </visual>
+
+            <!-- Sensorical model (Mode: 50Hz, 270°, sample each 0,5°) -->
+            <sensor name="lidar" type="ray">
+                <plugin name="${name}" filename="liblidar_gazebo.so">
+                    <ros>
+                        <parameter name="publishing_mode" type="string">__lidar_out_mode__</parameter>"
+                    </ros>
+                </plugin>
+                <visualize>__lidar_visualize__</visualize>
+                <update_rate>50</update_rate>
+                <ray>
+                    <scan>
+                        <horizontal>
+                            <samples>540</samples>
+                            <resolution>1</resolution>
+                            <min_angle>-0.7853982</min_angle>
+                            <max_angle>3.926991</max_angle>
+                        </horizontal>
+                    </scan>
+                    <range>
+                        <min>0.06</min>
+                        <max>20</max>
+                        <resolution>0.01</resolution>
+                    </range>
+                    <noise>
+                        <type>gaussian</type>
+                        <mean>0.0</mean>
+                        <stddev>0.012</stddev>
+                    </noise>
+                </ray>
+            </sensor>
+
+        </gazebo>
+
+    </xacro:macro>
+
+    <!-- Define LIDARs -->
+    <xacro:lidar name="lidar_l"/>
+    <xacro:lidar name="lidar_r"/>
+
+    <!-- ========================================================================================================================= -->
+
+</robot>

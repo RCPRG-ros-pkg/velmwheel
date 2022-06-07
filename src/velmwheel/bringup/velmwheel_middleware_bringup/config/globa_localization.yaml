@@ -1,0 +1,50 @@
+# ====================================================================================================================================
+# @file       globa_localization.yaml
+# @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+# @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+# @date       Tuesday, 29th March 2022 5:09:49 pm
+# @modified   Wednesday, 25th May 2022 4:44:01 pm
+# @project    engineering-thesis
+# @brief      Default configuration for the 'velmwheel_globa_localization' node
+#    
+#    
+# @copyright Krzysztof Pierczyk © 2022
+# ====================================================================================================================================
+
+/**:
+
+    # Node's parameters
+    ros__parameters:
+
+        # Default method of markers-matching (STD localization)
+        std_matching_method: "previous_transform"
+        # Fall-back method of markers-matching (STD localization)
+        std_matching_method_fallback: "neighbour_distance"        
+        # Maximal distance between estimated position of the incoming marker in the 'map' frame of reference 
+        # and position of the compared map marker for which node assumes that both points correspond to each 
+        # other in [m] used when the 'previous_transform' markers-matching method is used (STD localization)
+        std_previous_transform_match_threshold: 0.25        
+        # Maximal value of the mean difference betwen point-to-neighbour distances of matched neighbours in 
+        # the 'neighbour_distance' points-matching mode in [m] (STD localization)
+        std_mean_neighbours_distance_threshold: 0.15        
+        # Maximal value of the mean distance betwen point-to-neighbour translations of matched neighbours in 
+        # the 'neighbour_translation' points-matching mode in [m] (STD localization)
+        std_mean_neighbours_translation_threshold: 0.15
+
+        # Maximum correspondance distance for accepted match pairs (ICP localization)
+        icp_max_correspondance_distance: 100.0
+        # Epsilon (maximal accepted inter-iteration change) in the ICP transformation (ICP localization)
+        icp_transformation_epsilon: 1.0e-10
+        # Epsilon (maximal accepted inter-iteration change) in the fitness of point clouds (ICP localization)
+        icp_euclidean_fitness_epsilon: 0.001
+        # Maximum number of tierations of the ICP algorithm (ICP localization)
+        icp_maximum_iterations: 100
+
+
+
+
+
+
+
+
+

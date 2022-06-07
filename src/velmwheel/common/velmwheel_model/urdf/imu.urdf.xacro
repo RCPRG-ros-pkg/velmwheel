@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<!-- =================================================================================================================================
+  - @file       imu.urdf.xacro
+  - @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+  - @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+  - @date       Sunday, 13th March 2022 12:33:13 pm
+  - @modified   Wednesday, 25th May 2022 11:38:32 pm
+  - @project    engineering-thesis
+  - @brief      URDF model of the IMU sensor of the WUT Velmwheel robot
+  - 
+  - 
+  - @copyright Krzysztof Pierczyk © 2022
+  - ================================================================================================================================== -->
+<robot name="imu" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <!-- ======================================================= Includes ======================================================== -->
+
+    <xacro:include filename="$(find velmwheel_model)/urdf/materials/imu.urdf.xacro"/>
+
+    <!-- ====================================================== Parameters ======================================================= -->
+
+    <!-- Dimensions of the IMU module [m] -->
+    <xacro:property name="imu_width" value="0.01"/>
+    <xacro:property name="imu_length" value="0.01"/>
+    <xacro:property name="imu_height" value="0.01"/>
+    <!-- Mass of the IMU module [kg] -->
+    <xacro:property name="imu_mass" value="0.2"/>
+
+    <!-- ========================================================= Model ========================================================= -->
+
+    <xacro:macro name="imu_sensor">
+
+    <!-- ================================================== URDF specification =================================================== -->
+
+    <link name="imu_centre">
+        <visual name="imu">
+            <geometry>
+                <box size="${imu_width} ${imu_length} ${imu_height}"/>
+            </geometry>
+            <material name="imu_material"/>
+        </visual>
+        <inertial>
+            <mass value="${imu_mass}"/>
+            <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0" />
+        </inertial>
+    </link>
+
+    <!-- ========================================================================================================================= -->
+
+    </xacro:macro>
+
+</robot>

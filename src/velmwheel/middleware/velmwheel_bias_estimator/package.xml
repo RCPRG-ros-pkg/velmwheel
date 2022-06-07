@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+
+    <!-- Package's name -->
+    <name>velmwheel_bias_estimator</name>
+    <!-- Package's version -->
+    <version>0.0.0</version>
+    <!-- Package's description -->
+    <description>
+
+    Package providing Kalman-Filter-based processing node responsible for estimation of the current
+    orientation and angular velocity of the WUT Velmwheel robot on the 2D plain based on measurements
+    from IMU sensor and LIDARs-scan-based odometry data
+
+    </description>
+    <!-- Package's author -->
+    <author email="wojciechdudek.mail@gmail.com">Wojciech Dudek</author>
+    <!-- Package's maintainer -->
+    <maintainer email="krzysztof.pierczyk@gmail.com">Krzysztof Pierczyk</maintainer>
+    <!-- Package's license -->
+    <license>BSD</license>
+
+    <!-- Package's build dependencies -->
+    <buildtool_depend>ament_cmake</buildtool_depend>
+    <buildtool_depend>cmake_common</buildtool_depend>
+    <!-- Package's buildtime dependencies -->
+    <build_depend>rclcpp</build_depend>
+    <build_depend>rclcpp_components</build_depend>
+    <build_depend>node_common_cpp</build_depend>
+    <build_depend>std_msgs</build_depend>
+    <build_depend>std_srvs</build_depend>
+    <build_depend>geometry_msgs</build_depend>
+    <build_depend>sensor_msgs</build_depend>
+    <build_depend>tf2</build_depend>
+    <build_depend>tf2_eigen</build_depend>
+    <build_depend>tf2_geometry_msgs</build_depend>
+    <!-- Package's runtime dependencies -->
+    <exec_depend>rclcpp</exec_depend>
+    <exec_depend>rclcpp_components</exec_depend>
+    <exec_depend>std_msgs</exec_depend>
+    <exec_depend>std_srvs</exec_depend>
+    <exec_depend>geometry_msgs</exec_depend>
+    <exec_depend>sensor_msgs</exec_depend>
+    <exec_depend>tf2</exec_depend>
+    <exec_depend>tf2_eigen</exec_depend>
+    <exec_depend>tf2_geometry_msgs</exec_depend>
+    <!-- Package's runtime dependencies (launch) -->
+    <exec_depend>velmwheel_launch</exec_depend>
+
+    <!-- Package's exports -->
+    <export>
+        <build_type>ament_cmake</build_type>
+    </export>
+
+</package>

@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!-- =================================================================================================================================
+  - @file       velmwheel.urdf.xacro
+  - @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+  - @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+  - @date       Thursday, 19th May 2022 9:53:09 am
+  - @modified   Thursday, 26th May 2022 2:53:39 am
+  - @project    engineering-thesis
+  - @brief      Definition of the URDF materials of the WUT Velmwheel robot
+  -
+  - 
+  - @copyright Krzysztof Pierczyk © 2022
+  - ================================================================================================================================== -->
+<robot name="imu" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <!-- Materials definitions for Velmwheel components -->
+    <material name="velmwheel_wheels_material">
+        <color rgba="1 0.5 0 1"/>
+    </material>
+    <material name="velmwheel_rollers_material">
+        <color rgba="0.5 0.5 0.5 1.0"/>
+    </material>
+    <material name="velmwheel_base_material">
+        <color rgba="1 0.5 0 1"/>
+    </material>
+
+</robot>

@@ -1,0 +1,6 @@
+[submodule "extern/bash-utils"]
+	path = extern/bash-utils
+	url = https://github.com/kpierczy/bash-utils
+[submodule "extern/ros/sick_scan_xd"]
+	path = extern/ros/sick_scan_xd
+	url = https://github.com/SICKAG/sick_scan_xd

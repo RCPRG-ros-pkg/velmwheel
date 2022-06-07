@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+
+    <!-- Package's name -->
+    <name>velmwheel_common</name>
+    <!-- Package's version -->
+    <version>0.0.0</version>
+    <!-- Package's description -->
+    <description>Interface package depending on all packages common across different domains of WUT Velmwheel robot's development</description>
+    <!-- Package's author -->
+    <author email="krzysztof.pierczyk@gmail.com">Krzysztof Pierczyk</author>
+    <!-- Package's maintainer -->
+    <maintainer email="krzysztof.pierczyk@gmail.com">Krzysztof Pierczyk</maintainer>
+    <!-- Package's license -->
+    <license>BSD</license>
+
+    <!-- Package's dependencies -->
+    <depend>velmwheel_model</depend>
+    <depend>velmwheel_msgs</depend>
+    <depend>velmwheel_launch</depend>
+
+</package>

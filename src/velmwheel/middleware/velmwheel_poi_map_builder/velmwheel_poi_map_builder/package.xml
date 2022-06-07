@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+
+    <!-- Package's name -->
+    <name>velmwheel_poi_map_builder</name>
+    <!-- Package's version -->
+    <version>0.0.0</version>
+    <!-- Package's description -->
+    <description>
+    
+    ROS2 port of part of the <i>poi_map_builder</i> ROS package originally by Wojtek Dudek. The package provides
+    (component-like) nodes for automating the process of building and visualization of intensity map based on the stream
+    of incoming intensity markers for the WUT Velmwheel robot
+    
+    </description>
+    <!-- Package's author -->
+    <author email="wojciechdudek.mail@gmail.com">Wojtek Dudek</author>
+    <!-- Package's maintainer -->
+    <maintainer email="krzysztof.pierczyk@gmail.com">Krzysztof Pierczyk</maintainer>
+    <!-- Package's license -->
+    <license>BSD</license>
+
+    <!-- Package's build dependencies -->
+    <buildtool_depend>ament_cmake</buildtool_depend>
+    <buildtool_depend>ament_cmake_python</buildtool_depend>
+    <buildtool_depend>cmake_common</buildtool_depend>
+    <!-- Package's buildtime dependencies -->
+    <build_depend>rclcpp</build_depend>
+    <build_depend>rclcpp_components</build_depend>
+    <build_depend>node_common_cpp</build_depend>
+    <build_depend>sensor_msgs</build_depend>
+    <build_depend>visualization_msgs</build_depend>
+    <build_depend>poi_map_msgs</build_depend>
+    <build_depend>velmwheel_poi_map_builder_msgs</build_depend>
+    <build_depend>pcl_ros</build_depend>
+    <build_depend>pcl_conversions</build_depend>
+    <build_depend>tf2</build_depend>
+    <build_depend>tf2_ros</build_depend>
+    <build_depend>poi_map_lib</build_depend>
+    <build_depend>velmwheel_model</build_depend>
+    <!-- Package's runtime dependencies -->
+    <exec_depend>rclcpp</exec_depend>
+    <exec_depend>rclcpp_components</exec_depend>
+    <exec_depend>sensor_msgs</exec_depend>
+    <exec_depend>visualization_msgs</exec_depend>
+    <exec_depend>poi_map_msgs</exec_depend>
+    <exec_depend>velmwheel_poi_map_builder_msgs</exec_depend>
+    <exec_depend>pcl_ros</exec_depend>
+    <exec_depend>pcl_conversions</exec_depend>
+    <exec_depend>tf2</exec_depend>
+    <exec_depend>tf2_ros</exec_depend>
+    <exec_depend>poi_map_lib</exec_depend>
+    <exec_depend>velmwheel_model</exec_depend>
+    <!-- Package's runtime dependencies (launch) -->
+    <exec_depend>velmwheel_launch</exec_depend>
+    
+    <!-- Package's exports -->
+    <export>
+        <build_type>ament_cmake</build_type>
+    </export>
+
+</package>

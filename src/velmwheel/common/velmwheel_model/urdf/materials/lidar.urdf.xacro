@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!-- =================================================================================================================================
+  - @file       lidar.urdf.xacro
+  - @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+  - @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+  - @date       Thursday, 19th May 2022 9:53:09 am
+  - @modified   Thursday, 26th May 2022 2:53:44 am
+  - @project    engineering-thesis
+  - @brief      Definition of the URDF material of the LIDAR sensor of the WUT Velmwheel robot
+  - 
+  - @copyright Krzysztof Pierczyk © 2022
+  - ================================================================================================================================== -->
+<robot name="imu" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <!-- Materials definitions for LIDAR sensor -->
+    <material name="lidar_base_material">
+        <color rgba="0.07 0.44 0.91 1.00"/>
+    </material>
+    <material name="lidar_glass_material">
+        <color rgba="0.1 0.1 0.1 1.0"/>
+    </material>
+
+</robot>

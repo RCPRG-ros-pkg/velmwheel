@@ -1,0 +1,59 @@
+# ====================================================================================================================================
+# @file       odom_fusion_custom.yaml
+# @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+# @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+# @date       Tuesday, 29th March 2022 5:09:49 pm
+# @modified   Wednesday, 13th April 2022 12:43:10 am
+# @project    engineering-thesis
+# @brief
+#    
+#    Default configuration for the velmwheel_odom_fusion node
+#    
+# @copyright Krzysztof Pierczyk © 2022
+# ====================================================================================================================================
+
+/**:
+
+    # Node's parameters
+    ros__parameters:
+
+        # 6-element vector representing acceleration gain of the robot's controls in the [ v_x, v_y, v_z, v_roll, v_pitch, v_yaw ] order
+        control_acc_gain: [ 1.3, 1.3, 1.3, 1.3, 1.3, 4.5 ]
+        # 6-element vector representing acceleration limits of the robot's controls in the [ v_x, v_y, v_z, v_roll, v_pitch, v_yaw ] order
+        control_acc_limits: [ 0.8, 1.3, 1.3, 1.3, 1.3, 0.9 ]
+        # 6-element vector representing deceleration gain of the robot's controls in the [ v_x, v_y, v_z, v_roll, v_pitch, v_yaw ] order
+        control_dec_gain: [ 1.3, 1.3, 1.3, 1.3, 1.3, 4.5 ]
+        # 6-element vector representing deceleration limits of the robot's controls in the [ v_x, v_y, v_z, v_roll, v_pitch, v_yaw ] order
+        control_dec_limits: [ 1.0, 1.3, 1.3, 1.3, 1.3, 1.0 ]
+        # Timeout value, in seconds, after which a control is considered stale
+        control_timeout_s: 0.1
+
+        # Process (noise) uncertianty (covariance) 15x15 matrix of the model [Q] given as 225-element row-major array
+        process_noise_covariance: [
+
+            0.05 , 0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0   , 0.0   , 0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0   ,
+            0.0  , 0.05 , 0.0  , 0.0  , 0.0  , 0.0  , 0.0   , 0.0   , 0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0   ,
+            0.0  , 0.0  , 0.06 , 0.0  , 0.0  , 0.0  , 0.0   , 0.0   , 0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0   ,
+            0.0  , 0.0  , 0.0  , 0.03 , 0.0  , 0.0  , 0.0   , 0.0   , 0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0   ,
+            0.0  , 0.0  , 0.0  , 0.0  , 0.03 , 0.0  , 0.0   , 0.0   , 0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0   ,
+            0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.06 , 0.0   , 0.0   , 0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0   ,
+            0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.025 , 0.0   , 0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0   ,
+            0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0   , 0.025 , 0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0   ,
+            0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0   , 0.0   , 0.04 , 0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0   ,
+            0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0   , 0.0   , 0.0  , 0.01 , 0.0  , 0.0  , 0.0  , 0.0  , 0.0   ,
+            0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0   , 0.0   , 0.0  , 0.0  , 0.01 , 0.0  , 0.0  , 0.0  , 0.0   ,
+            0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0   , 0.0   , 0.0  , 0.0  , 0.0  , 0.02 , 0.0  , 0.0  , 0.0   ,
+            0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0   , 0.0   , 0.0  , 0.0  , 0.0  , 0.0  , 0.01 , 0.0  , 0.0   ,
+            0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0   , 0.0   , 0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.01 , 0.0   ,
+            0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0   , 0.0   , 0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.015
+            
+        ]
+
+        # Timeout value, in seconds, after which a sensor measurement is considered stale
+        sensor_timeout_s: 0.1
+
+        # The measurements Mahalanobis distance threshold in number of sigmas of the filter
+        mahalanobis_threshold: 2.0
+        
+        # Name of the output file for debug logs produced by the filtering module (set an empty string to disable debug logging)        
+        # debug_log_file: "odom_fusion_debug_log.txt"

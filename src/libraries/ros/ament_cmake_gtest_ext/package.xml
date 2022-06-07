@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+
+    <!-- Package's name -->
+    <name>ament_cmake_gtest_ext</name>
+    <!-- Package's version -->
+    <version>0.0.0</version>
+    <!-- Package's description -->
+    <description>
+
+    The ability to add gtest-based tests in the ament buildsystem in CMake (extension of the ament_cmake_gtest package).
+    This package is provided to extend interface of `ament_add_gtest` CMake tool with ability to add prefix and postfix
+    string to the command that the registered test is run with
+    
+    </description>
+    <!-- Package's authors -->
+    <author>Dirk Thomas</author>
+    <author email="michael.jeronimo@openrobotics.org">Michael Jeronimo</author>
+    <author email="michel@ekumenlabs.com">Michel Hidalgo</author>
+    <!-- Package's maintainer -->
+    <maintainer email="krzysztof.pierczyk@gmail.com">Krzysztof Pierczyk</maintainer>
+    <!-- Package's license -->
+    <license>Apache License 2.0</license>
+
+    <!-- Package's build dependencies -->
+    <buildtool_depend>ament_cmake_core</buildtool_depend>
+    <!-- Package's build export dependencies -->
+    <buildtool_export_depend>ament_cmake_test</buildtool_export_depend>
+    <buildtool_export_depend>gtest</buildtool_export_depend>
+    <buildtool_export_depend>gtest_vendor</buildtool_export_depend>
+
+    <!-- Package's exports -->
+    <export>
+        <build_type>ament_cmake</build_type>
+    </export>
+
+</package>

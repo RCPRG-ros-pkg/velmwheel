@@ -1,0 +1,62 @@
+/'' ==================================================================================================================================
+ ' @file       map_builder.plantuml
+ ' @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+ ' @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+ ' @date       Sunday, 3rd April 2022 12:40:51 am
+ ' @modified   Sunday, 3rd April 2022 1:06:58 am
+ ' @project    engineering-thesis
+ ' @brief
+ '    
+ '    UML diagram describing poi-map-building ('poi' refers to points-of-interest) subsystem provided by the package. Precisely,
+ '    it refers to the velmwheel::points_of_interest::Map builder class
+ '    
+ ' @copyright Krzysztof Pierczyk © 2022
+ ' ================================================================================================================================ '/
+
+@startuml map_builder
+
+interface input_laser as "Laser Scans (1)                             "
+interface input       as "...       "
+interface input_cloud as "Point Cloud (N)                            "
+
+' System
+cloud "Map builder" as map_builder {
+
+    ' Incoming scans are filtered
+    input_laser -- [ Data Filter (1)   ]
+    input       -- [ Data Filter (...) ]
+    input_cloud -- [ Data Filter (N)   ]
+
+    ' Filtered data is transforming icoming data into homogeneous form
+    [ Data Filter (1)   ] --> [ Data Converter (1)   ] : "  (filtered scan)"
+    [ Data Filter (...) ] --> [ Data Converter (...) ] : "  (filtered scan)"
+    [ Data Filter (N)   ] --> [ Data Converter (N)   ] : "  (filtered scan)"
+
+    ' Input markers are passed to the 'temporary-map builder'
+    [ Data Converter (1)   ] --> [ Temporary Map Builder ] : "  (input markers)"
+    [ Data Converter (...) ] --> [ Temporary Map Builder ] : "  (input markers)"
+    [ Data Converter (N)   ] --> [ Temporary Map Builder ] : "  (input markers)"
+
+    ' Content of the 'temporary-map' is used to generator 'global' map
+    [ Temporary Map Builder ] --> [ Global Map Builder ] : "  (local PoI)"
+
+}
+
+' Local PoI observed by the robot in the near past
+interface temporary_map_markers_robot as "        Temporary map markers <fixed FoR>"
+' Global PoI observed by the robot in the whole lifecycle
+interface map_markers as "Map markers <fixed FoR>                "
+' Local PoI observed by the robot in the near past
+interface temporary_map_markers_fixed as "Temporary map markers <fixed FoR>"
+
+
+[ Temporary Map Builder ] ---> temporary_map_markers_robot
+[ Global Map Builder ]    -->  map_markers
+[ Temporary Map Builder ] ---> temporary_map_markers_fixed
+
+
+note left of map_markers
+  "FoR" expands to "Frame of Reference"
+end note
+
+@enduml

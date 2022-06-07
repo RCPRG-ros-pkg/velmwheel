@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format2.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+
+    <!-- Package's name -->
+    <name>robot_localization_api</name>
+    <!-- Package's version -->
+    <version>3.2.4</version>
+    <!-- Package's description -->
+    <description>
+    
+    Provides nonlinear state estimation through sensor fusion of an abritrary number of sensors.
+        
+    </description>
+    <!-- Package's website -->
+    <url type="website">http://ros.org/wiki/robot_localization</url>
+    <!-- Package's author -->
+    <author email="ayrton04@gmail.com">Tom Moore</author>
+    <author email="stevenmacenski@gmail.com">Steve Macenski</author>
+    <!-- Package's maintainer -->
+    <maintainer email="krzysztof.pierczyk@gmail.com">Krzysztof Pierczyk</maintainer>
+    <!-- Package's license -->
+    <license>Apache License 2.0</license>
+
+    <!-- Package's buildtool dependencies -->
+    <buildtool_depend>ament_cmake</buildtool_depend>
+    <buildtool_depend>builtin_interfaces</buildtool_depend>
+    <buildtool_depend>rosidl_default_generators</buildtool_depend>
+    <buildtool_depend>cmake_common</buildtool_depend>
+    <!-- Package's build dependencies -->
+    <build_depend>libboost-dev</build_depend>
+    <build_depend>rclcpp</build_depend>
+    <build_depend>rmw_implementation</build_depend>
+    <!-- Package's build export dependencies -->
+    <build_export_depend>libboost-dev</build_export_depend>
+    <!-- Package's dependencies -->
+    <depend>eigen</depend>
+    <depend>geographic_msgs</depend>
+    <depend>geometry_msgs</depend>
+    <depend>diagnostic_msgs</depend>
+    <depend>diagnostic_updater</depend>
+    <depend>geographiclib</depend>
+    <depend>message_filters</depend>
+    <depend>nav_msgs</depend>
+    <depend>sensor_msgs</depend>
+    <depend>std_msgs</depend>
+    <depend>std_srvs</depend>
+    <depend>tf2</depend>
+    <depend>tf2_eigen</depend>
+    <depend>tf2_geometry_msgs</depend>
+    <depend>tf2_ros</depend>
+    <depend>yaml_cpp_vendor</depend>
+    <!-- Package's runtime dependencies -->
+    <exec_depend>rosidl_default_runtime</exec_depend>
+    <exec_depend>rclcpp</exec_depend>
+    <exec_depend>rmw_implementation</exec_depend>
+
+    <!-- Package's grouping -->
+    <member_of_group>rosidl_interface_packages</member_of_group>
+    <!-- Package's exports -->
+    <export>
+        <build_type>ament_cmake</build_type>
+    </export>
+    
+</package>

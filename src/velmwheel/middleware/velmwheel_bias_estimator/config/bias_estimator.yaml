@@ -1,0 +1,24 @@
+# ====================================================================================================================================
+# @file       bias_estimator.yaml
+# @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+# @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+# @date       Tuesday, 22nd March 2022 3:12:52 am
+# @modified   Wednesday, 25th May 2022 4:44:01 pm
+# @project    engineering-thesis
+# @brief      Default configuration for the velmwheel_bias_estimator node
+#    
+#    
+# @copyright Krzysztof Pierczyk © 2022
+# ====================================================================================================================================
+
+/**:
+
+    # Parameters
+    ros__parameters:
+
+        # Initial value of the P matrix (estimate uncertainty) given as row-major 2x2 matrix
+        P_init: [ 0.1, 0.0, 0.001, 0.001 ] 
+        # Value of the diagonal elements of the Q matrix (process noise uncertainty)
+        Q: [ 0.8, 0.007 ]
+        # Value of the measurement uncertainty of the filter (due to limited observation matrix H it influences only odometry measurements)
+        R: 0.001

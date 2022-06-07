@@ -1,0 +1,149 @@
+<?xml version="1.0"?>
+<!-- =================================================================================================================================
+  - @file       velmwheel.urdf.xacro
+  - @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+  - @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+  - @date       Wednesday, 9th March 2022 7:42:42 pm
+  - @modified   Wednesday, 25th May 2022 11:44:59 pm
+  - @project    engineering-thesis
+  - @brief      Definition of the Gazebo plugins for URDF model of the WUT Velmwheel robot
+  -    
+  -    
+  -    
+  - @see http://gazebosim.org/tutorials?tut=ros_urdf&cat=connect_ros
+  - @see https://nu-msr.github.io/me495_site/lecture10_sdf_gazebo.html
+  - @copyright Krzysztof Pierczyk © 2022
+  - ================================================================================================================================== -->
+<robot name="velmwheel" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <!-- ======================================================= Includes ======================================================== -->
+
+    <!-- Include robot's description -->
+    <xacro:include filename="$(find velmwheel_model)/urdf/velmwheel.urdf.xacro"/>
+
+    <!-- ======================================================== Macros ========================================================= -->
+
+    <!-- Build gazebo specificiation for the wheel link -->
+    <xacro:macro name="wheel_gazebo" params="dir side x_fsign y_fsign">
+
+        <gazebo reference="wheel_${dir}${side}">
+            <visual name="wheel_${dir}${side}">
+				<material>
+					<script>
+						<uri>file://materials/scripts/velmwheel.material</uri>
+						<name>velmwheel/wheels</name>
+					</script>
+				</material>
+			</visual>
+			<collision name="wheel_${dir}${side}">
+				<surface>
+					<friction>
+						<ode>
+							<mu>0.95</mu>
+							<mu2>0.5</mu2>
+							<fdir1>"${x_fsign * 0.707106781186548} ${y_fsign * 0.707106781186548} 0"</fdir1>
+							<slip1>0.001</slip1>
+							<slip2>0.1</slip2>
+						</ode>
+						<bullet>
+							<friction>1</friction>
+							<friction2>0</friction2>
+                            <fdir1>"${x_fsign * 0.707106781186548} ${y_fsign * 0.707106781186548} 0"</fdir1>
+							<rolling_friction>0</rolling_friction>
+						</bullet>
+					</friction>
+				</surface>
+			</collision>
+        </gazebo>
+
+        <gazebo reference="wheel_${dir}${side}_rollers">
+			<visual name="wheel_${dir}${side}_rollers">
+				<material>
+					<script>
+						<uri>file://materials/scripts/velmwheel.material</uri>
+						<name>velmwheel/rollers</name>
+					</script>
+				</material>
+			</visual>
+        </gazebo>
+        
+        <gazebo reference="wheel_${dir}${side}_rollers_joint">
+            <preserveFixedJoint>true</preserveFixedJoint>
+        </gazebo>
+
+    </xacro:macro>
+
+    <!-- ============================================= Gazebo specification (robot) ============================================== -->
+
+    <!-- Robot plugins -->
+    <gazebo>
+
+        <!-- Driver plugin for ROS integration -->
+		<plugin name="sim" filename="librobot_gazebo.so"/>
+		<plugin name="base" filename="libbase_gazebo.__base_plugin_impl__.so"/>
+        <!-- Model's pose -->
+		<pose>0 0 "${base_z_offset}" 0 0 0</pose>
+        <!-- Model type -->
+		<static>false</static>
+
+    </gazebo>
+
+    <!-- =========================================== Gazebo specification (components) =========================================== -->
+
+    <!-- Base link -->
+    <gazebo reference="base">
+        <visual name="base">
+            <material>
+                <script>
+                    <uri>file://materials/scripts/velmwheel.material</uri>
+                    <name>velmwheel/base</name>
+                </script>
+            </material>
+        </visual>
+    </gazebo>
+
+    <!-- Mobile front -->
+    <gazebo reference="front">
+        <visual name="front">
+            <material>
+                <script>
+                    <uri>file://materials/scripts/velmwheel.material</uri>
+                    <name>velmwheel/base</name>
+                </script>
+            </material>
+        </visual>
+    </gazebo>
+
+    <!-- 
+      - @note Direction of the mu1 (first component of the friction, <fdir1>) is the same for
+      -    fl-rr and fr-rl pairs of wheels as diretion of rollers is the same. That was not the
+      -    case in the original model
+     -->
+
+    <!-- Rear right wheel -->
+    <xacro:wheel_gazebo dir="r" side="r" x_fsign="1"  y_fsign="-1"/>
+    <!-- Rear left wheel -->
+    <xacro:wheel_gazebo dir="r" side="l" x_fsign="1"  y_fsign="1"/>
+    <!-- Front right wheel -->
+    <xacro:wheel_gazebo dir="f" side="r" x_fsign="1" y_fsign="1"/>
+    <!-- Front left wheel -->
+    <xacro:wheel_gazebo dir="f" side="l" x_fsign="1" y_fsign="-1"/>
+
+    <!-- Keep sensors links separated -->
+    <gazebo reference="lidar_l_centre_joint">
+        <preserveFixedJoint>true</preserveFixedJoint>
+    </gazebo>
+    <gazebo reference="lidar_r_centre_joint">
+        <preserveFixedJoint>true</preserveFixedJoint>
+    </gazebo>
+    <gazebo reference="imu_centre_joint">
+        <preserveFixedJoint>true</preserveFixedJoint>
+    </gazebo>
+
+    <!-- Include Gazebo subdescriptions -->
+    <xacro:include filename="$(find velmwheel_gazebo)/urdf/imu.urdf.xacro"/>
+    <xacro:include filename="$(find velmwheel_gazebo)/urdf/lidar.urdf.xacro"/>
+    
+    <!-- ========================================================================================================================= -->
+
+</robot>

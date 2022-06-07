@@ -1,0 +1,29 @@
+*
+# Some workspace settings
+!.vscode/c_cpp_properties.json
+!.vscode/extensions.json
+!.vscode/keybindings.json
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/vsicons-custom-icons/
+!.vscode/vsicons-custom-icons/**
+# Documens
+!doc/**
+# External projects' folder
+!extern/
+!extern/**
+# Helper scripts
+!scripts/
+!scripts/**
+# Spike code
+!spike/
+!spike/**
+# Source code
+!src/
+!src/**
+# Tools folder
+!tools/.gitignore
+# Others
+!source_me.bash
+!readme.md
+!.gitignore

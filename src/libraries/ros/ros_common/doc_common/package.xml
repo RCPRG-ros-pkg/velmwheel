@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+
+    <!-- Package's name -->
+    <name>doc_common</name>
+    <!-- Package's version -->
+    <version>0.0.0</version>
+    <!-- Package's description -->
+    <description>
+
+    Set of common CMake routines and files templates speeding-up documentation building process.
+    
+    </description>
+    <!-- Package's authors -->
+    <author email="krzysztof.pierczyk@gmail.com">Krzysztof Pierczyk</author>
+    <!-- Package's maintainer -->
+    <maintainer email="krzysztof.pierczyk@gmail.com">Krzysztof Pierczyk</maintainer>
+    <!-- Package's license -->
+    <license>Apache License 2.0</license>
+
+    <!-- Package's build dependencies -->
+    <buildtool_depend>ament_cmake</buildtool_depend>
+    <buildtool_depend>ament_cmake_python</buildtool_depend>
+    <!-- Package's build export dependencies -->
+    <buildtool_export_depend>ament_cmake</buildtool_export_depend>
+    <!-- Package's buildtime export dependencies -->
+    <build_export_depend>ament_index_python</build_export_depend>
+    <!-- Package's runtime dependencies -->
+    <exec_depend>ament_index_python</exec_depend>
+
+    <!-- Package's exports -->
+    <export>
+        <build_type>ament_cmake</build_type>
+    </export>
+
+</package>

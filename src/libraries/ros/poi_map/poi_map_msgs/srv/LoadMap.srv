@@ -1,0 +1,21 @@
+# ====================================================================================================================================
+# @file       LoadMap.srv
+# @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+# @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+# @date       Friday, 1st April 2022 2:04:16 pm
+# @modified   Wednesday, 25th May 2022 4:37:13 pm
+# @project    engineering-thesis
+# @brief      Auxiliary service message type describing a request-response model for asking a node for loading a current PoI map
+#    
+#    
+# @see https://github.com/dudekw/poi_map_msgs
+# @copyright Krzysztof Pierczyk © 2022
+# ====================================================================================================================================
+
+# Path to the file under which the map shall be loaded
+string file_path
+---
+# Servic'e status (@c true on success)
+bool succeeded
+# (Optional) Error reaosn
+string reason

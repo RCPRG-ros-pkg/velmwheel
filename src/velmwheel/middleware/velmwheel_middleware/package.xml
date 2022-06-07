@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+
+    <!-- Package's name -->
+    <name>velmwheel_middleware</name>
+    <!-- Package's version -->
+    <version>0.0.0</version>
+    <!-- Package's description -->
+    <description>
+    
+    Interface package depending on all packages of the WUT Velmwheel robot related to the core driving
+    functionalities of the system including basic controllers and subsystems responsible for sensorical
+    data analysis
+
+    </description>
+    <!-- Package's author -->
+    <author email="krzysztof.pierczyk@gmail.com">Krzysztof Pierczyk</author>
+    <!-- Package's maintainer -->
+    <maintainer email="krzysztof.pierczyk@gmail.com">Krzysztof Pierczyk</maintainer>
+    <!-- Package's license -->
+    <license>BDS</license>
+    
+    <!-- Package's build dependencies -->
+    <buildtool_depend>ament_cmake</buildtool_depend>
+    <!-- Package's dependencies -->
+    <depend>velmwheel_base_controller</depend>
+    <depend>velmwheel_bias_estimator</depend>
+    <depend>velmwheel_global_localization</depend>
+    <depend>velmwheel_laser_odom</depend>
+    <depend>velmwheel_odom_fusion</depend>
+    <depend>velmwheel_poi_map_builder</depend>
+    <depend>velmwheel_slam</depend>
+
+    <!-- Package's exports -->
+    <export>
+        <build_type>ament_cmake</build_type>
+    </export>
+
+
+</package>

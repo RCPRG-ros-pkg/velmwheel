@@ -1,0 +1,42 @@
+# ====================================================================================================================================
+# @file       common.doxyfile
+# @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+# @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+# @date       Tuesday, 24th May 2022 1:01:14 pm
+# @modified   Tuesday, 24th May 2022 2:54:56 pm
+# @project    engineering-thesis
+# @brief      Doxygen config file containing common configuration used by the projects' packages
+# 
+# 
+# @copyright Krzysztof Pierczyk © 2022
+# ====================================================================================================================================
+
+# ============================================================= Sources ============================================================ #
+
+# Source files
+RECURSIVE = YES
+# Files pattern
+FILE_PATTERNS = \
+    *.c         \
+    *.h         \
+    *.cpp       \
+    *.c++       \
+    *.hpp       \
+    *.yaml      \
+    *.md        \
+    *.py
+
+# ====================================================== Documentation config ====================================================== #
+
+# Command aliases (file headers)
+ALIASES += maintainer="@par Maintainer^^"
+ALIASES += modified="@par Modified^^"
+ALIASES += project="@par Project^^"
+# Command aliases (code)
+ALIASES += performance="@par Performance^^"
+ALIASES += synchronised="@par Synchronised^^ This routine is thread-safe"
+
+# Don't rearrange order of members
+SORT_MEMBER_DOCS = YES
+# Use non-standard method for generating mathematics
+USE_MATHJAX = YES

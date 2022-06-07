@@ -1,0 +1,21 @@
+# ====================================================================================================================================
+# @file       SaveMap.srv
+# @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+# @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+# @date       Thursday, 31st March 2022 12:18:42 pm
+# @modified   Wednesday, 25th May 2022 4:37:25 pm
+# @project    engineering-thesis
+# @brief      Auxiliary service message type describing a request-response model for asking a node for saving a current PoI map
+#    
+#    
+# @see https://github.com/dudekw/poi_map_msgs
+# @copyright Krzysztof Pierczyk © 2022
+# ====================================================================================================================================
+
+# Path to the file under which the map shall be saved
+string file_path
+---
+# Servic'e status (@c true on success)
+bool succeeded
+# (Optional) Error reaosn
+string reason

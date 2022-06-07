@@ -1,0 +1,35 @@
+# ====================================================================================================================================
+# @file       poi_map_builder.yaml
+# @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+# @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+# @date       Friday, 1st April 2022 12:28:36 am
+# @modified   Wednesday, 25th May 2022 4:44:01 pm
+# @project    engineering-thesis
+# @brief      Default configuration for the 'velmwheel_poi_map_builder' node
+#    
+#    
+# @copyright Krzysztof Pierczyk © 2022
+# ====================================================================================================================================
+
+/**:
+
+    # Node's parameters
+    ros__parameters:
+
+        # Common paramaters
+        distance_limit: 0.05
+        intensity_threshold: 1500 
+        intensity_limit: 100000.0
+        save_intensity_threshold: 200.0
+        visualization_threshold: 1000.0
+        visualization_publish_rate: 10.0
+
+        # Map parameters
+        map_markers_limit: 200
+        map_markers_namespace: map_markers
+        map_distance_matching_threshold: [ 0.4, 0.1 ]
+
+        # Temporary-map parameters
+        temporary_map_markers_limit: 30
+        temporary_map_markers_namespace: temporary_map_markers
+        temporary_map_distance_matching_threshold: [ 0.1, 0.1 ]

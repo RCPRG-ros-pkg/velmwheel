@@ -1,0 +1,126 @@
+<?xml version="1.0"?>
+<!-- =================================================================================================================================
+  - @file       lidar.urdf.xacro
+  - @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+  - @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+  - @date       Sunday, 13th March 2022 12:34:06 pm
+  - @modified   Wednesday, 25th May 2022 11:38:57 pm
+  - @project    engineering-thesis
+  - @brief      URDF model of the LIDAR sensors of the WUT Velmwheel robot
+  -    
+  -    
+  - @see https://cdn.sick.com/media/docs/7/27/927/technical_information_telegram_listing_ranging_sensors_lms1xx_lms5xx_tim2xx_tim5xx_tim7xx_lms1000_mrs1000_mrs6000_nav310_ld_oem15xx_ld_lrs36xx_lms4000_en_im0045927.pdf
+  - @see https://www.sick.com/ag/en/detection-and-ranging-solutions/2d-lidar-sensors/lms1xx/c/g91901
+  - @copyright Krzysztof Pierczyk © 2022
+  - ================================================================================================================================== -->
+<robot name="lidar" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <!-- ======================================================= Includes ======================================================== -->
+
+    <xacro:include filename="$(find velmwheel_model)/urdf/materials/lidar.urdf.xacro"/>
+
+    <!-- ====================================================== Parameters ======================================================= -->
+
+    <!-- Dimensions of the LIDAR module [m] -->
+    <xacro:property name="lidar_radius" value="0.051"/>
+    <xacro:property name="lidar_length" value="0.152"/>
+    <xacro:property name="lidar_radius_base" value="0.051"/>
+    <xacro:property name="lidar_length_base" value="0.098"/>
+    <xacro:property name="lidar_radius_hat" value="0.047"/>
+    <xacro:property name="lidar_length_hat" value="0.019"/>
+    <xacro:property name="lidar_radius_core" value="0.04"/>
+    <xacro:property name="lidar_length_core" value="0.04"/>
+    <!-- Mass of the LIDAR module [kg] -->
+    <xacro:property name="lidar_mass_base_hat" value="1.1"/>
+    <xacro:property name="lidar_mass_core" value="0.05"/>
+    <!-- Positions of the LIDAR module [m] -->
+    <xacro:property name="lidar_position_base" value="0 0 -0.027"/>
+    <xacro:property name="lidar_position_hat" value="0 0 0.066"/>
+    <xacro:property name="lidar_position_heart" value="0 0 0.039"/>
+
+    <!-- ========================================================= Model ========================================================= -->
+
+    <xacro:macro name="lidar_sensor" params="name">
+
+    <!-- ================================================== URDF specification =================================================== -->
+
+    <!--
+     - @note LIDAR base and hat has been smashed into two links in comparison to the original
+     -     version of the simulator. This is only a visual change as the collider model remains
+     -     the same and is entirely held by the base link. The reason of this change is a bug
+     -     in the Gazebo's URDF-SDF converter that does not use distinct materials defined 
+     -     for many <visual> tags in the <gazebo> element and insteads picks the first material
+     -     defined to covery all <visual> elements in the resulting SDF link
+    -->
+
+    <!-- LIDAR centre -->
+    <link name="${name}_centre"/>
+
+    <!-- LIDAR base -->
+    <link name="${name}_base">
+        <visual name="${name}_base">
+            <geometry>
+                <cylinder radius="${lidar_radius_base}" length="${lidar_length_base}"/>
+            </geometry>
+            <origin xyz="${lidar_position_base}"/>
+            <material name="lidar_base_material"/>
+        </visual>
+        <collision>
+            <geometry>
+                <cylinder radius="${lidar_radius}" length="${lidar_length}"/>
+            </geometry>
+        </collision>
+        <inertial>
+            <mass value="${lidar_mass_base_hat}"/>
+            <inertia ixx="0.00283314166" ixy="0.0" ixz="0.0" iyy="0.00283314166" iyz="0.0" izz="0.00143055"/>
+        </inertial>
+        
+    </link>
+    <!-- Base-centre link -->
+    <joint name="${name}_base_centre_joint" type="fixed">
+        <parent link="${name}_centre"/>
+        <child link="${name}_base"/>
+    </joint>
+
+    <!-- LIDAR base -->
+    <link name="${name}_hat">
+        <visual name="${name}_hat">
+            <geometry>
+                <cylinder radius="${lidar_radius_hat}" length="${lidar_length_hat}"/>
+            </geometry>
+            <origin xyz="${lidar_position_hat}"/>
+            <material name="lidar_base_material"/>
+        </visual>
+    </link>
+    <!-- Base-centre link -->
+    <joint name="${name}_hat_centre_joint" type="fixed">
+        <parent link="${name}_centre"/>
+        <child link="${name}_hat"/>
+    </joint>
+
+    <!-- LIDAR core -->
+    <link name="${name}_core">
+        <visual name="${name}_core">
+            <geometry>
+                <cylinder radius="${lidar_radius_core}" length="${lidar_length_core}"/>
+            </geometry>
+            <material name="lidar_glass_material"/>
+        </visual>
+        <inertial>
+            <mass value="${lidar_mass_core}"/>
+            <inertia ixx="0.0000008333" ixy="0.0" ixz="0.0" iyy="0.0000008333" iyz="0.0" izz="0.0000008333"/>
+        </inertial>     
+    </link>
+
+    <!-- Link's joint -->
+    <joint name="${name}_core_centre_joint" type="fixed">
+        <parent link="${name}_centre"/>
+        <child link="${name}_core"/>
+        <origin xyz="${lidar_position_heart}"/>
+    </joint>
+
+    <!-- ========================================================================================================================= -->
+
+    </xacro:macro>
+
+</robot>

@@ -1,0 +1,2 @@
+#define PACKAGE "@libuio_PROJECT_NAME@"
+#define VERSION "@libuio_VERSION@"

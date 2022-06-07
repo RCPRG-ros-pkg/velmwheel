@@ -1,0 +1,48 @@
+# ====================================================================================================================================
+# @file       Doxyfile
+# @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+# @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+# @date       Tuesday, 24th May 2022 1:03:12 pm
+# @modified   Wednesday, 25th May 2022 1:32:31 am
+# @project    engineering-thesis
+# @brief      Configuration of the Doxygen generator
+# 
+# 
+# @copyright Krzysztof Pierczyk © 2022
+# ====================================================================================================================================
+
+# ======================================================== General settings ======================================================== #
+
+# Project info
+PROJECT_NAME   = "package_common_cpp"
+PROJECT_NUMBER = $(ROS_DISTRO)
+PROJECT_BRIEF  = "Package implementing common mechanisms for playing with ROS2 packages"
+
+# Compilation seetings
+GENERATE_HTML  = YES
+GENERATE_LATEX = YES
+
+# ============================================================= Sources ============================================================ #
+
+# Source files
+INPUT = ./include ./src
+# Source files config
+RECURSIVE = YES
+# Files pattern
+FILE_PATTERNS = *.hpp *.cpp
+
+# ====================================================== Documentation config ====================================================== #
+
+# Command aliases (file headers)
+ALIASES += maintainer="@par Maintainer^^"
+ALIASES += modified="@par Modified^^"
+ALIASES += project="@par Project^^"
+
+# Elements extraction
+EXTRACT_PRIVATE = YES
+# Don't rearrange order of members
+SORT_MEMBER_DOCS = YES
+# Use non-standard method for generating mathematics
+USE_MATHJAX = YES
+
+# ================================================================================================================================== #

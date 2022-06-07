@@ -1,0 +1,218 @@
+<?xml version="1.0"?>
+<!-- =================================================================================================================================
+  - @file       velmwheel.urdf.xacro
+  - @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+  - @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+  - @date       Wednesday, 9th March 2022 7:42:42 pm
+  - @modified   Wednesday, 25th May 2022 11:39:20 pm
+  - @project    engineering-thesis
+  - @brief      URDF model of the WUT Velmwheel robot
+  -    
+  -    
+  -    
+  - @copyright Krzysztof Pierczyk © 2022
+  - @see http://wiki.ros.org/urdf/XML/link
+  - @see http://wiki.ros.org/urdf/XML/joint
+  - ================================================================================================================================== -->
+<robot name="velmwheel" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <!-- ======================================================= Includes ======================================================== -->
+
+    <xacro:include filename="$(find velmwheel_model)/urdf/materials/velmwheel.urdf.xacro"/>
+    <xacro:include filename="$(find velmwheel_model)/urdf/imu.urdf.xacro"/>
+    <xacro:include filename="$(find velmwheel_model)/urdf/lidar.urdf.xacro"/>
+    <xacro:include filename="$(find velmwheel_model)/urdf/kinect.urdf.xacro"/>
+
+    <!-- ====================================================== Parameters ======================================================= -->
+
+    <!-- Dimensions of the links [m] -->
+    <xacro:property name="wheel_radius" value="${0.1016}"/>
+
+    <!-- Mass of the links [kg] -->
+    <xacro:property name="base_mass" value="60"/>
+    <xacro:property name="front_mass" value="15"/>
+    <xacro:property name="wheel_mass" value="1.6"/>
+
+    <!-- Positions of the links [m] -->
+    <xacro:property name="base_z_offset" value="0.1035"/>
+    <xacro:property name="base_link_centre_offset" value="0 0 ${base_z_offset - 0.019}"/>
+    <xacro:property name="base_centre_offset" value="-0.081 0 0.019"/>
+    <xacro:property name="front_base_offset" value="0.445 0 -0.001"/>
+    <xacro:property name="lidar_l_centre_offset" value="0 0.3 0.176"/>
+    <xacro:property name="lidar_l_orientation" value="0 0 0"/>
+    <xacro:property name="lidar_r_centre_offset" value="0 -0.3 0.176"/>
+    <xacro:property name="lidar_r_orientation" value="0 0 -3.141592"/>
+    <xacro:property name="imu_centre_ofset" value="0 0 0"/>
+    <xacro:property name="wheel_y_offset" value="0.38"/>
+    <xacro:property name="wheel_centre_x_offset" value="0.36"/>
+    <xacro:property name="wheel_r_base_x_offset" value="${-wheel_centre_x_offset + 0.081}"/>
+    <xacro:property name="wheel_f_front_x_offset" value="${0.445 - 0.081 - wheel_centre_x_offset}"/>
+
+    <!-- ======================================================== Macros ========================================================= -->
+
+    <!-- Builds wheel link -->
+    <xacro:macro name="wheel" params="dir side wheel_model side_reflect parent wheel_x_offset">
+
+        <!--
+         - @note Wheel rollers and middle part has been smashed into two links in comparison to the 
+         -     original version of the simulator. This is only a visual change as the collider model
+         -     remains the same and is entirely held by the middle link. The reason of this change 
+         -     is a bug in the Gazebo's URDF-SDF converter that does not use distinct materials defined 
+         -     for many <visual> tags in the <gazebo> element and insteads picks the first material
+         -     defined to covery all <visual> elements in the resulting SDF link
+         -  @note In ros-galactic there is a bug in `rviz` that makes all <visual> parts of the single
+         -     <link> colored with the metrial of the first <visual> element only.
+         -  @note '*_rollers' link requires the <inertial> element to be properly parsed by the Gazebo's
+         -     URDF-SDF parser. For these reason small, insignificant mass is added to the model
+         -->
+
+		<link name="wheel_${dir}${side}">
+			<visual name="wheel_${dir}${side}">
+				<geometry>
+                    <mesh filename="package://velmwheel_model/models/velmwheel/standard/visual/wheel.stl"/>
+				</geometry>
+                <material name="velmwheel_wheels_material"/>
+			</visual>
+			<collision name="wheel_${dir}${side}">
+				<geometry>
+					<sphere radius="${wheel_radius}"/>
+				</geometry>
+			</collision>
+			<inertial>
+				<mass value="${wheel_mass}"/>
+				<inertia ixx="0.004738485" ixy="0.0" ixz="0.0" iyy="0.008" iyz="0.0" izz="0.004738485"/>
+			</inertial>
+		</link>
+
+		<joint name="motor_${dir}${side}" type="continuous">
+			<parent link="${parent}"/>
+			<child link="wheel_${dir}${side}"/>
+            <origin xyz="${wheel_x_offset} ${side_reflect * wheel_y_offset} 0"/>
+			<axis xyz="0 1 0"/>
+		</joint>
+
+		<link name="wheel_${dir}${side}_rollers">
+			<visual name="wheel_${dir}${side}_rollers">
+				<geometry>
+                    <mesh filename="package://velmwheel_model/models/velmwheel/standard/visual/wheel_${wheel_model}.stl"/>
+				</geometry>
+                <material name="velmwheel_rollers_material"/>
+			</visual>
+			<inertial>
+				<mass value="0.0001"/>
+				<inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+			</inertial>
+		</link>
+
+		<joint name="wheel_${dir}${side}_rollers_joint" type="fixed">
+			<parent link="wheel_${dir}${side}"/>
+			<child link="wheel_${dir}${side}_rollers"/>
+		</joint>
+
+    </xacro:macro>
+
+    <!-- =================================================== Robot description =================================================== -->
+
+    <!-- Base link -->
+    <link name="base_link"/>
+
+    <!-- Robot's centre -->
+    <link name="centre_link"/>
+    <!-- Base-link-centre joint -->
+    <joint name="centre_joint" type="fixed">
+        <parent link="base_link"/>
+        <child link="centre_link"/>
+        <origin xyz="${base_link_centre_offset}"/>
+    </joint>
+
+    <!-- Base block -->
+    <link name="base">
+        <visual name="base">
+            <geometry>
+                <mesh filename="package://velmwheel_model/models/velmwheel/standard/visual/base.stl"/>
+            </geometry>
+            <material name="velmwheel_base_material"/>
+        </visual>
+        <collision name="base">
+            <geometry>
+                <mesh filename="package://velmwheel_model/models/velmwheel/standard/collider/base.dae"/>
+            </geometry>
+        </collision>
+        <inertial>
+            <mass value="${base_mass}"/>
+            <inertia ixx="2.94" ixy="0.0" ixz="0.0" iyy="2.72" iyz="0.0" izz="5.40"/>
+        </inertial>
+    </link>
+    <!-- Base-centre joint -->
+    <joint name="base_joint" type="fixed">
+        <parent link="centre_link"/>
+        <child link="base"/>
+        <origin xyz="${base_centre_offset}"/>
+    </joint>
+
+    <!-- Mobile front -->
+    <link name="front">
+        <visual name="front">
+            <geometry>
+                <mesh filename="package://velmwheel_model/models/velmwheel/standard/visual/front.stl"/>
+            </geometry>
+            <material name="velmwheel_base_material"/>
+        </visual>
+        <collision name="front">
+            <geometry>
+                <mesh filename="package://velmwheel_model/models/velmwheel/standard/collider/front.dae"/>
+            </geometry>
+        </collision>
+        <inertial>
+            <mass value="${front_mass}"/>
+            <inertia ixx="0.7351" ixy="0.0" ixz="0.0" iyy="0.0771" iyz="0.0" izz="0.7483"/>
+        </inertial>
+    </link>
+
+    <!-- Base-front joint -->
+    <joint name="middle_joint" type="continuous">
+        <parent link="base"/>
+        <child link="front"/>
+        <origin xyz="${front_base_offset}"/>
+        <axis xyz="1 0 0"/>
+    </joint>
+
+    <!-- Left LIDAR sensors -->
+    <xacro:lidar_sensor name="lidar_l"/>
+    <!-- Left LIDAR-centre join -->
+    <joint name="lidar_l_centre_joint" type="fixed">
+        <parent link="centre_link"/>
+        <child link="lidar_l_centre"/>
+        <origin xyz="${lidar_l_centre_offset}" rpy="${lidar_l_orientation}"/>
+    </joint>
+
+    <!-- Right LIDAR sensors -->
+    <xacro:lidar_sensor name="lidar_r"/>
+    <!-- Right LIDAR-centre join -->
+    <joint name="lidar_r_centre_joint" type="fixed">
+        <parent link="centre_link"/>
+        <child link="lidar_r_centre"/>
+        <origin xyz="${lidar_r_centre_offset}" rpy="${lidar_r_orientation}"/>
+    </joint>
+
+    <!-- IMU sensor -->
+    <xacro:imu_sensor/>
+    <!-- IMU-centre join -->
+    <joint name="imu_centre_joint" type="fixed">
+        <parent link="centre_link"/>
+        <child link="imu_centre"/>
+        <origin xyz="${imu_centre_ofset}"/>
+    </joint>
+
+    <!-- Rear right wheel -->
+    <xacro:wheel dir="r" side="r" wheel_model="l" side_reflect="-1" parent="base" wheel_x_offset="${wheel_r_base_x_offset}"/>
+    <!-- Rear left wheel -->
+    <xacro:wheel dir="r" side="l" wheel_model="r" side_reflect="1"  parent="base" wheel_x_offset="${wheel_r_base_x_offset}"/>
+    <!-- Front right wheel -->
+    <xacro:wheel dir="f" side="r" wheel_model="r" side_reflect="-1" parent="front" wheel_x_offset="${wheel_f_front_x_offset}"/>
+    <!-- Front left wheel -->
+    <xacro:wheel dir="f" side="l" wheel_model="l" side_reflect="1"  parent="front" wheel_x_offset="${wheel_f_front_x_offset}"/>
+    
+    <!-- ========================================================================================================================= -->
+
+</robot>

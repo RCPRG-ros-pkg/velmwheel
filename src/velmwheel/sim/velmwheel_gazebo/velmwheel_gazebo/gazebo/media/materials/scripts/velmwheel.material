@@ -1,0 +1,35 @@
+material velmwheel/wheels {
+    receive_shadows on
+    technique {
+        pass {
+            ambient 1 0.5 0 1
+            diffuse 1 0.5 0 1
+            specular 0.8 0.8 0.8 1
+            shading gouraud
+        }
+    }
+}
+
+material velmwheel/rollers {
+    receive_shadows on
+    technique {
+        pass {
+            ambient 0.5 0.5 0.5 1.0
+            diffuse 0.5 0.5 0.5 1.0
+            specular 0.8 0.8 0.8 1
+            shading gouraud
+        }
+    }
+}
+
+material velmwheel/base {
+    receive_shadows on
+    technique {
+        pass {
+            ambient 1 0.5 0 1
+            diffuse 1 0.5 0 1
+            specular 0.8 0.8 0.8 1
+            shading gouraud
+        }
+    }
+}

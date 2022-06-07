@@ -1,0 +1,168 @@
+# ====================================================================================================================================
+# @file       slam.yaml
+# @author     Steve Macenski (stevenmacenski@gmail.com)
+# @author     Michel Hidalgo (michel@ekumenlabs.com)
+# @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+# @date       Wednesday, 13th April 2022 3:37:38 am
+# @modified   Wednesday, 25th May 2022 11:19:05 pm
+# @project    engineering-thesis
+# @brief      Default configuration for the slam node
+#    
+#    
+# @note This configuration is based on the 'mapper_params_online_sync.yaml' from the `slam_toolbox` package
+# @copyright Krzysztof Pierczyk © 2022
+# ====================================================================================================================================
+
+/**:
+
+    # Node's parameters
+    ros__parameters:
+
+        # ==================================================== Solver parameters =================================================== #
+
+        # The type of nonlinear solver to utilize for karto's scan solver
+        solver_plugin: solver_plugins::CeresSolver
+        # The linear solver for Ceres to use
+        ceres_linear_solver: SPARSE_NORMAL_CHOLESKY
+        # The preconditioner to use with that solver
+        ceres_preconditioner: SCHUR_JACOBI
+        # The trust region strategy. Line searach strategies are not exposed because they perform poorly for this use
+        ceres_trust_strategy: LEVENBERG_MARQUARDT
+        # The dogleg strategy to use if the trust strategy is `DOGLEG`
+        ceres_dogleg_type: TRADITIONAL_DOGLEG
+        # The type of loss function to reject outlier measurements. None is equatable to a squared loss
+        ceres_loss_function: None
+
+        # Mode ('mapping' or 'localization') for performance optimizations in the Ceres problem creation
+        mode: mapping 
+
+        # =================================================== Toolbox parameters =================================================== #
+
+        # Odometry reference TF frame
+        # odom_frame: odom
+        # Map TF frame
+        # map_frame: map
+        # Base TF frame of the robot
+        # base_frame: base_link
+        # Scans topic
+        # scan_topic: /scan
+
+        # --------------------------------------------------------------------------------
+        # if you'd like to immediately start continuing a map at a given pose
+        # or at the dock, but they are mutually exclusive, if pose is given will use pose,
+        # uncomen following map_* configurations
+        # --------------------------------------------------------------------------------
+
+        # Name of the pose-graph file to load on startup if available
+        # map_file_name: test_steve
+        # Pose to start pose-graph mapping/localization in, if available
+        # map_start_pose: [0.0, 0.0, 0.0]
+        # Starting pose-graph loading at the dock (first node), if available. If both pose and dock are set, it will use pose
+        # map_start_at_dock: true
+
+        # Change logger to debug
+        debug_logging: false
+        # Number of scans to throttle in synchronous mode
+        throttle_scans: 1
+        # The map to odom transform publish period. 0 will not publish transforms ( no transformaiton if @c 0 )
+        transform_publish_period: 0.02 
+        # Interval to update the 2D occupancy map for other applications / visualization
+        map_update_interval: 5.0
+
+        # Whether or not to allow for interactive mode to be enabled. Interactive mode will retain a cache of laser scans mapped 
+        # to their ID for visualization in interactive mode. As a result the memory for the process will increase. This is manually
+        # disabled in localization and lifelong modes since they would increase the memory utilization over time. Valid for either 
+        # mapping or continued mapping modes.
+        enable_interactive_mode: true
+        
+        # Resolution of the 2D occupancy map to generate
+        resolution: 0.05
+        # Maximum laser range to use for 2D occupancy map rastering
+        max_laser_range: 20.0 
+        # The minimum duration of time between scans to be processed in synchronous mode
+        minimum_time_interval: 0.5
+        # TF timeout for looking up transforms
+        transform_timeout: 0.2
+        # Duration to store TF messages for lookup. Set high if running offline at multiple times speed in synchronous mode. 
+        tf_buffer_duration: 30.
+        
+        # The number of bytes to reset the stack size to, to enable serialization/deserialization of larger files. A liberal default
+        # is 40000000, but less is fine.
+        stack_size_to_use: 40000000 
+
+        # Minimum distance of travel before processing a new scan
+        minimum_travel_distance: 0.5
+
+        # ===================================================== Matcher Params ===================================================== #
+        
+        # whether to use scan matching to refine odometric pose (uh, why would you not?)
+        use_scan_matching: true
+        # Whether to use the barycenter or scan pose
+        use_scan_barycenter: true
+        # Minimum changing in heading to justify an update
+        minimum_travel_heading: 0.5
+        # The number of scans to buffer into a chain, also used as the number of scans in the circular buffer of localization mode
+        scan_buffer_size: 10
+        # Maximum distance of a scan from the pose before removing the scan from the buffer
+        scan_buffer_maximum_scan_distance: 10.0
+        # The threshold link matching algorithm response for fine resolution to pass 
+        link_match_minimum_response_fine: 0.1  
+        # Maximum distance between linked scans to be valid
+        link_scan_maximum_distance: 1.5
+        # Maximum threshold of distance for scans to be considered for loop closure 
+        loop_search_maximum_distance: 3.0
+        # Whether to do loop closure (if you're not sure, the answer is "true")
+        do_loop_closing: true 
+        # The minimum chain length of scans to look for loop closure
+        loop_match_minimum_chain_size: 10           
+        # The threshold variance in coarse search to pass to refine
+        loop_match_maximum_variance_coarse: 3.0  
+        # The threshold response of the loop closure algorithm in coarse search to pass to refine
+        loop_match_minimum_response_coarse: 0.35    
+        # The threshold response of the loop closure algorithm in fine search to pass to refine
+        loop_match_minimum_response_fine: 0.45
+
+        # ------------------------------------------------
+        # Correlation Parameters - Correlation Parameters
+        # ------------------------------------------------
+
+        # Search grid size to do scan correlation over
+        correlation_search_space_dimension: 0.5
+        # Search grid resolution to do scan correlation over
+        correlation_search_space_resolution: 0.01
+        # Amount of multimodal smearing to smooth out responses
+        correlation_search_space_smear_deviation: 0.1 
+
+        # ------------------------------------------------
+        # Correlation Parameters - Loop Closure Parameters
+        # ------------------------------------------------
+        
+        # Size of the search grid over the loop closure algorith
+        loop_search_space_dimension: 8.0
+        # Search grid resolution to do loop closure over
+        loop_search_space_resolution: 0.05
+        # Amount of multimodal smearing to smooth out responses
+        loop_search_space_smear_deviation: 0.03
+
+        # ------------------------------------------------
+        # Scan Matcher Parameters
+        # ------------------------------------------------
+        
+        # A penalty to apply to a matched scan as it differs from the odometric pose
+        distance_variance_penalty: 0.5      
+        # A penalty to apply to a matched scan as it differs from the odometric pose
+        angle_variance_penalty: 1.0    
+        # Range of angles to test for fine scan matching
+        fine_search_angle_offset: 0.00349     
+        # Range of angles to test for coarse scan matching
+        coarse_search_angle_offset: 0.349   
+        # Resolution of angles over the Offset range to test in scan matching
+        coarse_angle_resolution: 0.0349        
+        # Smallest penalty an angle can have to ensure the size doesn't blow up
+        minimum_angle_penalty: 0.9
+        # Smallest penalty a scan can have to ensure the size doesn't blow up
+        minimum_distance_penalty: 0.5
+        # Whether to automatically increase the search grid size if no viable match is found
+        use_response_expansion: true
+
+        # ========================================================================================================================== #

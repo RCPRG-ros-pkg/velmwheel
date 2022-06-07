@@ -1,0 +1,109 @@
+<!-- =================================================================================================================================
+  - @file     model.sdf
+  - @author   Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+  - @date     Monday, 7th March 2022 3:27:05 pm
+  - @modified Wednesday, 9th March 2022 6:27:06 pm
+  - @project  engineering-thesis
+  - @brief
+  -    
+  -    SDF description of the IMU sensors of the WUT Velmobil robot
+  -    
+  - @note Noise values are taken from 'some' [?] example and don't fit the IMU device precisely
+  - @copyright Krzysztof Pierczyk © 2022
+  - @source https://github.com/RCPRG-ros-pkg/omnivelma
+  - ================================================================================================================================== -->
+
+<?xml version="1.0" ?>
+<sdf version="1.7">
+	<model name="imu">
+		
+		<!-- ========================================================== Model ========================================================== -->
+        
+		<link name="base">
+
+            <!-- Position -->
+			<pose>0 0 0 0 0 0</pose>
+
+            <!-- Visual geometry -->
+			<visual name="base_visual">
+				<pose>0 0 0 0 0 0</pose>
+				<geometry>
+					<box>
+						<size>0.01 0.01 0.01</size>
+					</box>
+				</geometry>
+				<material>
+					<script>
+						<uri>file://materials/scripts/imu.material</uri>
+						<name>imu/base</name>
+					</script>
+				</material>
+			</visual>
+
+            <!-- Sensorical model -->
+			<sensor name="imu" type="imu">
+                <plugin name="imu" filename="libimu_gazebo.so"/>
+				<visualize>false</visualize>
+                <always_on>true</always_on>
+				<imu>
+					<angular_velocity>
+						<x>
+							<noise type="gaussian">
+								<mean>0.0</mean>
+								<stddev>2e-4</stddev>
+								<bias_mean>0.0000075</bias_mean>
+								<bias_stddev>0.0000008</bias_stddev>
+							</noise>
+						</x>
+						<y>
+							<noise type="gaussian">
+								<mean>0.0</mean>
+								<stddev>2e-4</stddev>
+								<bias_mean>0.0000075</bias_mean>
+								<bias_stddev>0.0000008</bias_stddev>
+							</noise>
+						</y>
+						<z>
+							<noise type="gaussian">
+								<mean>0.0</mean>
+								<stddev>2e-4</stddev>
+								<bias_mean>0.0000075</bias_mean>
+								<bias_stddev>0.0000008</bias_stddev>
+							</noise>
+						</z>
+					</angular_velocity>
+					<linear_acceleration>
+						<x>
+							<noise type="gaussian">
+								<mean>0.0</mean>
+								<stddev>1.7e-2</stddev>
+								<bias_mean>0.1</bias_mean>
+								<bias_stddev>0.001</bias_stddev>
+							</noise>
+						</x>
+						<y>
+							<noise type="gaussian">
+								<mean>0.0</mean>
+								<stddev>1.7e-2</stddev>
+								<bias_mean>0.1</bias_mean>
+								<bias_stddev>0.001</bias_stddev>
+							</noise>
+						</y>
+						<z>
+							<noise type="gaussian">
+								<mean>0.0</mean>
+								<stddev>1.7e-2</stddev>
+								<bias_mean>0.1</bias_mean>
+								<bias_stddev>0.001</bias_stddev>
+							</noise>
+						</z>
+					</linear_acceleration>
+				</imu>
+			</sensor>
+            
+		</link>
+
+        <!-- ===================================================================================================================== -->
+        
+	</model>
+</sdf>

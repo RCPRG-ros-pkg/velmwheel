@@ -1,0 +1,40 @@
+# ====================================================================================================================================
+# @file       default.doxyfile
+# @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+# @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+# @date       Monday, 23rd May 2022 9:52:09 pm
+# @modified   Tuesday, 24th May 2022 3:26:08 pm
+# @project    engineering-thesis
+# @brief      Template of the Doxygen config file containing package-specific configuration set commonly used by the projects' 
+#             packages
+# 
+# 
+# @copyright Krzysztof Pierczyk © 2022
+# ====================================================================================================================================
+
+# ======================================================== General settings ======================================================== #
+
+# Project info
+PROJECT_NAME   = "@DOXYGEN_PROJECT_NAME@"
+PROJECT_NUMBER = "@DOXYGEN_PROJECT_NUMBER@"
+PROJECT_BRIEF  = "@DOXYGEN_PROJECT_BRIEF@"
+
+# Compilation logs
+GENERATE_HTML  = "@DOXYGEN_GENERATE_HTML@"
+GENERATE_LATEX = "@DOXYGEN_GENERATE_LATEX@"
+
+# ============================================================= Sources ============================================================ #
+
+# Source files
+INPUT = "@DOXYGEN_INPUT_DIRS@"
+# Excluded files
+EXCLUDE = "@DOXYGEN_EXCLUDE@"
+# Excluded files
+EXCLUDE_PATTERNS = "@DOXYGEN_EXCLUDE_PATTERNS@"
+
+# ====================================================== Documentation config ====================================================== #
+
+# Elements extraction
+EXTRACT_PRIVATE = "@DOXYGEN_EXTRACT_PRIVATE@"
+
+# ================================================================================================================================== #

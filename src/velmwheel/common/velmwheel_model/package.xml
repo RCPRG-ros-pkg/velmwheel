@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+
+    <!-- Package's name -->
+    <name>velmwheel_model</name>
+    <!-- Package's version -->
+    <version>0.0.0</version>
+    <!-- Package's description -->
+    <description>Package containing URDF description of the WUT Velmwheel robot</description>
+    <!-- Package's author -->
+	<author email="antyradek@protonmail.com">Antyradek</author>
+    <!-- Package's maintainer -->
+    <maintainer email="krzysztof.pierczyk@gmail.com">Krzysztof Pierczyk</maintainer>
+    <!-- Package's license -->
+    <license>GPLv3</license>
+
+    <!-- Package's build dependencies -->
+    <buildtool_depend>ament_cmake</buildtool_depend>
+    <buildtool_depend>ament_cmake_python</buildtool_depend>
+    <!-- Package's dependencies -->
+    <depend>geometry_msgs</depend>
+    <depend>velmwheel_msgs</depend>
+
+    <!-- Package's exports -->
+    <export>
+
+        <!-- Build exports -->
+        <build_type>ament_cmake</build_type>
+        <!-- Simulators exports (at the moment there is no clear way to move it to `velmwheel_gazebo` package) -->
+        <gazebo_ros gazebo_media_path="${prefix}"/>
+        
+    </export>
+
+</package>

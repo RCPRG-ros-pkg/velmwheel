@@ -1,0 +1,26 @@
+# ====================================================================================================================================
+# @file       ChangeMode.srv
+# @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+# @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+# @date       Friday, 1st April 2022 2:04:16 pm
+# @modified   Wednesday, 25th May 2022 4:45:05 pm
+# @project    engineering-thesis
+# @brief      Auxiliary service message type describing a request-response model for asking a points-of-interests map builder node
+#             for changing the current mode
+#    
+#    
+# @copyright Krzysztof Pierczyk © 2022
+# ====================================================================================================================================
+
+# Possible modes
+uint8 IDLE     = 0
+uint8 WATCHING = 1
+uint8 MAPPING  = 2
+
+# Mode to be set
+uint8 mode
+---
+# Servic'e status (@c true on success)
+bool succeeded
+# (Optional) Error reaosn
+string reason

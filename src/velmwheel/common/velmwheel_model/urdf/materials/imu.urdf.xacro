@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!-- =================================================================================================================================
+  - @file       imu.urdf.xacro
+  - @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+  - @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+  - @date       Thursday, 19th May 2022 9:53:09 am
+  - @modified   Thursday, 26th May 2022 2:53:49 am
+  - @project    engineering-thesis
+  - @brief      Definition of the URDF material of the IMU sensor of the WUT Velmwheel robot
+  - 
+  - 
+  - @copyright Krzysztof Pierczyk © 2022
+  - ================================================================================================================================== -->
+<robot name="imu" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <!-- Materials definitions for IMU sensor -->
+    <material name="imu_material">
+        <color rgba="0.3 0.3 0.3 1"/>
+    </material>
+
+</robot>

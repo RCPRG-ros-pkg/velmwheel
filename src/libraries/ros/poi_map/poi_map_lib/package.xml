@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+
+    <!-- Package's name -->
+    <name>poi_map_lib</name>
+    <!-- Package's version -->
+    <version>0.0.0</version>
+    <!-- Package's description -->
+    <description>
+    
+    The package providing a C++ library for building a map of PoI (Points of Interest) markers located 
+    in the 2D space. Based on the part of the <i>poi_map_msgs</i> ROS package originally by Wojtek Dudek. 
+    
+    </description>
+    <!-- Package's author -->
+    <author email="wojciechdudek.mail@gmail.com">Wojtek Dudek</author>
+    <author email="krzysztof.pierczyk@gmail.com">Krzysztof Pierczyk</author>
+    <!-- Package's maintainer -->
+    <maintainer email="krzysztof.pierczyk@gmail.com">Krzysztof Pierczyk</maintainer>
+    <!-- Package's license -->
+    <license>BSD</license>
+
+    <!-- Package's build dependencies -->
+    <buildtool_depend>ament_cmake</buildtool_depend>
+    <buildtool_depend>cmake_common</buildtool_depend>
+    <buildtool_depend>doc_common</buildtool_depend>
+    <!-- Package's build dependencies -->
+    <build_depend>rclcpp</build_depend>
+    <build_depend>std_msgs</build_depend>
+    <build_depend>geometry_msgs</build_depend>
+    <build_depend>visualization_msgs</build_depend>
+    <build_depend>poi_map_msgs</build_depend>
+    <build_depend>tf2</build_depend>
+    <!-- Package's runtime dependencies -->
+    <exec_depend>rclcpp</exec_depend>
+    <exec_depend>std_msgs</exec_depend>
+    <exec_depend>geometry_msgs</exec_depend>
+    <exec_depend>visualization_msgs</exec_depend>
+    <exec_depend>poi_map_msgs</exec_depend>
+    <exec_depend>tf2</exec_depend>
+    
+    <!-- Package's exports -->
+    <export>
+        <build_type>ament_cmake</build_type>
+    </export>
+
+</package>
