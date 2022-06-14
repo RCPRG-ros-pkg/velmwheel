@@ -1,0 +1,5 @@
+<library path="velmwheel_imu_driver">
+    <class type="velmwheel::ImuDriver" base_class_type="velmwheel::EthercatSlaveDriver">
+        <description>Driver plugin for the IMU EtherCAT slave.</description>
+    </class>
+</library>

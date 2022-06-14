@@ -2,7 +2,7 @@
 # @file     building.bash
 # @author   Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @date     Tuesday, 1st March 2022 4:11:56 pm
-# @modified   Wednesday, 25th May 2022 10:44:48 pm
+# @modified   Tuesday, 14th June 2022 3:49:53 pm
 # @project  engineering-thesis
 # @brief
 #    
@@ -35,11 +35,20 @@ function colbuild_base() {
     # Let's allow local packegs' overwitting
     COLCON_BUILD_FLAGS+="--allow-overriding ${packages_list[@]}"
 
+    # Jump to the root directory
+    pushd $PROJECT_HOME > /dev/null
+
     # Build packages
-    
     colbuild -v ${@:3} &&
     # Source install directory
-    source $PROJECT_HOME/install/setup.bash
+    source $PROJECT_HOME/install/setup.bash || {
+    # Handle error
+        popd > /dev/null
+        return 1    
+    }
+
+    # Back to the caller's directory
+    popd > /dev/null
 }
 
 # ---------------------------------------------------------------------------------------
@@ -55,7 +64,7 @@ function colbuild_src() {
     # Prepare source paths
     local SOURCE_DIRS="$PROJECT_HOME/src"
     # Build
-    colbuild_base "$SOURCE_DIRS" "" "" "$@" || {
+    colbuild_base "$SOURCE_DIRS" "" "$@" || {
     # On error return
         log_error "Failed to build source directory"
         return 1
@@ -69,14 +78,14 @@ function colbuild_src() {
 # ---------------------------------------------------------------------------------------
 function colbuild_prj() {
 
-    log_info "Building extern directory..."
+    log_info "Building extern/ros directory..."
 
     # Prepare source paths
     local SOURCE_DIRS="$PROJECT_HOME/extern/ros"
     # Prepare CMake flags paths (disable LDMRS Sick LIDARs support in the producer's ROS package)
     local CMAKE_FLAGS="-DBUILD_WITH_LDMRS_SUPPORT=OFF"
     # Build external dependencies
-    colbuild_base "$SOURCE_DIRS" "$CMAKE_FLAGS" || {
+    colbuild_base "$SOURCE_DIRS" "$CMAKE_FLAGS" "$@" || {
     # On error return
         log_error "Failed to build extern directory"
         return 1

@@ -1,0 +1,26 @@
+# ====================================================================================================================================
+# @file       SetBiasOffsets.srv
+# @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+# @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+# @date       Monday, 30th May 2022 5:29:26 pm
+# @modified   Monday, 30th May 2022 5:58:39 pm
+# @project    engineering-thesis
+# @brief      Service message type describing a request-response model for asking an IMU sensor driver for setting bias offsets 
+#             of gyro and acceleration sensors of each axis
+#    
+#    
+# @copyright Krzysztof Pierczyk © 2022
+# ====================================================================================================================================
+
+# Bias offsets of accelerations sensor
+velmwheel_imu_driver_msgs/AccelerationBiasOffsets acceleration
+# Bias offsets of gyro sensor
+velmwheel_imu_driver_msgs/GyroBiasOffsets gyro
+
+---
+
+# True if biases has been sucesfully set
+bool success
+# Human readable error message if success is @c false, else empty string.
+string error_message
+

@@ -28,6 +28,7 @@
     <depend>launch_common</depend>
     <depend>node_common_cpp</depend>
     <depend>package_common_cpp</depend>
+    <depend>package_common_py</depend>
 
     <!-- Package's exports -->
     <export>

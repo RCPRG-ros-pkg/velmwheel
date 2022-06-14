@@ -3,7 +3,7 @@
  * @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
  * @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
  * @date       Wednesday, 16th March 2022 4:37:20 pm
- * @modified   Tuesday, 31st May 2022 4:16:24 pm
+ * @modified   Tuesday, 14th June 2022 4:04:53 pm
  * @project    engineering-thesis
  * @brief      Definitions of API implementing common routines related to ROS2 parameters system
  * 
@@ -155,12 +155,13 @@ std::optional<T> get_param(rclcpp::Node &node, std::string_view name) {
 
     /**
      * @brief Get the parameter (if parameter has not be initialized, treat it as unset)
-     * @note The @ref rclcpp::exceptions::ParameterUninitializedException exception is not
-     *    described as part of the throw set of the @ref get_param() method
+     * @note The @ref rclcpp::exceptions::ParameterUninitializedException exception that
+     *    is actually thrown by get_parameter() is not described as part of the throw set
+     *    of the @ref get_param() method . For this reason catch any exception to be safe.
      */
     try {
         param = node.get_parameter(name_str);
-    } catch (rclcpp::exceptions::ParameterUninitializedException &ex) {
+    } catch (...) {
         return std::optional<T>{};
     }
     

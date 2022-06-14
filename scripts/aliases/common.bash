@@ -2,7 +2,7 @@
 # @file     common.bash
 # @author   Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @date     Tuesday, 1st March 2022 4:11:56 pm
-# @modified   Thursday, 7th April 2022 5:39:58 pm
+# @modified   Tuesday, 14th June 2022 8:01:37 pm
 # @project  engineering-thesis
 # @brief
 #    
@@ -17,3 +17,11 @@
 alias rosdep_install_src="
 rosdep install -i --from-path src --rosdistro $PROJECT_ROS_DISTRO -y
 "
+
+# ---------------------------------------------------------------------------------------
+# @brief Prints git history in a pretty form
+# @see https://stackoverflow.com/questions/1057564/pretty-git-branch-graphs
+# ---------------------------------------------------------------------------------------
+function git_adog() {
+    git log --all --decorate --oneline --graph
+}

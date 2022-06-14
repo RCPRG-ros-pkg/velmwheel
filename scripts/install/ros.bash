@@ -24,8 +24,8 @@ export ROS2_DISTRO="$PROJECT_ROS_DISTRO"
 main() {
 
     # Install ros
-    if ! is_pkg_installed "ros-${ROS2_DISTRO}-desktop"; then
-        $BASH_UTILS_BIN_HOME/install/ros/ros.bash --distro=$ROS2_DISTRO install pkg
+    if ! is_pkg_installed "ros-${PROJECT_ROS_DISTRO}-desktop"; then
+        $BASH_UTILS_BIN_HOME/install/ros/ros.bash --distro=$PROJECT_ROS_DISTRO install pkg
     fi
 
     # Install Gazebo package
@@ -44,33 +44,33 @@ main() {
         librange-v3-dev
 
         # ROS packages
-        ros-${ROS2_DISTRO}-gazebo-ros-pkgs
-        ros-${ROS2_DISTRO}-joint-state-publisher
-        ros-${ROS2_DISTRO}-xacro
-        ros-${ROS2_DISTRO}-slam-toolbox
-        ros-${ROS2_DISTRO}-pointcloud-to-laserscan
-        ros-${ROS2_DISTRO}-robot-localization
-        ros-${ROS2_DISTRO}-pcl-ros
-        ros-${ROS2_DISTRO}-navigation2
-        ros-${ROS2_DISTRO}-nav2-bringup
+        ros-${PROJECT_ROS_DISTRO}-gazebo-ros-pkgs
+        ros-${PROJECT_ROS_DISTRO}-joint-state-publisher
+        ros-${PROJECT_ROS_DISTRO}-xacro
+        ros-${PROJECT_ROS_DISTRO}-slam-toolbox
+        ros-${PROJECT_ROS_DISTRO}-pointcloud-to-laserscan
+        ros-${PROJECT_ROS_DISTRO}-robot-localization
+        ros-${PROJECT_ROS_DISTRO}-pcl-ros
+        ros-${PROJECT_ROS_DISTRO}-navigation2
+        ros-${PROJECT_ROS_DISTRO}-nav2-bringup
 
         # Auxiliary ROS packages (mainly for testing)
-        ros-${ROS2_DISTRO}-turtlebot3
-        ros-${ROS2_DISTRO}-turtlebot3-bringup
-        ros-${ROS2_DISTRO}-turtlebot3-cartographer
-        ros-${ROS2_DISTRO}-turtlebot3-description
-        ros-${ROS2_DISTRO}-turtlebot3-example
-        ros-${ROS2_DISTRO}-turtlebot3-fake-node
-        ros-${ROS2_DISTRO}-turtlebot3-fake-node-dbgsym
-        ros-${ROS2_DISTRO}-turtlebot3-gazebo
-        ros-${ROS2_DISTRO}-turtlebot3-gazebo-dbgsym
-        ros-${ROS2_DISTRO}-turtlebot3-msgs
-        ros-${ROS2_DISTRO}-turtlebot3-msgs-dbgsym
-        ros-${ROS2_DISTRO}-turtlebot3-navigation2
-        ros-${ROS2_DISTRO}-turtlebot3-node
-        ros-${ROS2_DISTRO}-turtlebot3-node-dbgsym
-        ros-${ROS2_DISTRO}-turtlebot3-simulations
-        ros-${ROS2_DISTRO}-turtlebot3-teleop
+        ros-${PROJECT_ROS_DISTRO}-turtlebot3
+        ros-${PROJECT_ROS_DISTRO}-turtlebot3-bringup
+        ros-${PROJECT_ROS_DISTRO}-turtlebot3-cartographer
+        ros-${PROJECT_ROS_DISTRO}-turtlebot3-description
+        ros-${PROJECT_ROS_DISTRO}-turtlebot3-example
+        ros-${PROJECT_ROS_DISTRO}-turtlebot3-fake-node
+        ros-${PROJECT_ROS_DISTRO}-turtlebot3-fake-node-dbgsym
+        ros-${PROJECT_ROS_DISTRO}-turtlebot3-gazebo
+        ros-${PROJECT_ROS_DISTRO}-turtlebot3-gazebo-dbgsym
+        ros-${PROJECT_ROS_DISTRO}-turtlebot3-msgs
+        ros-${PROJECT_ROS_DISTRO}-turtlebot3-msgs-dbgsym
+        ros-${PROJECT_ROS_DISTRO}-turtlebot3-navigation2
+        ros-${PROJECT_ROS_DISTRO}-turtlebot3-node
+        ros-${PROJECT_ROS_DISTRO}-turtlebot3-node-dbgsym
+        ros-${PROJECT_ROS_DISTRO}-turtlebot3-simulations
+        ros-${PROJECT_ROS_DISTRO}-turtlebot3-teleop
 
     )
 

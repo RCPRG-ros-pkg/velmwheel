@@ -1,0 +1,25 @@
+# ====================================================================================================================================
+# @file       GetProductInfo.srv
+# @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+# @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+# @date       Monday, 30th May 2022 5:29:26 pm
+# @modified   Monday, 30th May 2022 6:03:31 pm
+# @project    engineering-thesis
+# @brief      Service message type describing a request-response model for asking an IMU sensor driver for reading product 
+#             informations
+#    
+#    
+# @copyright Krzysztof Pierczyk © 2022
+# ====================================================================================================================================
+
+---
+
+# Producst ID
+uint16 product_id
+# Serial number
+uint16 serial_number
+
+# True if service has been sucesfully served
+bool success
+# Human readable error message if success is @c false, else empty string.
+string error_message

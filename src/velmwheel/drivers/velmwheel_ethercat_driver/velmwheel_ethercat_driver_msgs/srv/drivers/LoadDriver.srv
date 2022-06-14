@@ -1,0 +1,25 @@
+# ====================================================================================================================================
+# @file       LoadDriver.srv
+# @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+# @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+# @date       Thursday, 28th April 2022 12:04:10 pm
+# @modified   Friday, 27th May 2022 11:36:24 am
+# @project    engineering-thesis
+# @brief      Service message type describing a request-response model for asking an ethercat driver node for loading a driver 
+#             plugin of the specific slave device
+#    
+#    
+# @copyright Krzysztof Pierczyk © 2022
+# ====================================================================================================================================
+
+# A plugin identifier
+string plugin_name
+
+---
+
+# True if the plugin was successfully loaded
+bool success
+# Human readable error message if success is false, else empty string.
+string error_message
+# A unique identifier for the loaded node.
+uint64 unique_id

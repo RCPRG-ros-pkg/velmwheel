@@ -1,0 +1,56 @@
+# ====================================================================================================================================
+# @file       Doxyfile
+# @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+# @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+# @date       Tuesday, 24th May 2022 1:03:12 pm
+# @modified   Wednesday, 25th May 2022 9:54:32 pm
+# @project    engineering-thesis
+# @brief      Configuration of the Doxygen generator
+# 
+# 
+# @copyright Krzysztof Pierczyk © 2022
+# ====================================================================================================================================
+
+# ======================================================== General settings ======================================================== #
+
+# Project info
+PROJECT_NAME   = "cifx_toolkit"
+PROJECT_NUMBER = $(ROS_DISTRO)
+PROJECT_BRIEF  = "ROS2 package implementing Hilscher's CIFX/netX C Toolkit for CIFX/netX industrial extension cards"
+
+# Compilation seetings
+GENERATE_HTML  = YES
+GENERATE_LATEX = YES
+
+# ============================================================= Sources ============================================================ #
+
+# Source files
+INPUT = ./include ./src
+# Source files config
+RECURSIVE = YES
+# Files pattern
+FILE_PATTERNS = *.hpp *.cpp
+
+# Exclude private and Hilscher-provided
+EXCLUDE_PATTERNS += */cifx-api/*
+EXCLUDE_PATTERNS += */hilscher-definitions/*
+EXCLUDE_PATTERNS += */os-dependent/*
+EXCLUDE_PATTERNS += */toolkit/*
+EXCLUDE_PATTERNS += */user/*
+
+# ====================================================== Documentation config ====================================================== #
+
+# Command aliases (file headers)
+ALIASES += maintainer="@par Maintainer^^"
+ALIASES += modified="@par Modified^^"
+ALIASES += project="@par Project^^"
+ALIASES += performance="@par Performance^^"
+
+# Elements extraction
+EXTRACT_PRIVATE = YES
+# Don't rearrange order of members
+SORT_MEMBER_DOCS = YES
+# Use non-standard method for generating mathematics
+USE_MATHJAX = YES
+
+# ================================================================================================================================== #

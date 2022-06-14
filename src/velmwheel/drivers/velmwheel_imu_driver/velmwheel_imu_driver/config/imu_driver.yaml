@@ -1,0 +1,35 @@
+# ====================================================================================================================================
+# @file       imu_driver.yaml
+# @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+# @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+# @date       Tuesday, 22nd March 2022 3:12:52 am
+# @modified   Tuesday, 31st May 2022 2:28:54 pm
+# @project    engineering-thesis
+# @brief      Default configuration for the velmwheel_imu_driver plugin
+#    
+#    
+# @copyright Krzysztof Pierczyk © 2022
+# ====================================================================================================================================
+
+/**:
+
+    # Parameters
+    ros__parameters:
+
+        # Dedicated namespace for the IMU driver
+        imu:
+
+            # Name of the IMU slave used in the ENI configuration
+            eni_name: 'Imu'
+
+            # ----------------------------------------------------------------
+            # Initial configuration of the digital filter setting
+            # 
+            # @see 'Układ elektroniczny do akwizycji danych z jednostki
+            #    inercyjnej za pośrednictwem EtherCAT', B. J. Kaczor, 2017, 
+            #    p. 26
+            # ----------------------------------------------------------------
+            init_filter_seettings: 2
+
+            # Initial configuration of the gyro range as [+/- deg/s] limit (one of [75, 150, 300])
+            init_gyro_range: 150

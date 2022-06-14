@@ -3,7 +3,7 @@
 # @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @date       Thursday, 7th April 2022 6:50:10 am
-# @modified   Tuesday, 7th June 2022 4:37:14 pm
+# @modified   Wednesday, 25th May 2022 4:44:01 pm
 # @project    engineering-thesis
 # @brief      Main launch file for the WUT Velmwheel robot
 #    
@@ -50,6 +50,16 @@ sim = {
     'launch_description_source': get_launch_source('velmwheel_sim_bringup', 'gazebo.launch.py'),
     # Conditionally (if sim-based launch is run)
     'condition': sim_run
+    
+}
+
+# Low-level drivers
+drivers = {
+
+    # Source file
+    'launch_description_source': get_launch_source('velmwheel_drivers_bringup', 'drivers.launch.py'),
+    # Conditionally (if sim-based launch is run)
+    'condition': real_run
     
 }
 
@@ -107,6 +117,7 @@ launch_description = [
 
     # Low-level
     IncludeLaunchDescription(**sim),
+    IncludeLaunchDescription(**drivers),
     # Middleware software
     IncludeLaunchDescription(**middleware_sim),
     IncludeLaunchDescription(**middleware_real),

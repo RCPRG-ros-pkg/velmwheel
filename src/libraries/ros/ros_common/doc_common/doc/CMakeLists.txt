@@ -3,7 +3,7 @@
 # @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @date       Wednesday, 16th March 2022 4:33:51 pm
-# @modified   Wednesday, 25th May 2022 4:02:18 pm
+# @modified   Thursday, 9th June 2022 3:43:58 am
 # @project    engineering-thesis
 # @brief      CMake file for `cmake_common` package
 #    
@@ -50,12 +50,12 @@ add_sphinx_doc(sphinx_doc
     # @note `doc_common` package has no local dependencies. As so, this
     #    is possible that no other of local packages has been built and
     #    neither COLCON_PREFIX_PATH env variable has been set by sourcing
-    #    installed packager nor it can be deduced from the installation#
+    #    installed package nor it can be deduced from the installation
     #    path of the `doc_common` itself. As so, package needs to use
     #    non-colcon-standard destination for log file (which is 
     #    <COLCON_RUN_DIR>/log) and instead use in-build-tree destination
     # --------------------------------------------------------------------
-    OUTPUT_LOG_FILE ${CMAKE_CURRENT_BINARY_DIR}/log/doc/${PROJECT_NAME}/sphinx.html.log
+    OUTPUT_LOG_FILE ${CMAKE_CURRENT_BINARY_DIR}/log/sphinx
 
     # Install dircetory (Sphinx)
     INSTALL_DIR "share/${PROJECT_NAME}/doc/sphinx"

@@ -3,7 +3,7 @@
  * @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
  * @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
  * @date       Sunday, 13th March 2022 10:34:29 pm
- * @modified   Wednesday, 25th May 2022 11:31:34 pm
+ * @modified   Monday, 13th June 2022 9:04:54 pm
  * @project    engineering-thesis
  * @brief      Set of various constants related to the WUT Velmwheel robot
  * 

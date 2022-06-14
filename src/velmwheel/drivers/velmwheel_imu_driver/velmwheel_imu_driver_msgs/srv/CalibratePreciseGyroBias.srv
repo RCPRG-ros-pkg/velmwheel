@@ -1,0 +1,20 @@
+# ====================================================================================================================================
+# @file       CalibratePreciseGyroBias.srv
+# @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+# @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+# @date       Monday, 30th May 2022 5:29:26 pm
+# @modified   Monday, 30th May 2022 6:00:38 pm
+# @project    engineering-thesis
+# @brief      Service message type describing a request-response model for asking an IMU sensor driver for conducting precise bias 
+#             offset callibration procedure for gyro sensors
+#    
+#    
+# @copyright Krzysztof Pierczyk © 2022
+# ====================================================================================================================================
+
+---
+
+# True if callibration has been sucesfully conducted
+bool success
+# Human readable error message if success is @c false, else empty string.
+string error_message

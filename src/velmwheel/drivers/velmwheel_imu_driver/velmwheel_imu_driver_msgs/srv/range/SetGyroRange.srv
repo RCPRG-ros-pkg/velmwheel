@@ -1,0 +1,29 @@
+# ====================================================================================================================================
+# @file       SetGyroRange.srv
+# @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+# @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+# @date       Monday, 30th May 2022 5:29:26 pm
+# @modified   Monday, 30th May 2022 5:59:05 pm
+# @project    engineering-thesis
+# @brief      Service message type describing a request-response model for asking an IMU sensor driver for setting new value
+#             of the gyro sensors range
+#    
+#    
+# @copyright Krzysztof Pierczyk © 2022
+# ====================================================================================================================================
+
+
+# Constants representing current configuration of the gyro sensors' range
+uint16 RANGE_75  = 0
+uint16 RANGE_150 = 1
+uint16 RANGE_300 = 2
+
+# Range configuration to be set
+uint16 range
+
+---
+
+# True if range configuration has been sucesfully set
+bool success
+# Human readable error message if success is @c false, else empty string.
+string error_message

@@ -1,0 +1,27 @@
+# ====================================================================================================================================
+# @file       base_driver.yaml
+# @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+# @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+# @date       Tuesday, 22nd March 2022 3:12:52 am
+# @modified   Tuesday, 14th June 2022 4:39:10 pm
+# @project    engineering-thesis
+# @brief      Default configuration for the velmwheel_base_driver plugin
+#    
+#    
+# @copyright Krzysztof Pierczyk © 2022
+# ====================================================================================================================================
+
+/**:
+
+    # Parameters
+    ros__parameters:
+        
+        # Dedicated namespace for base driver
+        base:
+            
+            # Names of the servo slave used in the ENI configuration
+            eni_wheel_names:
+                rear_left:   'WheelRearLeft'
+                rear_right:  'WheelRearRight'
+                front_left:  'WheelFrontLeft'
+                front_right: 'WheelFrontRight'

@@ -20,7 +20,7 @@
     <!-- Package's dependencies -->
     <depend>velmwheel_launch</depend>
     <depend>velmwheel_sim_bringup</depend>
-    <!-- <depend>velmwheel_drivers_bringup</depend> -->
+    <depend>velmwheel_drivers_bringup</depend>
     <depend>velmwheel_middleware_bringup</depend>
     <!-- Package's runtime dependencies -->
     <exec_depend>ros2launch</exec_depend>

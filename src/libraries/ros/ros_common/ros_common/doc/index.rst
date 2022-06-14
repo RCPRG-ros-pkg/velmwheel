@@ -15,3 +15,4 @@ Submodules
     * :launch_common:`launch_common<>`
     * :node_common_cpp:`node_common_cpp<>`
     * :package_common_cpp:`package_common_cpp<>`
+    * :package_common_py:`package_common_py<>`

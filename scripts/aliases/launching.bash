@@ -2,7 +2,7 @@
 # @file     launching.bash
 # @author   Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @date     Tuesday, 1st March 2022 4:11:56 pm
-# @modified   Friday, 20th May 2022 11:34:47 am
+# @modified   Tuesday, 14th June 2022 3:58:43 pm
 # @project  engineering-thesis
 # @brief
 #    
@@ -45,6 +45,8 @@ function bringup_sim() {
 
     local -a launch_params=()
 
+    # Configure launch system to run simulated version of low-level drivers
+    launch_params+=( launch_mode:=sim )
     # Configure GUI and RVIZ to be run
     launch_params+=( with_gui:=true  )
     launch_params+=( with_rviz:=true )
@@ -89,4 +91,52 @@ function build_and_bringup_sim() {
     colbuild_src || return 1
     # On success, run simulation
     bringup_sim "$world" "${@:2}"
+}
+
+# ---------------------------------------------------------------------------------------
+# @brief Runs Velmwheel system 
+#
+# @param ...
+#    other parameters to be passed to `ros2 launch` command
+# ---------------------------------------------------------------------------------------
+function bringup() {
+
+    # Arguments
+    local world="$1"
+
+    # On success, clear terminal and kill all running components of the system
+    clear && kill_system || return 1
+
+    local -a launch_params=()
+
+    # Configure launch system to run simulated version of low-level drivers
+    launch_params+=( launch_mode:=real )
+    # Configure RVIZ to be run
+    launch_params+=( with_rviz:=false )
+
+    # Configure laser drivers
+    launch_params+=( with_left_lidar_driver:=false  )
+    launch_params+=( with_right_lidar_driver:=false )
+    # Configure EtherCAT drivers
+    launch_params+=( with_ethercat_driver:=true )
+
+    # Configure publishing mode of LIDAR drivers
+    launch_params+=( laser_output_mode:=both )
+    # Configure static transformation for key frames
+    launch_params+=( map_at:=world       )
+    launch_params+=( odom_at:=map        )
+    launch_params+=( robot_at:=odom_pose )
+    # Configure components to be run/not-run
+    launch_params+=( with_base_controller:=false     )
+    launch_params+=( with_laser_conversion:=false    )
+    launch_params+=( with_laser_odom:=false          )
+    launch_params+=( with_odom_fusion:=false         )
+    launch_params+=( with_bias_estimator:=false      )
+    launch_params+=( with_poi_map_builder:=false     )
+    launch_params+=( with_global_localization:=false )
+    launch_params+=( with_slam:=false                )
+    
+    # Run simulation
+    ros2 launch velmwheel_bringup launch.py "${launch_params[@]}" "${@:2}"
+
 }

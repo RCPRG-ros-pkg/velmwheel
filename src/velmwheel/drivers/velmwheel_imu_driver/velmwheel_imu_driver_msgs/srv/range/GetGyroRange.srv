@@ -1,0 +1,28 @@
+# ====================================================================================================================================
+# @file       GetGyroRange.srv
+# @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+# @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+# @date       Monday, 30th May 2022 5:29:26 pm
+# @modified   Monday, 30th May 2022 5:57:49 pm
+# @project    engineering-thesis
+# @brief      Service message type describing a request-response model for asking an IMU sensor driver for reading current value
+#             of the gyro sensors range
+#    
+#    
+# @copyright Krzysztof Pierczyk © 2022
+# ====================================================================================================================================
+
+---
+
+# Constants representing current configuration of the gyro sensors' range
+uint16 RANGE_75  = 0
+uint16 RANGE_150 = 1
+uint16 RANGE_300 = 2
+
+# Current range configuration
+uint16 range
+
+# True if valid response data has been returned
+bool success
+# Human readable error message if success is @c false, else empty string.
+string error_message

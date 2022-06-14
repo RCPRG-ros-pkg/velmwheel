@@ -3,7 +3,7 @@
 # @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @date       Thursday, 12th May 2022 11:27:46 pm
-# @modified   Wednesday, 25th May 2022 2:09:46 pm
+# @modified   Thursday, 9th June 2022 3:45:25 am
 # @project    engineering-thesis
 # @brief      Definition of the add_sphinx_doc() function
 #    
@@ -37,7 +37,7 @@ include(${CMAKE_CURRENT_LIST_DIR}/common.cmake)
 #     list of documentation source files
 # @param OUTPUT_DIR [DIR] (optional, default: ${CMAKE_CURRENT_BINARY_DIR}/doc/sphinx)
 #     output directory for Sphinx results
-# @param OUTPUT_LOG_FILE [FILE] (optional, default: ${COLCON_LOG_DIR}/doc/${PROJECT_NAME}/sphinx)
+# @param OUTPUT_LOG_FILE [FILE] (optional, default: ${DOC_COMMON_LOG_DIR}/doc/${PROJECT_NAME}/sphinx)
 #     base for the name of the Sphinx error log files; ${BUILDER}.log suffix is 
 #     appended to the file name automatically; by default, the log will be put into 
 #     the subdirectory of the default log directory used by colcon (for convinience)
@@ -174,47 +174,47 @@ function(add_sphinx_doc target_name)
     # -------------------------- Strip arguments -------------------------
     
     # Strip flag arguments
-    _node_common_strip_arg(GENERATE_CPP_API_DOC)
-    _node_common_strip_arg(NO_BREATHE_DEFAULT_PROJECT)
+    _doc_common_strip_arg(GENERATE_CPP_API_DOC)
+    _doc_common_strip_arg(NO_BREATHE_DEFAULT_PROJECT)
     # Strip single-value arguments
-    _node_common_strip_arg(INSTALL_DIR)
-    _node_common_strip_arg(DOXYGEN_INSTALL_DIR)
+    _doc_common_strip_arg(INSTALL_DIR)
+    _doc_common_strip_arg(DOXYGEN_INSTALL_DIR)
     # Strip multi-value arguments
-    _node_common_strip_arg(ENVS)
-    _node_common_strip_arg(DOXYGEN_SOURCE_FILES)
-    _node_common_strip_arg(DOXYGEN_DOXY_FILES)
-    _node_common_strip_arg(DOXYGEN_DOXY_LINES)
+    _doc_common_strip_arg(ENVS)
+    _doc_common_strip_arg(DOXYGEN_SOURCE_FILES)
+    _doc_common_strip_arg(DOXYGEN_DOXY_FILES)
+    _doc_common_strip_arg(DOXYGEN_DOXY_LINES)
     
     # ----------------------- Set default arguments ----------------------
     
     # Set default working dircetory (Sphinx)
-    _node_common_parse_arg(WORKING_DIR ${CMAKE_CURRENT_SOURCE_DIR})
+    _doc_common_parse_arg(WORKING_DIR ${CMAKE_CURRENT_SOURCE_DIR})
     # Set default source dircetory (Sphinx)
-    _node_common_parse_arg(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
+    _doc_common_parse_arg(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
     # Set default source files (Sphinx)
-    _node_common_parse_arg(SOURCE_FILES ${SOURCE_DIR}/index.rst)
+    _doc_common_parse_arg(SOURCE_FILES ${SOURCE_DIR}/index.rst)
     # Set default output dircetory (Sphinx)
-    _node_common_parse_arg(OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR}/doc/sphinx)
+    _doc_common_parse_arg(OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR}/doc/sphinx)
     # Set default output log file (Sphinx)
-    _node_common_parse_arg(OUTPUT_LOG_FILE ${COLCON_LOG_DIR}/doc/${PROJECT_NAME}/sphinx)
+    _doc_common_parse_arg(OUTPUT_LOG_FILE ${DOC_COMMON_LOG_DIR}/doc/${PROJECT_NAME}/sphinx)
     # Set default builder formats (Sphinx)
-    _node_common_parse_arg(BUILDERS "html")
+    _doc_common_parse_arg(BUILDERS "html")
 
     # Set default project name (Breathe)
-    _node_common_parse_arg(BREATHE_PROJECT_NAME ${PROJECT_NAME})
+    _doc_common_parse_arg(BREATHE_PROJECT_NAME ${PROJECT_NAME})
 
     # Set default working dircetory (Doxygen)
-    _node_common_parse_arg(DOXYGEN_WORKING_DIR ${WORKING_DIR})
+    _doc_common_parse_arg(DOXYGEN_WORKING_DIR ${WORKING_DIR})
     # Set default output dircetory (Doxygen)
-    _node_common_parse_arg(DOXYGEN_OUTPUT_DIR ${OUTPUT_DIR}/doxygen)
+    _doc_common_parse_arg(DOXYGEN_OUTPUT_DIR ${OUTPUT_DIR}/doxygen)
     # Set default output log file (Doxygen)
     get_filename_component(OUTPUT_LOG_DIR "${OUTPUT_LOG_FILE}" DIRECTORY)
-    _node_common_parse_arg(DOXYGEN_OUTPUT_LOG_FILE ${OUTPUT_LOG_DIR}/sphinx.doxygen.log)
+    _doc_common_parse_arg(DOXYGEN_OUTPUT_LOG_FILE ${OUTPUT_LOG_DIR}/sphinx.doxygen.log)
     # Set default envs (Doxygen)
     if(ENVS)
-        _node_common_parse_arg(DOXYGEN_DOXY_ENVS "${ENVS}")
+        _doc_common_parse_arg(DOXYGEN_DOXY_ENVS "${ENVS}")
     else()
-        _node_common_strip_arg(DOXYGEN_DOXY_ENVS)
+        _doc_common_strip_arg(DOXYGEN_DOXY_ENVS)
     endif()
 
     # ------------------------- Validate arguments -----------------------

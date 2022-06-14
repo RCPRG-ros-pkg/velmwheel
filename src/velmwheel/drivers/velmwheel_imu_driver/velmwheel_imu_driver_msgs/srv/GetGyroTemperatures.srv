@@ -1,0 +1,23 @@
+# ====================================================================================================================================
+# @file       GetGyroTemperatures.srv
+# @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+# @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+# @date       Monday, 30th May 2022 5:29:26 pm
+# @modified   Tuesday, 31st May 2022 3:56:19 pm
+# @project    engineering-thesis
+# @brief      Service message type describing a request-response model for asking an IMU sensor driver for reading current 
+#             temperatures of gyro sensors of each axis
+#    
+#    
+# @copyright Krzysztof Pierczyk © 2022
+# ====================================================================================================================================
+
+---
+
+# Temperatures of gyro sensor
+velmwheel_imu_driver_msgs/GyroTemperatures temperatures
+
+# True if valid response data has been returned
+bool success
+# Human readable error message if success is @c false, else empty string.
+string error_message

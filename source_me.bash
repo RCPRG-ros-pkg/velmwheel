@@ -3,7 +3,7 @@
 # @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @date       Friday, 23rd April 2021 12:29:15 pm
-# @modified   Wednesday, 1st June 2022 2:00:35 pm
+# @modified   Tuesday, 14th June 2022 7:19:52 pm
 # @project    engineering-thesis
 # @brief      Script that should be sourced before starting working with the directory
 # @details

@@ -1,0 +1,34 @@
+# ====================================================================================================================================
+# @file       LockMemory.srv
+# @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+# @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+# @date       Thursday, 28th April 2022 12:04:10 pm
+# @modified   Tuesday, 31st May 2022 2:03:55 pm
+# @project    engineering-thesis
+# @brief      Service message type describing a request-response model for asking an EtherCAT driver process to perform actions
+#             related to managin memory-allocation scheme enabling node's fine-tunning with respect to realtime performance
+#    
+#    
+# @copyright Krzysztof Pierczyk © 2022
+# ====================================================================================================================================
+
+# ----------------------------------------------------
+# Possible memory locking schemes
+# ----------------------------------------------------
+uint8 NONE    = 0 # Skip memory locking step
+uint8 CURRENT = 1 # Lock only current pages
+uint8 ALL     = 2 # Lock both current and future pages
+
+# Requested locking scheme
+uint8 memory_locking_scheme
+# Whether to disable returning memory to the system with sbrk()
+bool disable_memory_trimming false
+# Whether to disable mmap()
+bool disable_mmap false
+
+---
+
+# True if the memory has been sucesfully locked
+bool success
+# Human readable error message if success is false, else empty string.
+string error_message

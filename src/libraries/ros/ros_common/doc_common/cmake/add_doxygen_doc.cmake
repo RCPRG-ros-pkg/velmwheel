@@ -3,7 +3,7 @@
 # @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @date       Thursday, 12th May 2022 11:27:46 pm
-# @modified   Wednesday, 25th May 2022 2:09:50 pm
+# @modified   Thursday, 9th June 2022 3:44:53 am
 # @project    engineering-thesis
 # @brief      Definition of the add_doxygen_doc() function
 #    
@@ -86,7 +86,7 @@ endfunction()
 # @param OUTPUT_DIR [DIR] (optional, default: ${CMAKE_CURRENT_BINARY_DIR}/doc/doxygen)
 #     output directory for Doxygen results; this will overwrite 'OUTPUT_DIRECTORY' 
 #     in the original @p DOXYFILE
-# @param OUTPUT_LOG_FILE [FILE] (optional, default: ${COLCON_LOG_DIR}/doc/${PROJECT_NAME}/doxygen.log)
+# @param OUTPUT_LOG_FILE [FILE] (optional, default: ${DOC_COMMON_LOG_DIR}/doc/${PROJECT_NAME}/doxygen.log)
 #     name of the Doxygen output log file; this will overwrite 'WARN_LOGFILE' in the
 #     original @p DOXYFILE; by default, the log will be put into the subdirectory
 #     of the default log directory used by colcon (for convinience)
@@ -169,24 +169,24 @@ function(add_doxygen_doc target_name)
     # -------------------------- Strip arguments -------------------------
 
     # Strip single-value arguments
-    _node_common_strip_arg(TAG_FILE)
-    _node_common_strip_arg(INSTALL_DIR)
+    _doc_common_strip_arg(TAG_FILE)
+    _doc_common_strip_arg(INSTALL_DIR)
     # Strip multi-value arguments
-    _node_common_strip_arg(SOURCE_FILES)
-    _node_common_strip_arg(DOXY_FILES)
-    _node_common_strip_arg(DOXY_LINES)
-    _node_common_strip_arg(DOXY_ENVS)
+    _doc_common_strip_arg(SOURCE_FILES)
+    _doc_common_strip_arg(DOXY_FILES)
+    _doc_common_strip_arg(DOXY_LINES)
+    _doc_common_strip_arg(DOXY_ENVS)
 
     # ----------------------- Set default arguments ----------------------
 
     # Set default working dircetory
-    _node_common_parse_arg(WORKING_DIR ${CMAKE_CURRENT_SOURCE_DIR})
+    _doc_common_parse_arg(WORKING_DIR ${CMAKE_CURRENT_SOURCE_DIR})
     # Set default output directory
-    _node_common_parse_arg(OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR}/doc/doxygen)
+    _doc_common_parse_arg(OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR}/doc/doxygen)
     # Set default log file
-    _node_common_parse_arg(OUTPUT_LOG_FILE ${COLCON_LOG_DIR}/doc/${PROJECT_NAME}/doxygen.log)
+    _doc_common_parse_arg(OUTPUT_LOG_FILE ${DOC_COMMON_LOG_DIR}/doc/${PROJECT_NAME}/doxygen.log)
     # Set default output file
-    _node_common_parse_arg(OUTPUT_FILE html/index.html)
+    _doc_common_parse_arg(OUTPUT_FILE html/index.html)
 
     # ------------------------- Validate arguments -----------------------
 

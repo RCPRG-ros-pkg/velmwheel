@@ -1,0 +1,5 @@
+<library path="velmwheel_base_driver">
+    <class type="velmwheel::BaseDriver" base_class_type="velmwheel::EthercatSlaveDriver">
+        <description>Driver plugin for the servodriver EtherCAT slaves of the WUT Velmwheel robot.</description>
+    </class>
+</library>

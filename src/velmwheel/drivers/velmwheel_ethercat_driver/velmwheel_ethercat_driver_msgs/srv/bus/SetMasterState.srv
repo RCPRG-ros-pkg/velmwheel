@@ -1,0 +1,29 @@
+# ====================================================================================================================================
+# @file       SetMasterState.srv
+# @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+# @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+# @date       Thursday, 28th April 2022 12:04:10 pm
+# @modified   Friday, 27th May 2022 11:43:35 am
+# @project    engineering-thesis
+# @brief      Service message type describing a request-response model for asking an EtherCAT driver node for setting state of 
+#             the master device
+#    
+#    
+# @copyright Krzysztof Pierczyk © 2022
+# ====================================================================================================================================
+
+# Possible master states
+uint8 INIT   = 0
+uint8 PREOP  = 1
+uint8 SAFEOP = 2
+uint8 OP     = 3
+
+# Bus state to be set
+uint8 state
+
+---
+
+# True if the bus state has been sucesfully set
+bool success
+# Human readable error message if success is false, else empty string.
+string error_message

@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+
+    <!-- Package's name -->
+    <name>velmwheel_drivers</name>
+    <!-- Package's version -->
+    <version>0.0.0</version>
+    <!-- Package's description -->
+    <description>Interface package depending on all hardware drivers packages of the WUT Velmwheel robot</description>
+    <!-- Package's author -->
+    <author email="krzysztof.pierczyk@gmail.com">Krzysztof Pierczyk</author>
+    <!-- Package's maintainer -->
+    <maintainer email="krzysztof.pierczyk@gmail.com">Krzysztof Pierczyk</maintainer>
+    <!-- Package's license -->
+    <license>BSD</license>
+
+    <!-- Package's dependencies -->
+    <depend>velmwheel_ethercat_driver</depend>
+    <depend>velmwheel_base_driver</depend>
+    <depend>velmwheel_imu_driver</depend>
+    <depend>velmwheel_laser_driver</depend>
+    <depend>velmwheel_twincat</depend>
+
+</package>
