@@ -3,7 +3,7 @@
 # @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @date       Tuesday, 1st March 2022 4:11:56 pm
-# @modified   Thursday, 16th June 2022 12:27:08 pm
+# @modified   Thursday, 16th June 2022 12:27:14 pm
 # @project    engineering-thesis
 # @brief      Set of handy function and aliases used when dealing with the project
 #    

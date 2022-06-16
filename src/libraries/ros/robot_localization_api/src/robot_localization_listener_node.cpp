@@ -50,7 +50,7 @@ public:
   RobotLocalizationListenerNode()
   : rclcpp::Node("robot_localization_listener_node")
   {
-    service_ = this->create_service<robot_localization::srv::GetState>(
+    service_ = this->create_service<robot_localization_api::srv::GetState>(
       "get_state",
       std::bind(
         &RobotLocalizationListenerNode::getStateCallback, this,
@@ -70,11 +70,11 @@ public:
 
 private:
   std::shared_ptr<RosRobotLocalizationListener> rll_;
-  rclcpp::Service<robot_localization::srv::GetState>::SharedPtr service_;
+  rclcpp::Service<robot_localization_api::srv::GetState>::SharedPtr service_;
 
   bool getStateCallback(
-    const std::shared_ptr<robot_localization::srv::GetState::Request> req,
-    const std::shared_ptr<robot_localization::srv::GetState::Response> res)
+    const std::shared_ptr<robot_localization_api::srv::GetState::Request> req,
+    const std::shared_ptr<robot_localization_api::srv::GetState::Response> res)
   {
     Eigen::VectorXd state(STATE_SIZE);
     Eigen::MatrixXd covariance(STATE_SIZE, STATE_SIZE);

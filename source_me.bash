@@ -1,11 +1,11 @@
 # ====================================================================================================================================
-# @file       sourceMe.bash
+# @file       source_me.bash
 # @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @date       Friday, 23rd April 2021 12:29:15 pm
-# @modified   Wednesday, 15th June 2022 2:38:45 pm
+# @modified   Thursday, 16th June 2022 1:21:31 pm
 # @project    engineering-thesis
-# @brief      Script that should be sourced before starting working with the directory
+# @brief      Script that should be source before starting working with the directory
 # @details
 #   
 #    Script provides user's terminal with definitions required for project's handling. Morover, it checks for project's dependancies
@@ -16,14 +16,14 @@
 #    while and it makes no sense to repeat this process at each source action. It is required to run update command at least once 
 #    after cloning the repository.
 #
-#    Optionally, one may source this script with the 'setup' keyword which will make the script verify dependencies without
+#    Optionally, one may source this script with the 'setup' keyword which will make the script to verify dependencies without
 #    updating git submodules. This may be handy if some system dependencies are added to the scripts/isntall/*.bash scripts
 #    and need to be installed.
 #
-# @note Script was tested on Ubuntu 20.0.4 LTS system
+# @note Script was tested on Ubuntu 22.0.4 LTS system
 # @note This script should be rather sourced than executed
 #
-# @copyright Krzysztof Pierczyk © 2021
+# @copyright Krzysztof Pierczyk © 2022
 # ====================================================================================================================================
 
 # ========================================================== Configruation ========================================================= #
@@ -32,7 +32,7 @@
 export PROJECT_HOME="$(dirname "$(readlink -f "$BASH_SOURCE")")"
 
 # Set distro of the ROS2 to be used
-export PROJECT_ROS_DISTRO=galactic
+export PROJECT_ROS_DISTRO=humble
 # Domain ID for ROS2 DDS middleware
 export ROS_DOMAIN_ID=0
 # ROS home and logs [default values at the moment]
@@ -72,14 +72,6 @@ function setup_project() {
         return 1
     }
 
-    log_info "Applying patched dependencies..."
-
-    # Apply patches
-    $PROJECT_HOME/scripts/apply_patches.bash || {
-        log_error "Failed to apply required patches"
-        return 1
-    }
-
 }
 
 # Update project
@@ -92,15 +84,19 @@ if [[ "$1" == 'update' ]]; then
         log_error_aux "Failed to clone git submodules"
         return 1
     }
-
+    
     # Setup project 
     setup_project || return 1
+    # Source bash-utils library one more time (due to bash bug disabling colours of `log` library when bash-utils sourced from function)
+    source $PROJECT_HOME/extern/bash-utils/source_me.bash || return 1
     
 # Setup project
 elif [[ "$1" == 'setup' ]]; then
 
     # Setup project 
     setup_project || return 1
+    # Source bash-utils library one more time (due to bash bug disabling colours of `log` library when bash-utils sourced from function)
+    source $PROJECT_HOME/extern/bash-utils/source_me.bash || return 1
     
 # Just prepare current shell
 else

@@ -20,7 +20,7 @@
 #include "geometry_msgs/msg/transform_stamped.hpp"
 // TF2 includes
 #include "tf2/utils.h"
-#include "tf2_geometry_msgs/tf2_geometry_msgs.h"
+#include "tf2_geometry_msgs/tf2_geometry_msgs.hpp"
 // External includes
 #include <range/v3/core.hpp>
 #include <range/v3/algorithm/sort.hpp>

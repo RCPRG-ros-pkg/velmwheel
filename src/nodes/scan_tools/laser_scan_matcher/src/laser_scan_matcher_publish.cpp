@@ -19,6 +19,7 @@
 #include <cmath>
 // TF2 includes
 #include "tf2/utils.h"
+#include "tf2_geometry_msgs/tf2_geometry_msgs.hpp"
 // Private includes
 #include "scan_tools/laser_scan_matcher.hpp"
 

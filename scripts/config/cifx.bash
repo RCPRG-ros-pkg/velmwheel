@@ -66,6 +66,33 @@ add_cifx_udev_rule() {
         LOG_CONTEXT="cifx-todo" \
             log_warn "Add actual udev rule creation to the scripts/config/cifx.bash script!"
 
+        # local ret
+
+        # log_info "Adding udev rule for xifx/netX devices..."
+
+        # # Create the file
+        # sudo touch $RULE_FILE_PATH &&
+        # # Add actual rule to the file
+        # echo "KERNEL=\"...\", SUBSYSTEM==\"...\", ATTRS{...}==\"...\", GROUP=\"$CIFIX_GROUP_NAME\"" && 
+        # # Parse command statu
+        # ret=$? || ret=$?
+
+        # # If failed, report error
+        # if [[ $ret != 0 ]]; then
+        #     log_error "Failed to create udev rule for cifx/netX devices"
+        # fi
+
+        # log_info "Udev rule has been sucesfully added"
+
+        # # Reload udev rules
+        # sudo udevadm control --reload-rules > /dev/null && sudo udevadm trigger > /dev/null || {
+        #     log_error "Failed to reload udev rules"
+        #     return
+        # }
+
+        # log_info "Udev rules has been reloaded. Technically, you shouldn't need to reboot the system..."
+        # log_info "(But probably you should)"
+
     fi
 
 }

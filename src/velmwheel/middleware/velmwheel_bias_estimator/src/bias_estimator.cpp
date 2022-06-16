@@ -16,8 +16,10 @@
 // Common includes
 #include "node_common/node.hpp"
 // TF includes
-#include "tf2_geometry_msgs/tf2_geometry_msgs.h"
+#include "tf2_geometry_msgs/tf2_geometry_msgs.hpp"
 #include "tf2/utils.h"
+// Interfaces includes
+#include "std_msgs/msg/float64.hpp"
 // Private includes
 #include "velmwheel/bias_estimator.hpp"
 
@@ -435,7 +437,14 @@ Eigen::Matrix<double, 2, 2> BiasEstimator::get_state_transition_matrix(const rcl
 
 
 void BiasEstimator::publish_orientation_estimation() {
-    theta_pub->publish(robot_orientation_rad);
+
+    std_msgs::msg::Float64 msg;
+
+    // Prepare message
+    msg.data = robot_orientation_rad;
+
+    // Publish message
+    theta_pub->publish(msg);
 }
 
 /* ================================================================================================================================ */

@@ -3,7 +3,7 @@
 # @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @date       Thursday, 12th May 2022 8:07:39 pm
-# @modified   Thursday, 16th June 2022 12:29:29 pm
+# @modified   Thursday, 16th June 2022 12:28:33 pm
 # @project    engineering-thesis
 # @brief      Preconfiguration of the project's workspace
 #    

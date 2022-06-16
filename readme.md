@@ -39,7 +39,7 @@ Repository provides system of *bash* utilities automating setup of the developme
 [bash-utils](https://github.com/kpierczy/bash-utils) library. All of these can be run by:
 
   - changing `PROJECT_ROS_DISTRO` variable in the `source source_me.bash` file to the target ROS2 version (at the moment project
-    has been tested on ROS2 Galactic in Ubuntu 20.04LTS environment)
+    has been tested on ROS2 Humble in Ubuntu 22.04LTS environment)
   - typing `source source_me.bash update` into the terminal from the root directory of the project
 
 The latter will inspect the system, install all required dependencies (including target ROS2 distribution), setup key environment

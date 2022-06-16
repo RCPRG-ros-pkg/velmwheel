@@ -3,7 +3,7 @@
 # @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @date       Friday, 29th April 2022 1:22:24 pm
-# @modified   Thursday, 16th June 2022 12:21:54 pm
+# @modified   Thursday, 16th June 2022 12:22:35 pm
 # @project    engineering-thesis
 # @brief      Installs system dependencies of the project
 #    
@@ -18,7 +18,7 @@ source $BASH_UTILS_HOME/source_me.bash
 
 main() {
 
-    # System dependencies
+    # ROS dependencies
     local -a dependencies=(
         
         # Libraries
@@ -71,7 +71,6 @@ main() {
 
     # Install Python dependencies
     pip_install_list -vU python_dependencies
-
 }
 
 # ============================================================= Script ============================================================= #

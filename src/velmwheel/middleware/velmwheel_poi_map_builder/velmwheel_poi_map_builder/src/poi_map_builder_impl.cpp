@@ -16,7 +16,7 @@
 // System includes
 #include <utility>
 // TF includes
-#include "tf2_geometry_msgs/tf2_geometry_msgs.h"
+#include "tf2_geometry_msgs/tf2_geometry_msgs.hpp"
 // Common includes
 #include "node_common/node.hpp"
 // Private includes

@@ -3,7 +3,7 @@
 # @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @date       Thursday, 14th January 2021 9:29:40 pm
-# @modified   Wednesday, 15th June 2022 2:42:38 pm
+# @modified   Thursday, 16th June 2022 12:22:49 pm
 # @project    engineering-thesis
 # @brief      Downloads, builds, installs and loads uio_netx kernel that maps Hilscher card's memory and interrupts into Linux
 #             UIO (Userspace I/O) subsystem. It is required by all drivers operating on these cards.

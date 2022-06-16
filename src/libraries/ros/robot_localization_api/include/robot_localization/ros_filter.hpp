@@ -33,8 +33,8 @@
 #ifndef ROBOT_LOCALIZATION__ROS_FILTER_HPP_
 #define ROBOT_LOCALIZATION__ROS_FILTER_HPP_
 
-#include <robot_localization/srv/set_pose.hpp>
-#include <robot_localization/srv/toggle_filter_processing.hpp>
+#include <robot_localization_api/srv/set_pose.hpp>
+#include <robot_localization_api/srv/toggle_filter_processing.hpp>
 
 #include <geometry_msgs/msg/accel_with_covariance_stamped.hpp>
 #include <geometry_msgs/msg/pose_with_covariance_stamped.hpp>
@@ -126,9 +126,9 @@ public:
   void toggleFilterProcessingCallback(
     const std::shared_ptr<rmw_request_id_t>/*request_header*/,
     const std::shared_ptr<
-      robot_localization::srv::ToggleFilterProcessing::Request> req,
+      robot_localization_api::srv::ToggleFilterProcessing::Request> req,
     const std::shared_ptr<
-      robot_localization::srv::ToggleFilterProcessing::Response> resp);
+      robot_localization_api::srv::ToggleFilterProcessing::Response> resp);
 
   //! @brief Callback method for receiving all acceleration (IMU) messages
   //! @param[in] msg - The ROS IMU message to take in.
@@ -293,8 +293,8 @@ public:
   //! @return true if successful, false if not
   bool setPoseSrvCallback(
     const std::shared_ptr<rmw_request_id_t> request_header,
-    const std::shared_ptr<robot_localization::srv::SetPose::Request> request,
-    std::shared_ptr<robot_localization::srv::SetPose::Response> response);
+    const std::shared_ptr<robot_localization_api::srv::SetPose::Request> request,
+    std::shared_ptr<robot_localization_api::srv::SetPose::Response> response);
 
   //! @brief Service callback for manually enable the filter
   //! @param[in] request - N/A
@@ -721,7 +721,7 @@ protected:
   //! processing while still publishing.
   //! Uses a robot_localization ToggleFilterProcessing service.
   //!
-  rclcpp::Service<robot_localization::srv::ToggleFilterProcessing>::SharedPtr
+  rclcpp::Service<robot_localization_api::srv::ToggleFilterProcessing>::SharedPtr
     toggle_filter_processing_srv_;
 
   //! @brief Subscribes to the control input topic
@@ -737,7 +737,7 @@ protected:
   //! @brief Service that allows another node to change the current state and
   //! recieve a confirmation. Uses a custom SetPose service.
   //!
-  rclcpp::Service<robot_localization::srv::SetPose>::SharedPtr
+  rclcpp::Service<robot_localization_api::srv::SetPose>::SharedPtr
     set_pose_service_;
 
   //! @brief Service that allows another node to enable the filter. Uses a

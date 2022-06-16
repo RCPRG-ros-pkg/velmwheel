@@ -3,15 +3,11 @@
 <package format="3">
 
     <!-- Package's name -->
-    <name>velmwheel_base_driver_msgs</name>
+    <name>custom_waitable_spike</name>
     <!-- Package's version -->
     <version>0.0.0</version>
     <!-- Package's description -->
-    <description>
-    
-    Set of ROS interfaces specific for the wheel base controller of the WUT Velmwheel robot
-    
-    </description>
+    <description>Example custom-waitable in ROS2 humble</description>
     <!-- Package's author -->
     <author email="krzysztof.pierczyk@gmail.com">Krzysztof Pierczyk</author>
     <!-- Package's maintainer -->
@@ -21,19 +17,11 @@
 
     <!-- Package's build dependencies -->
     <buildtool_depend>ament_cmake</buildtool_depend>
-    <buildtool_depend>rosidl_default_generators</buildtool_depend>
-    <!-- Package's dependencies -->
-    <depend>builtin_interfaces</depend>
-    <depend>std_msgs</depend>
+    <!-- Package's buildtime dependencies -->
+    <build_depend>rclcpp</build_depend>
     <!-- Package's runtime dependencies -->
-    <exec_depend>rosidl_default_runtime</exec_depend>
-    <!-- Package's test dependencies -->
-    <test_depend>ament_lint_auto</test_depend>
-    <test_depend>ament_lint_common</test_depend>
+    <exec_depend>rclcpp</exec_depend>
 
-    <!-- Package's interfaces groups -->
-    <member_of_group>rosidl_interface_packages</member_of_group>
-    
     <!-- Package's exports -->
     <export>
         <build_type>ament_cmake</build_type>

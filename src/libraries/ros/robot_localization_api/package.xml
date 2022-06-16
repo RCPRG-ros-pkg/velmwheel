@@ -5,7 +5,7 @@
     <!-- Package's name -->
     <name>robot_localization_api</name>
     <!-- Package's version -->
-    <version>3.2.4</version>
+    <version>3.4.0</version>
     <!-- Package's description -->
     <description>
     
@@ -42,6 +42,7 @@
     <depend>geographiclib</depend>
     <depend>message_filters</depend>
     <depend>nav_msgs</depend>
+    <depend>angles</depend>
     <depend>sensor_msgs</depend>
     <depend>std_msgs</depend>
     <depend>std_srvs</depend>

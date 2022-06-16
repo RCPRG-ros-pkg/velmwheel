@@ -20,7 +20,7 @@
 #include <limits>
 #include <utility>
 // Math includes
-#include "tf2_eigen/tf2_eigen.h"
+#include "tf2_eigen/tf2_eigen.hpp"
 // ROS includes
 #include "rclcpp/rclcpp.hpp"
 #include "rclcpp/visibility_control.hpp"

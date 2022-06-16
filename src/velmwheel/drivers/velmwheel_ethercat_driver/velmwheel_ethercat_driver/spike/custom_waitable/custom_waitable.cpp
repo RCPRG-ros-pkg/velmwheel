@@ -3,7 +3,7 @@
  * @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
  * @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
  * @date       Thursday, 28th April 2022 2:24:56 pm
- * @modified   Thursday, 28th April 2022 3:16:51 pm
+ * @modified   Thursday, 16th June 2022 6:43:00 pm
  * @project    engineering-thesis
  * @brief
  *    
@@ -11,6 +11,7 @@
  *    
  * @soruce https://answers.ros.org/question/322815/ros2-how-to-create-custom-waitable/
  * @see https://docs.ros.org/en/galactic/Concepts/About-Executors.html
+ * @see https://github.com/ros2/rclcpp/pull/1612
  * 
  * @copyright Krzysztof Pierczyk © 2022
  * ================================================================================================================================ */
@@ -33,35 +34,19 @@ class MyWaitable : public rclcpp::Waitable {
 public: /* ------------------------ Waitable API iplementation ----------------------- */
     
     /// @brief Initialize waitable
-    MyWaitable() {
-
-        // Get global context
-        std::shared_ptr<rclcpp::Context> context_ptr =  rclcpp::contexts::get_global_default_context();
-        // Create options for guard condition
-        rcl_guard_condition_options_t guard_condition_options = rcl_guard_condition_get_default_options();
-        // Initialize guard condition
-        [[maybe_unused]] rcl_ret_t ret = rcl_guard_condition_init(&gc, context_ptr->get_rcl_context().get(), guard_condition_options);
-    }
+    MyWaitable() { }
 
     /// @brief Gives API hint about number of associated guard conditions
-    size_t get_number_of_ready_guard_conditions() { return 1;}
+    size_t get_number_of_ready_guard_conditions() override { return 1;}
 
     /// @brief Adds waitable to the wait set
-    bool add_to_wait_set(rcl_wait_set_t * wait_set) {
-
+    void add_to_wait_set(rcl_wait_set_t * wait_set) override {
         std::cout << "Adding to wait set! " << "(" << std::this_thread::get_id() << ")" << std::endl;
-
-        // Synchronise condition adding
-        std::lock_guard<std::recursive_mutex> lock(mutex);
-        // Add condition to the set
-        rcl_ret_t ret = rcl_wait_set_add_guard_condition(wait_set, &gc, NULL);
-        // return adding result
-        return RCL_RET_OK == ret;
-
+        gc.add_to_wait_set(wait_set);
     }
 
     /// @brief Tells API whether the waitable is ready to be executed
-    bool is_ready([[maybe_unused]] rcl_wait_set_t * wait_set) { 
+    bool is_ready([[maybe_unused]] rcl_wait_set_t * wait_set) override { 
         std::cout << "Requesting readiness! " << "(" << std::this_thread::get_id() << ")" << std::endl;
         return size > 0; 
     }
@@ -81,18 +66,15 @@ public: /* ------------------------ Waitable API iplementation -----------------
 public: /* -------------------------------- Helper API ------------------------------- */
 
     /// @brief Triggers the guard condition
-    void trigger() { [[maybe_unused]] auto ret = rcl_trigger_guard_condition(&gc); }
+    void trigger() { gc.trigger(); }
 
     /// @brief Adds element to the fake queue
     void produce() { size++; }
 
 private: /* ----------------------------- Data members ------------------------------- */
 
-    // Synchronisation mutex
-    std::recursive_mutex mutex;
-    
     // Guarding condition
-    rcl_guard_condition_t gc = rcl_get_zero_initialized_guard_condition();
+    rclcpp::GuardCondition gc;
     // Current size of a fake queue
     int size = 0;
 

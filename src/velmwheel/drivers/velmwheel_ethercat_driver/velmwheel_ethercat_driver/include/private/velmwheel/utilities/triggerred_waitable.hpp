@@ -3,7 +3,7 @@
  * @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
  * @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
  * @date       Thursday, 28th April 2022 3:13:39 pm
- * @modified   Friday, 20th May 2022 3:06:46 pm
+ * @modified   Thursday, 16th June 2022 3:04:24 pm
  * @project    engineering-thesis
  * @brief
  *    
@@ -102,7 +102,7 @@ public: /* ----------------------------------------------- Waitable API iplement
      *    @retval @c true on success
      *    @retval @c false on failure
      */
-    bool add_to_wait_set(rcl_wait_set_t * wait_set) override;
+    inline void add_to_wait_set(rcl_wait_set_t * wait_set) override;
 
     /**
      * @brief Tells Waitable API whether the associated condition has been triggerred
@@ -113,7 +113,7 @@ public: /* ----------------------------------------------- Waitable API iplement
      *    @retval @c true if waitable is ready to execute
      *    @retval @c false otherwise
      */
-    bool is_ready(rcl_wait_set_t * wait_set) override;
+    inline bool is_ready(rcl_wait_set_t * wait_set) override;
 
     /**
      * @brief Takes data related to the waited conditon
@@ -134,12 +134,9 @@ public: /* ------------------------------------------------------- Client API --
     void trigger();
 
 private: /* ----------------------------------------------------- Data members ---------------------------------------------------- */
-
-    /// Synchronisation lock
-    RecursiveLock lock;
     
     /// Guarding condition
-    rcl_guard_condition_t gc { rcl_get_zero_initialized_guard_condition() };
+    rclcpp::GuardCondition gc;
     
     /// External event state
     std::atomic<bool> triggerred { ATOMIC_FLAG_INIT };

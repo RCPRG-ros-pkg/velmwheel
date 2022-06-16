@@ -18,7 +18,7 @@
 // Common includes
 #include "node_common/node.hpp"
 // TF includes
-#include "tf2_geometry_msgs/tf2_geometry_msgs.h"
+#include "tf2_geometry_msgs/tf2_geometry_msgs.hpp"
 #include "tf2/utils.h"
 // Private includes
 #include "velmwheel/odom_fusion.hpp"

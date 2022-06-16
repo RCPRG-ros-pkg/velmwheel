@@ -3,7 +3,7 @@
 # @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @date       Friday, 13th May 2022 5:23:30 pm
-# @modified   Thursday, 16th June 2022 12:27:52 pm
+# @modified   Thursday, 16th June 2022 12:27:48 pm
 # @project    engineering-thesis
 # @brief      Checks for dependencancies of the project in the system and isntalls lacking ones. Sources scripts providing definitions
 #             and functionalities used in the project

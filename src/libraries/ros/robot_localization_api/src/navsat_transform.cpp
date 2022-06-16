@@ -42,7 +42,7 @@
 #include <rclcpp/rclcpp.hpp>
 #include <sensor_msgs/msg/imu.hpp>
 #include <sensor_msgs/msg/nav_sat_fix.hpp>
-#include <tf2_geometry_msgs/tf2_geometry_msgs.h>
+#include <tf2_geometry_msgs/tf2_geometry_msgs.hpp>
 
 #include <Eigen/Dense>
 
@@ -135,12 +135,12 @@ NavSatTransform::NavSatTransform(const rclcpp::NodeOptions & options)
       broadcast_cartesian_transform_as_parent_frame_);
   }
 
-  datum_srv_ = this->create_service<robot_localization::srv::SetDatum>(
+  datum_srv_ = this->create_service<robot_localization_api::srv::SetDatum>(
     "datum", std::bind(&NavSatTransform::datumCallback, this, _1, _2));
 
-  to_ll_srv_ = this->create_service<robot_localization::srv::ToLL>(
+  to_ll_srv_ = this->create_service<robot_localization_api::srv::ToLL>(
     "toLL", std::bind(&NavSatTransform::toLLCallback, this, _1, _2));
-  from_ll_srv_ = this->create_service<robot_localization::srv::FromLL>(
+  from_ll_srv_ = this->create_service<robot_localization_api::srv::FromLL>(
     "fromLL", std::bind(&NavSatTransform::fromLLCallback, this, _1, _2));
 
   std::vector<double> datum_vals;
@@ -157,36 +157,45 @@ NavSatTransform::NavSatTransform(const rclcpp::NodeOptions & options)
       datum_yaw = datum_vals[2];
     }
 
-    auto request = std::make_shared<robot_localization::srv::SetDatum::Request>();
+    auto request = std::make_shared<robot_localization_api::srv::SetDatum::Request>();
     request->geo_pose.position.latitude = datum_lat;
     request->geo_pose.position.longitude = datum_lon;
     request->geo_pose.position.altitude = 0.0;
     tf2::Quaternion quat;
     quat.setRPY(0.0, 0.0, datum_yaw);
     request->geo_pose.orientation = tf2::toMsg(quat);
-    auto response = std::make_shared<robot_localization::srv::SetDatum::Response>();
+    auto response = std::make_shared<robot_localization_api::srv::SetDatum::Response>();
     datumCallback(request, response);
   }
 
   auto custom_qos = rclcpp::SensorDataQoS(rclcpp::KeepLast(1));
 
+  auto subscriber_options = rclcpp::SubscriptionOptions();
+  subscriber_options.qos_overriding_options =
+    rclcpp::QosOverridingOptions::with_default_policies();
   odom_sub_ = this->create_subscription<nav_msgs::msg::Odometry>(
-    "odometry/filtered", custom_qos, std::bind(&NavSatTransform::odomCallback, this, _1));
+    "odometry/filtered", custom_qos, std::bind(
+      &NavSatTransform::odomCallback, this, _1), subscriber_options);
 
   gps_sub_ = this->create_subscription<sensor_msgs::msg::NavSatFix>(
-    "gps/fix", custom_qos, std::bind(&NavSatTransform::gpsFixCallback, this, _1));
+    "gps/fix", custom_qos, std::bind(&NavSatTransform::gpsFixCallback, this, _1),
+    subscriber_options);
 
   if (!use_odometry_yaw_ && !use_manual_datum_) {
     imu_sub_ = this->create_subscription<sensor_msgs::msg::Imu>(
-      "imu", custom_qos, std::bind(&NavSatTransform::imuCallback, this, _1));
+      "imu", custom_qos, std::bind(&NavSatTransform::imuCallback, this, _1), subscriber_options);
   }
 
+  rclcpp::PublisherOptions publisher_options;
+  publisher_options.qos_overriding_options = rclcpp::QosOverridingOptions::with_default_policies();
   gps_odom_pub_ =
-    this->create_publisher<nav_msgs::msg::Odometry>("odometry/gps", rclcpp::QoS(10));
+    this->create_publisher<nav_msgs::msg::Odometry>(
+    "odometry/gps", rclcpp::QoS(10), publisher_options);
 
   if (publish_gps_) {
     filtered_gps_pub_ =
-      this->create_publisher<sensor_msgs::msg::NavSatFix>("gps/filtered", rclcpp::QoS(10));
+      this->create_publisher<sensor_msgs::msg::NavSatFix>(
+      "gps/filtered", rclcpp::QoS(10), publisher_options);
   }
 
   // Sleep for the parameterized amount of time, to give
@@ -337,8 +346,8 @@ void NavSatTransform::computeTransform()
 }
 
 bool NavSatTransform::datumCallback(
-  robot_localization::srv::SetDatum::Request::SharedPtr request,
-  robot_localization::srv::SetDatum::Response::SharedPtr)
+  robot_localization_api::srv::SetDatum::Request::SharedPtr request,
+  robot_localization_api::srv::SetDatum::Response::SharedPtr)
 {
   // If we get a service call with a manual datum, even if we already computed
   // the transform using the robot's initial pose, then we want to assume that
@@ -386,8 +395,8 @@ bool NavSatTransform::datumCallback(
 }
 
 bool NavSatTransform::toLLCallback(
-  const std::shared_ptr<robot_localization::srv::ToLL::Request> request,
-  std::shared_ptr<robot_localization::srv::ToLL::Response> response)
+  const std::shared_ptr<robot_localization_api::srv::ToLL::Request> request,
+  std::shared_ptr<robot_localization_api::srv::ToLL::Response> response)
 {
   if (!transform_good_) {
     return false;
@@ -404,8 +413,8 @@ bool NavSatTransform::toLLCallback(
 }
 
 bool NavSatTransform::fromLLCallback(
-  const std::shared_ptr<robot_localization::srv::FromLL::Request> request,
-  std::shared_ptr<robot_localization::srv::FromLL::Response> response)
+  const std::shared_ptr<robot_localization_api::srv::FromLL::Request> request,
+  std::shared_ptr<robot_localization_api::srv::FromLL::Response> response)
 {
   double altitude = request->ll_point.altitude;
   double longitude = request->ll_point.longitude;

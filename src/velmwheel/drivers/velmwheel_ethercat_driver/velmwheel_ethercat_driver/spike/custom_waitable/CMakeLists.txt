@@ -2,10 +2,10 @@
 # @file       CMakeLists.txt
 # @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
-# @date       Monday, 13th June 2022 8:33:54 pm
-# @modified   Thursday, 16th June 2022 12:49:42 pm
+# @date       Wednesday, 16th March 2022 4:33:51 pm
+# @modified   Thursday, 16th June 2022 3:24:29 pm
 # @project    engineering-thesis
-# @brief      Minimal CMake file for the 'velmwheel_base_driver_msgs' package
+# @brief      CMake file for `velmwheel_ethercat_driver` package
 #    
 #    
 # @copyright Krzysztof Pierczyk © 2022
@@ -16,48 +16,29 @@
 # CMake version
 cmake_minimum_required(VERSION 3.8)
 # Project header
-project(velmwheel_base_driver_msgs)
+project(custom_waitable_spike)
 
 # ========================================================== Configuration ========================================================= #
 
 # Add extra warnings
 add_compile_options(-Wall -Wextra -Wpedantic)
 
-# Configure C++17 (instead of original C++14) to meet rclcpp requirement for std::variant
+# Require C++ 17
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # ========================================================== Dependencies ========================================================== #
 
-# Ament dependency (standard buildtool dependencies)
+# Common dependencies
 find_package(ament_cmake REQUIRED)
-find_package(rosidl_default_generators REQUIRED)
-# Interfaces dependencies
-find_package(builtin_interfaces REQUIRED)
-find_package(std_msgs REQUIRED)
+find_package(rclcpp REQUIRED)
 
-# ============================================================ Messages ============================================================ #
+# ============================================================= Plugin ============================================================= #
 
-# Add message interfaces to the project
-rosidl_generate_interfaces(
-    
-    # Sources
-    ${PROJECT_NAME}
-
-        # Messages
-        "msg/WheelsStatus.msg"
-        # Services
-        "srv/Command.srv"
-        "srv/ResetFailure.srv"
-
-    # Dependencies
-    DEPENDENCIES
-        builtin_interfaces
-        std_msgs
-)
-
-# Export ament dependencies for generated interfaces
-ament_export_dependencies(rosidl_default_runtime)
+# Add target
+add_executable(${PROJECT_NAME} custom_waitable)
+# Link rclcpp
+ament_target_dependencies(${PROJECT_NAME} rclcpp)
 
 # ============================================================== Build ============================================================= #
 

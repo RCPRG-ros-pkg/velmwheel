@@ -31,20 +31,7 @@ TriggerredWaitable<RecursiveLock>::TriggerredWaitable(
     std::function<void(void)> callback
 ) : 
     callback{ callback } 
-{
-
-    // Get global context
-    std::shared_ptr<rclcpp::Context> context_ptr =  rclcpp::contexts::get_global_default_context();
-    
-    // Create options for guard condition
-    rcl_guard_condition_options_t guard_condition_options = rcl_guard_condition_get_default_options();
-    // Initialize guard condition
-    rcl_ret_t ret = rcl_guard_condition_init(&gc, context_ptr->get_rcl_context().get(), guard_condition_options);
-    // If initialization failed, throw error
-    if(ret != RCL_RET_OK)
-        throw std::runtime_error{ "[TriggerredWaitable] rcl_guard_condition_init failed to initialize guard condition" };
-
-}
+{ }
 
 
 template<typename RecursiveLock>
@@ -52,15 +39,8 @@ size_t TriggerredWaitable<RecursiveLock>::get_number_of_ready_guard_conditions()
 
 
 template<typename RecursiveLock>
-bool TriggerredWaitable<RecursiveLock>::add_to_wait_set(rcl_wait_set_t * wait_set) {
-
-    std::lock_guard<std::recursive_mutex> guard(lock);
-    
-    // Add condition to the set
-    rcl_ret_t ret = rcl_wait_set_add_guard_condition(wait_set, &gc, NULL);
-    // return adding result
-    return RCL_RET_OK == ret;
-
+void TriggerredWaitable<RecursiveLock>::add_to_wait_set(rcl_wait_set_t * wait_set) {
+    gc.add_to_wait_set(wait_set);
 }
 
 
@@ -100,15 +80,7 @@ void TriggerredWaitable<RecursiveLock>::trigger() {
     // Mark event occurrence
     triggerred.store(true);
     // Trigger associated guard condition
-    [[maybe_unused]] auto ret = rcl_trigger_guard_condition(&gc); 
-
-    /**
-     * @note Conducted empirical tests showned no impact on the code execution of the
-     *    @ref rcl_trigger_guard_condition(...) call. This is however included in the
-     *    [1] example and has been kept.
-     * 
-     * @see [1] https://answers.ros.org/question/322815/ros2-how-to-create-custom-waitable/
-     */
+    gc.trigger();
 
 }
 

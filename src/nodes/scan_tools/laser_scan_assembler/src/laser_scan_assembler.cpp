@@ -126,7 +126,7 @@ LaserScanAssembler::LaserScanAssembler(const rclcpp::NodeOptions & options) :
         auto validity_decaying_time_ns =
             std::chrono::duration_cast<std::chrono::nanoseconds>(validity_decaying_time_s);
         // Keep the timeout value as ROS-specific structure
-        this->validity_decaying_time.emplace(validity_decaying_time_ns.count());
+        this->validity_decaying_time.emplace(validity_decaying_time_ns);
 
     }
 
