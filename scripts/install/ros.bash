@@ -1,14 +1,15 @@
 # ====================================================================================================================================
-# @ Filename: ros2_install.bash
-# @ Author: Krzysztof Pierczyk
-# @ Create Time: 2021-01-02 14:53:45
-# @ Modified time: 2021-01-02 14:53:47
-# @ Source: https://docs.ros.org/en/galactic/Installation/Ubuntu-Install-Binary.html
-# @ Description:
-#
-#     Setups environment and installs ROS2 distribution along with recommended tools
-#     
-# @ Note: Script was tested on Ubuntu 20.0.4 LTS system
+# @file       ros.bash
+# @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+# @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+# @date       Thursday, 2nd January 2021 2:53:45 pm
+# @modified   Thursday, 16th June 2022 12:25:50 pm
+# @project    engineering-thesis
+# @brief      Setups environment and installs ROS2 distribution along with recommended tools
+# 
+# 
+# @note Script was tested on Ubuntu 20.0.4 LTS system
+# @copyright Krzysztof Pierczyk © 2022
 # ====================================================================================================================================
 
 # Source BashUitils library

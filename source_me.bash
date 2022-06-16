@@ -3,7 +3,7 @@
 # @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @date       Friday, 23rd April 2021 12:29:15 pm
-# @modified   Tuesday, 14th June 2022 7:19:52 pm
+# @modified   Wednesday, 15th June 2022 2:38:45 pm
 # @project    engineering-thesis
 # @brief      Script that should be sourced before starting working with the directory
 # @details
@@ -60,7 +60,7 @@ function setup_project() {
         log_error_aux "Failed to resolve 'bash-utils' dependencies"
         return 1
     }
-
+    
     # Configure environment before dependencies' installation
     source $PROJECT_HOME/scripts/preconfig.bash || return 1
 
@@ -85,11 +85,11 @@ function setup_project() {
 # Update project
 if [[ "$1" == 'update' ]]; then
 
-    log_info "Clonning git submodules..."
+    log_info_aux "Clonning git submodules..."
 
     # Clone submodules
     git submodule update --init --recursive || {
-        log_error "Failed to clone git submodules"
+        log_error_aux "Failed to clone git submodules"
         return 1
     }
 

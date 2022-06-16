@@ -1,16 +1,17 @@
 # ====================================================================================================================================
-# @ Filename: dependancies.bash
-# @ Author: Krzysztof Pierczyk
-# @ Create Time: 2021-04-19 21:08:30
-# @ Modified time: 2021-04-19 21:08:37
-# @ Description: 
-#    
-#    Checks for dependencancies of the project in the system and isntalls lacking ones. Sources scripts providing definitions
-#    and functionalities used in the project
-#    
-# @ Note: Before running this script `source_me.bash` (under project's home directory) should be sourced by the calling terminal
-# @ Note: Script was tested on Ubuntu 20.0.4 LTS system
-# @ Note: This script should be rather source than executed
+# @file       config.bash
+# @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+# @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+# @date       Friday, 13th May 2022 5:23:30 pm
+# @modified   Thursday, 16th June 2022 12:27:52 pm
+# @project    engineering-thesis
+# @brief      Checks for dependencancies of the project in the system and isntalls lacking ones. Sources scripts providing definitions
+#             and functionalities used in the project
+#
+# @note Before running this script `source_me.bash` (under project's home directory) should be sourced by the calling terminal
+# @note Script was tested on Ubuntu 20.0.4 LTS system
+# @note This script should be rather source than executed
+# @copyright Krzysztof Pierczyk © 2022
 # ====================================================================================================================================
 
 # Check whether `source_me.bash` was sourced

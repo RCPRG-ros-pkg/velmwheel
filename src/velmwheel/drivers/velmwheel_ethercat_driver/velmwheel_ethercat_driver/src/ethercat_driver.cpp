@@ -3,7 +3,7 @@
  * @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
  * @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
  * @date       Thursday, 28th April 2022 12:31:55 pm
- * @modified   Tuesday, 14th June 2022 4:25:19 pm
+ * @modified   Wednesday, 15th June 2022 1:55:52 pm
  * @project    engineering-thesis
  * @brief      Definitions of the EtherCAT driver node of WUT Velmwheel robot
  * 
@@ -288,7 +288,7 @@ EthercatDriver::EthercatDriver(const rclcpp::NodeOptions & options) :
         }
 
     };
-
+    
     // Construct the driver
     implementation.emplace(*this, driver_config);
 

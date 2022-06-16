@@ -1,12 +1,14 @@
 # ====================================================================================================================================
-# @ Filename: dependancies.bash
-# @ Author: Krzysztof Pierczyk
-# @ Create Time: 2021-04-19 21:08:30
-# @ Modified time: 2021-04-19 21:08:37
-# @ Description: 
-#    
-#    Checks for dependencancies of the project in the system and isntalls lacking ones
-#
+# @file       install.bash
+# @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+# @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+# @date       Friday, 13th May 2022 5:23:30 pm
+# @modified   Thursday, 16th June 2022 12:29:29 pm
+# @project    engineering-thesis
+# @brief      Checks for dependencancies of the project in the system and isntalls lacking ones
+# 
+# 
+# @copyright Krzysztof Pierczyk © 2022
 # ====================================================================================================================================
 
 # Install basic dependencies

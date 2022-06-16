@@ -3,7 +3,7 @@
  * @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
  * @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
  * @date       Wednesday, 4th May 2022 12:03:11 pm
- * @modified   Friday, 27th May 2022 3:42:15 pm
+ * @modified   Wednesday, 15th June 2022 2:06:33 pm
  * @project    engineering-thesis
  * @brief      Definition of the RAII class wrapping an connection-point (called 'Driver') to the CIFX Toolkit Framework
  * 
@@ -40,7 +40,7 @@ namespace conversions {
         return CIFX_LINUX_INIT {
             .cos_polling_interval_ms   = static_cast<int>(config.cos_polling_interval_ms.has_value() ? config.cos_polling_interval_ms->count() : -1),
             .cos_polling_thread_params = conversions::to_c(config.cos_polling_thread_params),
-            .trace_level        = conversions::to_c(config.trace_level),
+            .trace_level               = conversions::to_c(config.trace_level),
         };
     }
 

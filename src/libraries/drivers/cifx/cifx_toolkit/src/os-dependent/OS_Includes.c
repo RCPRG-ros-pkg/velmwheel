@@ -3,7 +3,7 @@
  * @author     Adam Kowalewski
  * @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
  * @date       Thursday, 19th May 2022 9:53:09 am
- * @modified   Wednesday, 25th May 2022 9:47:39 pm
+ * @modified   Wednesday, 15th June 2022 1:39:54 pm
  * @project    engineering-thesis
  * @brief      CIFX'es files-related OS functions [implementation]
  * 
@@ -69,7 +69,7 @@ static void message(int trace_level, const char *colour, const char *context, co
         snprintf(buf, TRACE_BUF_SIZE, "[%s%s" LOG_END_COL "] %s", colour, context, format);
 
     // Print message
-	xTrace(trace_level, buf, arg);
+	xTraceVa(trace_level, buf, arg);
 }
 
 /* ======================================================= Public functions ======================================================= */
@@ -135,7 +135,7 @@ void xTraceDebug(const char *context, const char *format, ...) {
 
 
 void xTraceInfoVa(const char *context, const char *format, va_list arg) {
-
+    
     // Print message
 	message(TRACE_LEVEL_INFO, LOG_INFO_COL, context, format, arg);
 
@@ -147,7 +147,7 @@ void xTraceInfo(const char *context, const char *format, ...) {
     // Initialize variable arguments
     va_list arg;
 	va_start(arg, format);
-
+    
 	xTraceInfoVa(context, format, arg);
 
     // Remove variable list
@@ -178,9 +178,9 @@ void xTraceWarn(const char *context, const char *format, ...) {
 
 void xTraceErrorVa(const char *context, const char *format, va_list arg) {
 
+
     // Print message
 	message(TRACE_LEVEL_ERROR, LOG_ERROR_COL, context, format, arg);
-
 }
 
 
@@ -225,10 +225,11 @@ void xTraceSystemError(const char *context, int ec, const char *format, ...) {
 
 void xTraceGlobalSystemErrorVa(const char *context, const char *format, va_list arg) {
 
-    char message_buf[TRACE_BUF_SIZE];
+    char message_buf[TRACE_BUF_SIZE] = "";
 
     // Format message
-    snprintf(message_buf, TRACE_BUF_SIZE, "(%s) %s", strerror(errno), format);
+    snprintf(message_buf, TRACE_BUF_SIZE, "(%s) ", strerror(errno));
+    strncat(message_buf, format, TRACE_BUF_SIZE - strlen(message_buf));
 
     // Print message
 	message(TRACE_LEVEL_ERROR, LOG_ERROR_COL, context, message_buf, arg);

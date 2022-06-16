@@ -3,7 +3,7 @@
 # @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @date       Thursday, 14th January 2021 9:29:40 pm
-# @modified   Wednesday, 25th May 2022 10:46:36 pm
+# @modified   Wednesday, 15th June 2022 2:42:38 pm
 # @project    engineering-thesis
 # @brief      Downloads, builds, installs and loads uio_netx kernel that maps Hilscher card's memory and interrupts into Linux
 #             UIO (Userspace I/O) subsystem. It is required by all drivers operating on these cards.
@@ -37,19 +37,24 @@ main() {
     local ret
 
     # Check whether CIFX UIO (Userspace I/O) kernel module is present in the system
-    sudo ls /lib/modules/$(uname -r)/kernel/drivers/uio/uio_netx.ko > /dev/null && ret=$? || ret=$?
+    sudo ls /lib/modules/$(uname -r)/kernel/drivers/uio/uio_netx.ko &> /dev/null && ret=$? || ret=$?
 
     # If `ls` didn;t find the module, install it
     if [[ $ret == 2 ]] ; then
 
+        log_info "Installing cifx/netX Linux UIO driver..."
+
         # Create and enter temporary directory
-        rm -f /tmp/netx_uio
+        rm -rf /tmp/netx_uio
         mkdir /tmp/netx_uio
         cd /tmp/netx_uio
 
         # Download kernel module
         log_info "Downloading the module"
-        wget "$NETX_UIO_URL" -O netx_uio.tar.bz2
+        wget "$NETX_UIO_URL" -O netx_uio.tar.bz2 || {
+            log_error "Failed to download cifx/netX Linux UIO driver"
+            return 1
+        }
 
         # Extract files
         log_info "Extracting files"

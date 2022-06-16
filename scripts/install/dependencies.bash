@@ -3,11 +3,10 @@
 # @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @date       Friday, 29th April 2022 1:22:24 pm
-# @modified   Monday, 6th June 2022 8:01:16 pm
+# @modified   Thursday, 16th June 2022 12:21:54 pm
 # @project    engineering-thesis
-# @brief
+# @brief      Installs system dependencies of the project
 #    
-#    Installs system dependencies of the project
 #    
 # @copyright Krzysztof Pierczyk © 2022
 # ====================================================================================================================================
@@ -29,6 +28,20 @@ main() {
         # Python
         python3
         python3-pip
+
+        # Kernel building
+        libncurses-dev
+        flex
+        bison
+        openssl
+        libssl-dev
+        dkms
+        libelf-dev
+        libudev-dev
+        libpci-dev
+        libiberty-dev
+        autoconf
+        fakeroot
         
         # RT measurements
         rt-tests

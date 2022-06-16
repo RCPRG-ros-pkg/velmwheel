@@ -3,7 +3,7 @@
 # @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @date       Thursday, 7th April 2022 6:50:10 am
-# @modified   Tuesday, 14th June 2022 4:34:37 pm
+# @modified   Wednesday, 15th June 2022 10:13:40 pm
 # @project    engineering-thesis
 # @brief      Launchfile running middleware of the WUT Velmwheel robot's `ethercat_driver` module
 #    
@@ -56,6 +56,9 @@ bus_driver_description = {
             get_config_source('velmwheel_drivers_bringup', 'imu_driver.yaml'),
 
         ],
+
+        # Make driver required by system to functionate
+        default_required = True
 
     )),
     # Arguments

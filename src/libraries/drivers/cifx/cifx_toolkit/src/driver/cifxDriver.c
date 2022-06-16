@@ -3,7 +3,7 @@
  * @author     Adam Kowalewski
  * @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
  * @date       Wednesday, 13th April 2021 8:03:28 am
- * @modified   Friday, 27th May 2022 3:42:15 pm
+ * @modified   Wednesday, 15th June 2022 2:07:16 pm
  * @project    engineering-thesis
  * @brief      (De)Initialization functions of the CIFX driver [implementation]
  * 
@@ -61,7 +61,7 @@ static int init_toolkit(const CIFX_LINUX_INIT* init) {
 		xTraceSystemError(context, ec, "Could not initialize toolkit");
 		return -1;
 	}
-
+    
 	return 0;
 }
 
@@ -97,7 +97,7 @@ static int init_cos_polling(const CIFX_LINUX_INIT* init) {
 		xTraceInfo(context, "NOT using COS polling");
 		return 0;
 	}
-
+    
 	xTraceInfo(context, "Initializing COS polling...");
 
 	// Start COS polling thread
@@ -135,7 +135,7 @@ int32_t xToolkitInit(const CIFX_LINUX_INIT* init) {
 	// Check if Toolkit was already initialized
 	if(g_initialized)
 		return CIFX_TKT_ALREADY_INITIALIZED;
-
+    
 	// Toolkit initialization
 	if(init_toolkit(init) == -1)
 		return CIFX_TKT_INIT_ERROR;
@@ -145,7 +145,7 @@ int32_t xToolkitInit(const CIFX_LINUX_INIT* init) {
 		deinit_toolkit();
 		return CIFX_TKT_INIT_ERROR;
 	}
-
+    
 	// Signal driver's initializtion finished
 	g_initialized = true;
 

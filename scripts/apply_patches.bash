@@ -3,7 +3,7 @@
 # @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @date       Thursday, 26th May 2022 3:21:59 am
-# @modified   Thursday, 26th May 2022 3:34:00 am
+# @modified   Wednesday, 15th June 2022 10:40:05 am
 # @project    engineering-thesis
 # @brief      Auxiliary script applying patches required by the environment
 # 
@@ -34,14 +34,14 @@ main() {
     # Path to the patch file
     local PATCH_FILE=$PROJECT_HOME/scripts/patches/node.py.patch
     # Path to the patched file
-    local PATCHED_FILE=/opt/ros/${ROS_DISTRO}/lib/python3.8/site-packages/rclpy/node.py
+    local PATCHED_FILE=/opt/ros/${PROJECT_ROS_DISTRO}/lib/python3.8/site-packages/rclpy/node.py
 
     # Patch the file
     if ! patch -R -p0 -s -f --dry-run "$PATCHED_FILE" "$PATCH_FILE" > /dev/null; then
         log_info "Patching node.py file from [rclpy] package..."
         sudo patch -p0 "$PATCHED_FILE" "$PATCH_FILE" || {
-        log_error "Failed to patch [rclpy] package"
-            return 1
+            log_warning "Failed to patch [rclpy] package. It has probably been patched bu the upstream already."
+            return 0
         }
         log_info "[rclpy] package patched"
     fi

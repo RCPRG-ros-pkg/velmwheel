@@ -3,7 +3,7 @@
  * @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
  * @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
  * @date       Wednesday, 8th June 2022 11:34:53 pm
- * @modified   Monday, 13th June 2022 7:13:39 pm
+ * @modified   Thursday, 16th June 2022 2:32:24 pm
  * @project    engineering-thesis
  * @brief      Definition of auxiliary traits detcing types supported by the default translator
  * 
@@ -92,7 +92,7 @@ constexpr bool is_supported_string_type_v {
 
 /// Auxiliary trait indicating whether given T type is static_string bit type
 template<typename T>
-constexpr bool is_supported_string_type_v { 
+constexpr bool is_supported_static_string_type_v { 
     ethercat::types::traits::is_static_string_v       <T> ||
     ethercat::types::traits::is_static_string_array_v <T> ||
     ethercat::types::traits::is_static_string_vector_v<T>
@@ -107,12 +107,12 @@ constexpr bool is_supported_string_type_v {
  */
 template<typename T>
 constexpr bool is_supported_v { 
-    is_supported_builtin_v<T>        ||
-    is_supported_builtin_array_v<T>  ||
-    is_supported_builtin_vector_v<T> ||
-    is_supported_bit_type_v<T>       ||
-    is_supported_string_type_v<T>    ||
-    is_supported_string_type_v<T>
+    is_supported_builtin_v<T>            ||
+    is_supported_builtin_array_v<T>      ||
+    is_supported_builtin_vector_v<T>     ||
+    is_supported_bit_type_v<T>           ||
+    is_supported_string_type_v<T>        ||
+    is_supported_static_string_type_v<T>
 };
 
 /**

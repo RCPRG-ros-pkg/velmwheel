@@ -3,7 +3,7 @@
  * @author     Adam Kowalewski
  * @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
  * @date       Thursday, 19th May 2022 9:53:09 am
- * @modified   Wednesday, 25th May 2022 9:42:12 pm
+ * @modified   Wednesday, 15th June 2022 1:34:29 pm
  * @project    engineering-thesis
  * @brief      Declarations of common types and routines utilized by the implementation of OS-specific elements of the 
  *             CIFX/netX C Toolkit
@@ -146,7 +146,7 @@ void xTraceWarn(const char *context, const char *format, ...);
  * @param arg
  *    format-dependent arguments
  */
-void xTraceErrorVa(const char *context, const char *format, va_list);
+void xTraceErrorVa(const char *context, const char *format, va_list arg);
 
 /**
  * @brief Prints error message to the stdout

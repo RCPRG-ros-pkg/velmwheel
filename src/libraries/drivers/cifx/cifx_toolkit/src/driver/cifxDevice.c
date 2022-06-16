@@ -3,7 +3,7 @@
  * @author     Adam Kowalewski
  * @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
  * @date       Wednesday, 13th April 2021 7:51:3 am
- * @modified   Wednesday, 25th May 2022 9:43:49 pm
+ * @modified   Wednesday, 15th June 2022 9:54:53 pm
  * @project    engineering-thesis
  * @brief      Set of functions used to configure CIFX card [implementation]
  * 
@@ -25,6 +25,15 @@
 #include <string.h>
 #include <libuio.h>
 #include "cifxDriver.h"
+
+/* =========================================================== Constants ========================================================== */
+
+/// Name of the UIO device that is supported by the toolkit implementation
+static char *supported_uio_device_name = "netx";
+/// Name of the DPM memory map of the UIO device that is supported by the toolkit implementation
+static char *supported_uio_device_dpm_memory_map_name = "dpm";
+/// Name of the DMA memory map of the UIO device that is supported by the toolkit implementation
+static char *supported_uio_device_dma_memory_map_name = "dma";
 
 /* ========================================================== Global Data ========================================================= */
 
@@ -70,7 +79,7 @@ static int check_uio_device_name(struct uio_info_t* uio_device){
 	assert(uio_name != NULL);
 
 	// Check if the name is valid
-	if(strcmp(uio_name, "netx") != 0) {
+	if(strcmp(uio_name, supported_uio_device_name) != 0) {
 		xTraceInfo(context, "Specified UIO device is invalid: name not match");
 		return -1;
 	}
@@ -97,7 +106,7 @@ static int check_uio_device_dpm_map(struct uio_info_t* uio_device) {
 	xTraceInfo(context, "Checking, if UIO device has DPM map...");
 
 	// Check whether the mapping exists
-	const int dpm_index = uio_get_map_index_by_name(uio_device, "dpm");
+	const int dpm_index = uio_get_map_index_by_name(uio_device, supported_uio_device_dpm_memory_map_name);
 	if(dpm_index == -1)	{
 		xTraceInfo(context, "Specified UIO device is invalid: DPM map not found");
 		return -1;
@@ -150,7 +159,7 @@ static struct uio_info_t* acquire_uio_device(int uio_num) {
 	// Fins the UIO device
 	struct uio_info_t* uio_device = uio_find_by_uio_num(uio_num);
 	if(uio_device == NULL) {
-		xTraceGlobalSystemError(context, "Could not acquire UIO device");
+		xTraceGlobalSystemError(context, "Could not acquire UIO device (%d)", uio_num);
 		return NULL;
 	}
 
@@ -162,12 +171,12 @@ static struct uio_info_t* acquire_uio_device(int uio_num) {
 
 	// Open the UIO device
 	if(uio_open(uio_device) == -1) {
-		xTraceGlobalSystemError(context, "Could not open UIO device");
+		xTraceGlobalSystemError(context, "Could not open UIO device (%d)", uio_num);
 		uio_free_info(uio_device);
 		return NULL;
 	}
 
-	xTraceInfo(context, "Successfully acquired UIO device");
+	xTraceInfo(context, "Successfully acquired UIO device (%d)", uio_num);
 	return uio_device;
 }
 
@@ -261,7 +270,7 @@ static void set_uio_dev_instance_dpm_data(DEVICEINSTANCE* dev_instance, struct u
 	assert(uio_device != NULL);
 
 	// Get index of the DPM mapping (ensure that it exists)
-	const int dpm_index = uio_get_map_index_by_name(uio_device, "dpm");
+	const int dpm_index = uio_get_map_index_by_name(uio_device, supported_uio_device_dpm_memory_map_name);
 	assert(dpm_index != -1);
 
 	// Get pointer to the DPM mapping
@@ -292,7 +301,7 @@ static void set_uio_dev_instance_dma_data(DEVICEINSTANCE* dev_instance, struct u
 	assert(uio_device != NULL);
 
 	// Get index of the devices' DMA memory mapping
-	const int dma_index = uio_get_map_index_by_name(uio_device, "dma");
+	const int dma_index = uio_get_map_index_by_name(uio_device, supported_uio_device_dma_memory_map_name);
 	if(dma_index == -1)	{
 		return;
 	}
@@ -305,7 +314,7 @@ static void set_uio_dev_instance_dma_data(DEVICEINSTANCE* dev_instance, struct u
 	unsigned long dma_addr = uio_get_mem_addr(uio_device, dma_index);
 	assert(dma_addr != 0);
 
-	// Set number of DMA buffers (always 8 @see docs)
+	// Set number of DMA buffers (always 8 - number of card's communication channels - @see docs)
 	dev_instance->ulDMABufferCount = 8;
 
 	/**
@@ -534,7 +543,7 @@ int xDeviceInit(const CIFX_DEVICE_INIT* device_info) {
 		return CIFX_DEV_TKT_NOT_INITIALIZED;
 
 	xTraceInfo(context, "Initializing...");
-
+    
 	// Check if custom paths (if given) fit into internal buffers
 	if(device_info->bootloader_file != NULL && strlen(device_info->bootloader_file) > PATH_BUFF_SIZE)
 		return CIFX_DEV_INIT_ERROR;
@@ -550,6 +559,12 @@ int xDeviceInit(const CIFX_DEVICE_INIT* device_info) {
 		strncpy(firmware_f, device_info->firmware_file, PATH_BUFF_SIZE);
 	if(device_info->config_file != NULL)
 		strncpy(config_f, device_info->config_file, PATH_BUFF_SIZE);
+    
+    /**
+     * @warning Reset 'errno' to @c 0 manually to make sure that the libuio will not fail
+     *   for a false reason (yeah, it happens... .-.)
+     */
+    errno = 0;
 
 	// Acquire the UIO device
 	struct uio_info_t* uio_device = acquire_uio_device(device_info->uio_num);

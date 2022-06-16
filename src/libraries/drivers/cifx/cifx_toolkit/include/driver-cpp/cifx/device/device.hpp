@@ -3,7 +3,7 @@
  * @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
  * @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
  * @date       Wednesday, 4th May 2022 12:03:11 pm
- * @modified   Friday, 27th May 2022 3:33:54 pm
+ * @modified   Wednesday, 15th June 2022 4:23:38 pm
  * @project    engineering-thesis
  * @brief      Definition of the RAII class wrapping description and providing related API for the 'Device' concept of the 
  *             CIFX Toolkit Framework
@@ -60,12 +60,11 @@ Device::Device(
 ) :
     driver{ driver }
 {
-
     // Convert configuration to C structure
     auto c_config = conversions::to_c(name, config);
     
     // Else, add device to the Toolkit
-    if(auto ret = xDeviceInit(&c_config); ret != CIFX_NO_ERROR){
+    if(auto ret = xDeviceInit(&c_config); ret != CIFX_NO_ERROR) {
         throw Error{ ret, "cifx::Device::Device", "Device initialization failed" };
     }
 

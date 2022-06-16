@@ -10,13 +10,13 @@ The development enviroment consists of:
   - low-level drivers for all devices present in the robot
   - gazebo-11-based simulation of the robot with RVIZ support
   - set of middleware ROS nodes providing basic controls and processing of sensorical data
-  - *roslaunch*-based, highly-parametrizable bringup system covering all components of the system
+  - *roslaunch*-based, highly-parametrizable bringup system covering all components of the environment
   - set of *bash* scripts automating system-setup for the project as well as providing some handy tools speeding-up building and bringup process
 
 # Content
 
 The project has been structured in a way that mimics ralationships between individual components of the system. Each source file in the project 
-has been well-documented using doxygen/sphinx convention. The following provides bird-eye view of the project's structure:
+has been well-documented using doxygen/sphinx convention. The following list provides bird-eye view of the project's structure:
 
   - `extern`: submodule repositories that the project depends on
   - `scripts`: set of *bash* scripts automating system-setup and providing command-line tools speeding-up regular workflow
@@ -29,9 +29,9 @@ has been well-documented using doxygen/sphinx convention. The following provides
       **velmwheel_bringup** provides main *roslaunch* script for the system and should be the only one needed to run the environment
       (for both simulation and real-world scenarios)
       - `velmwheel/common`: common utilities utilized across the system
-      - `velmwheell/drivers`: low-level device drivers for the WUT Velmwheel robot
+      - `velmwheel/drivers`: low-level device drivers for the WUT Velmwheel robot
       - `velmwheel/middleware`: basic controls and sensorical-data-processing nodes
-      - `velmwheel/sim`: simulation environments for the WUT Velmwheel robot (currently only gazebo-based implementation has been implemented)
+      - `velmwheel/sim`: simulation environments for the WUT Velmwheel robot (currently only gazebo-based implementation has been provided)
 
 # Usage
 
@@ -57,8 +57,10 @@ Key utilities among them are:
   - `coltest_src [packages...]` - runs tests for all/listed packages in the `src/` directory
   - `bringup [...]` - simple wrapper around `ros launch` running main launchfile of the project configured for real-world scenario;
     all arguments passed to this command will be appended to the `ros launch` call
-  - `bringup_sim [...]` - simple wrapper around `ros launch` running main launchfile of the project configured for simulation scenario
-    all arguments passed to this command will be appended to the `ros launch` call
+  - `bringup_sim WORLD_NAME [...]` - simple wrapper around `ros launch` running main launchfile of the project configured for
+    simulation scenario; `WORLD_NAME` is path to the world file either relative to the `gazebo/media/world` subdirectory of the
+    `velmwheel_gazebo` package or an absolute path; all other arguments passed to this command will be appended to the `ros launch`
+    call
 
 Last two commands are defined in the `scripts/aliases/launching.bash` file and are used mainly to avoid typing all launch parameters at 
 command-line every time system is run. The list of parameters can (and probably should) be adjusted depending on requirements.
@@ -84,9 +86,14 @@ All packages define set of common parameters (see `node.py` file in the `velmwhe
 
   - `velmwheel_log_level`: system-wide log level configuration for the nodes
   - `with_<component_name>`: boolean parameter deciding whether the given component should be run
+  - `<component_name>_required`: boolean parameter deciding whether launch should shutdown when the node exits (default 'false'
+    for most of nodes)
   - `<component_name>_config`: path to the ROS configuration file that will be **appended** to the list of configruation
     parameters of the component at launchtime (note that these parameters will be appended, i.e. they can overwite some
     values set by the launchfile by default)
 
-All parameters can be listed with `ros2 launch -s <package> <launchfile>` although introspection capabilities for nested launchfiles are currently
-very limited (see [discussion](https://github.com/ros2/launch/issues/313)).
+Note that naming convention for `<component_name>` is following: for each `velmwheel_*` package providing `velmwheel_*` node executable/component
+value of the `<component_name>` is `*`. E.g. if `velmwheel_ethercat_driver` package provides `velmwheel_ethercat_driver` node executable, the
+corresponding launchfile will define `ethercat_driver_required` launch argument. All parameters can be listed with 
+`ros2 launch -s <package> <launchfile>` command, although introspection capabilities for nested launchfiles are currently very limited (see 
+[discussion](https://github.com/ros2/launch/issues/313)).

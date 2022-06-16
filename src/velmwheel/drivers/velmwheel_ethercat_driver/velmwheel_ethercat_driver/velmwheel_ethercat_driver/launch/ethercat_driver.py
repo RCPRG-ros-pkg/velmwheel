@@ -3,7 +3,7 @@
 # @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @date       Thursday, 28th April 2022 12:33:32 pm
-# @modified   Tuesday, 14th June 2022 2:05:27 pm
+# @modified   Wednesday, 15th June 2022 10:21:49 pm
 # @project    engineering-thesis
 # @brief
 #    
@@ -42,7 +42,9 @@ def generate_launch_description(
     params = [],
     remaps = [],
     additional_node_config = {},
-    additional_conditions = []
+    additional_conditions = [],
+    default_required = False,
+    prefix = None
 ):
     return generate_component_launch_description(
         
@@ -58,6 +60,8 @@ def generate_launch_description(
         default_on = 'true',
 
         # Additional arguments
+        default_required       = default_required,
+        prefix                 = prefix,
         params                 = params,
         remaps                 = remaps,
         additional_node_config = additional_node_config,

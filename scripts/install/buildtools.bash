@@ -1,12 +1,12 @@
 # ====================================================================================================================================
-# @file     buildtools.bash
-# @author   Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
-# @date     Tuesday, 26th October 2021 3:08:37 pm
-# @modified Monday, 7th March 2022 1:21:26 pm
-# @project  Winder
-# @brief
+# @file       buildtools.bash
+# @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+# @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+# @date       Tuesday, 26th October 2021 3:08:37 pm
+# @modified   Wednesday, 15th June 2022 11:22:09 pm
+# @project    Winder
+# @brief      Script checks building-tools dependencies and installs them if required
 #    
-#    Script checks building-tools dependencies and installs them if required
 #    
 # @copyright Krzysztof Pierczyk © 2021
 # ====================================================================================================================================
