@@ -28,7 +28,8 @@ launch_description = [
     IncludeLaunchDescription( launch_description_source=get_launch_source('velmwheel_middleware_bringup', f'components/laser_odom.launch.py')          ),
     IncludeLaunchDescription( launch_description_source=get_launch_source('velmwheel_middleware_bringup', f'components/odom_fusion.launch.py')         ),
     IncludeLaunchDescription( launch_description_source=get_launch_source('velmwheel_middleware_bringup', f'components/bias_estimator.launch.py')      ),
-    IncludeLaunchDescription( launch_description_source=get_launch_source('velmwheel_middleware_bringup', f'components/localization.launch.py')                ),
+    IncludeLaunchDescription( launch_description_source=get_launch_source('velmwheel_middleware_bringup', f'components/map_server.launch.py')                ),
+    IncludeLaunchDescription( launch_description_source=get_launch_source('velmwheel_middleware_bringup', f'components/global_planner.launch.py')                ),
     IncludeLaunchDescription( launch_description_source=get_launch_source('velmwheel_middleware_bringup', f'components/poi_map_builder.launch.py')     ),
     IncludeLaunchDescription( launch_description_source=get_launch_source('velmwheel_middleware_bringup', f'components/global_localization.launch.py') ),
 

@@ -52,7 +52,7 @@ def generate_slam_component_launch_description(
             { 'odom_frame':   'odom'                       },
             { 'map_frame':    'map'                        },
             { 'base_frame':   f'{ROBOT_NAME}'              },
-            { 'scan_topic':   f'/{ROBOT_NAME}/lidars/scan' },
+            { 'scan_topic':   f'/{ROBOT_NAME}/lidars/cloud/scan' },
             
         ],
 

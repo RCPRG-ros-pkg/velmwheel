@@ -1,15 +1,3 @@
-# ====================================================================================================================================
-# @file       slam.launch.py
-# @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
-# @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
-# @date       Thursday, 7th April 2022 6:50:10 am
-# @modified   Wednesday, 25th May 2022 4:44:01 pm
-# @project    engineering-thesis
-# @brief      Launchfile running middleware of the WUT Velmwheel robot's `slam` module
-#    
-#    
-# @copyright Krzysztof Pierczyk © 2022
-# ====================================================================================================================================
 
 # ============================================================= Imports ============================================================ #
 
