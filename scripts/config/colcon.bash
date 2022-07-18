@@ -1,16 +1,17 @@
 # ====================================================================================================================================
-# @ Filename: colcon.bash
-# @ Author: Krzysztof Pierczyk
-# @ Create Time: 2021-04-19 21:23:07
-# @ Modified time: 2021-04-19 21:23:24
-# @ Source: https://colcon.readthedocs.io/en/released/user/installation.html
-# @ Description:
-#
-#     Installs colcon build system used along with ROS2 packages
-#     
-# @ Note: Before running this script `sourceMe.bash` (under project's home directory) should be sourced by the calling terminal
-# @ Note: Script was tested on Ubuntu 20.0.4 LTS system
-# @ Note: This script should be rather source than executed
+# @file       colcon.bash
+# @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+# @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+# @date       Monday, 20th June 2022 1:03:56 pm
+# @modified   Wednesday, 22nd June 2022 12:17:36 pm
+# @project    engineering-thesis
+# @brief      Installs colcon build system used along with ROS2 packages
+# 
+# 
+# @note Before running this script `source_me.bash` (under project's home directory) should be sourced by the calling terminal
+# @note Script was tested on Ubuntu 22.04 LTS system
+# @note This script should be rather source than executed
+# @copyright Krzysztof Pierczyk © 2022
 # ====================================================================================================================================
 
 # Source additional script for colcon autocompletion

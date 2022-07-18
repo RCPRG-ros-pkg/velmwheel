@@ -4,14 +4,14 @@
 # @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @date       Thursday, 28th April 2022 1:05:25 pm
-# @modified   Tuesday, 14th June 2022 3:18:12 pm
+# @modified   Friday, 1st July 2022 5:46:07 pm
 # @project    engineering-thesis
 # @brief      Auxiliary ROS2 CLI utility requesting the running EtherCAT driver node for locking process memory
 # @details    Usage
 #
 #      ros2 run velmwheel_ethercat_driver memory_locker                            \
 #          <fully_qualified_driver_node_name>                                      \
-#             --ros-param                                                          \
+#             --ros-args                                                           \
 #             -p memory_lock_scheme:=<lock_scheme>                                 \
 #             -p disable_memory_trimming:=<bool>                                   \
 #             -p disable_mmap:=<bool>                                              \

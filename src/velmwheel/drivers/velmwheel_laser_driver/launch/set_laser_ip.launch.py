@@ -3,7 +3,7 @@
 # @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @date       Friday, 4th March 2022 5:57:12 pm
-# @modified   Thursday, 26th May 2022 2:27:25 am
+# @modified   Friday, 1st July 2022 7:37:29 pm
 # @project    engineering-thesis
 # @brief      Launchfile configuring a new IP address for the SICK LIDAR sensor
 #    
@@ -61,7 +61,7 @@ node_description = {
 
         # Driver's preconfigured configuration
         { 'scanner_type': 'sick_lms_1xx'                },
-        { 'port': 2112                                  },
+        { 'port': '2112'                                },
         { 'use_binary_protocol': True                   },
         { 'timelimit': 5                                },
         { 'min_intensity': 0.0                          },
@@ -98,4 +98,4 @@ launch_description = [
 # ================================================================================================================================== #
 
 def generate_launch_description():
-    LaunchDescription(launch_description)
+    return LaunchDescription(launch_description)

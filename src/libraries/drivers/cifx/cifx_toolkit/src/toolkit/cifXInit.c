@@ -1155,7 +1155,7 @@ static int32_t cifXDownloadFWFiles(PDEVICEINSTANCE ptDevInstance, PDEVICE_CHANNE
     {
       USER_Trace(ptDevInstance,
                   TRACE_LEVEL_INFO,
-                  "Firmware download, checking / starting: CHANNEL #%d, %d file(s)",
+                  "Firmware download, checking / starting: CHANNEL #%u, %u file(s)",
                   ulChannel,
                   ulFirmwareCnt);
     }
@@ -1325,7 +1325,7 @@ static int32_t cifXDownloadCNFFiles(PDEVICEINSTANCE ptDevInstance, PDEVICE_CHANN
     {
       USER_Trace(ptDevInstance,
                   TRACE_LEVEL_INFO,
-                  "Configuration download, checking / starting: CHANNEL#%d, %d file(s)!",
+                  "Configuration download, checking / starting: CHANNEL#%u, %u file(s)!",
                   ulChannel,
                   ulConfigCnt);
     }
@@ -3198,7 +3198,7 @@ static int32_t cifXCreateChannels(PDEVICEINSTANCE ptDevInstance, PDEVICE_CHANNEL
                 {
                   USER_Trace(ptDevInstance,
                             TRACE_LEVEL_INFO,
-                            "Device successfully created for channel = %d\r\n", ptChannelInst->ulChannelNumber);
+                            "Device successfully created for channel = %u", ptChannelInst->ulChannelNumber);
                 }
               }
             }
@@ -4164,7 +4164,6 @@ int32_t cifXTKitAddDevice(PDEVICEINSTANCE ptDevInstance)
     {
       /* Add the new entry to the device list */
       g_pptDevices[g_ulDeviceCount - 1] = ptDevInstance;
-
       /* Setup interrupts if as given during cifXStartDevice() */
       if(0 != (ptDevInstance->fIrqEnabled))
       {

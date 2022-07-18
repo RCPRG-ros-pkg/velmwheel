@@ -3,7 +3,7 @@
 # @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @date       Friday, 29th April 2022 1:22:24 pm
-# @modified   Thursday, 16th June 2022 12:22:35 pm
+# @modified   Friday, 15th July 2022 6:35:17 pm
 # @project    engineering-thesis
 # @brief      Installs system dependencies of the project
 #    
@@ -30,6 +30,8 @@ main() {
         python3-pip
 
         # Kernel building
+        git
+        build-essential
         libncurses-dev
         flex
         bison
@@ -42,6 +44,12 @@ main() {
         libiberty-dev
         autoconf
         fakeroot
+        dwarves
+
+        # Utilities
+        udev
+        net-tools
+        ntp
         
         # RT measurements
         rt-tests

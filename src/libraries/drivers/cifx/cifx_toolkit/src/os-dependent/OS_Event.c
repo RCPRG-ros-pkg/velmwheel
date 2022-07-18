@@ -3,7 +3,7 @@
  * @author     Adam Kowalewski
  * @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
  * @date       Thursday, 19th May 2022 9:53:09 am
- * @modified   Wednesday, 25th May 2022 9:47:39 pm
+ * @modified   Tuesday, 28th June 2022 3:02:01 pm
  * @project    engineering-thesis
  * @brief      CIFX'es events-related OS functions [implementation]
  * 
@@ -33,16 +33,12 @@ static const char *context = "os_event";
 
 void* OS_CreateEvent(void) {
 
-	xTraceDebug(context, "Creating event...");
-
 	// Allocate memory for the semaphore
 	sem_t* sem = (sem_t*) malloc(sizeof(sem_t));
 	if(sem == NULL)	{
 		xTraceGlobalSystemError(context, "Could not create event");
 		return NULL;
 	}
-
-	xTraceDebug(context, "Initializing event...");
 
 	// Initialize the semaphore
 	const int pshared = 0;
@@ -54,7 +50,6 @@ void* OS_CreateEvent(void) {
 		return NULL;
 	}
 
-	xTraceDebug(context, "Event created successfully");
 	return sem;
 }
 
@@ -62,7 +57,6 @@ void* OS_CreateEvent(void) {
 void OS_SetEvent(void* pvEvent) {
 
 	assert(pvEvent != NULL);
-	xTraceDebug(context, "Setting an event...");
 
 	// Increment the semaphore
 	sem_t* sem = (sem_t*) pvEvent;
@@ -70,8 +64,6 @@ void OS_SetEvent(void* pvEvent) {
 		xTraceGlobalSystemError(context, "Could not set an event");
 		assert(0); // This should not happen
 	}
-
-	xTraceDebug(context, "Event set successfully");
 }
 
 
@@ -92,13 +84,11 @@ void OS_DeleteEvent(void* pvEvent) {
 uint32_t OS_WaitEvent(void* pvEvent, uint32_t ulTimeoutMs) {
 
 	assert(pvEvent != NULL);
-	xTraceDebug(context, "Getting current time...");
 
 	// Prepare timers
 	const struct timespec clock_time = get_clock_time();
 	const struct timespec timeout = timespec_add_ms(&clock_time, ulTimeoutMs);
 
-	xTraceDebug(context, "Waiting for an event...");
 	sem_t* sem = (sem_t*) pvEvent;
 
 	// Wait for the timeout
@@ -109,12 +99,10 @@ uint32_t OS_WaitEvent(void* pvEvent, uint32_t ulTimeoutMs) {
 				assert(0);
 				return -1;
 			}
-			xTraceWarn(context, "Event not signalled, timeout occured");
 			return -1;
 		}
 		xTraceWarn(context, "Waiting for an event interrupted, continuing...");
 	}
-	xTraceDebug(context, "Event occured");
 
 	return 0;
 }

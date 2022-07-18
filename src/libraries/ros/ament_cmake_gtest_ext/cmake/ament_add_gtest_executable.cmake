@@ -3,11 +3,9 @@
 # @author     Dirk Thomas
 # @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @date       Wednesday, 27th April 2022 6:50:23 pm
-# @modified   Wednesday, 27th April 2022 7:37:21 pm
+# @modified   Monday, 11th July 2022 6:01:49 pm
 # @project    engineering-thesis
-# @brief
-#    
-#    Modified version of the `ament_add_gtest_executable` function
+# @brief      Modified version of the `ament_add_gtest_executable` function
 #    
 # Copyright 2014-2015 Open Source Robotics Foundation, Inc.
 #
@@ -25,33 +23,35 @@
 # ====================================================================================================================================
 
 # ---------------------------------------------------------------------------------------
-# Add an executable using gtest.
+# @brief Add an executable using gtest.
 #
-# Call add_executable(target ARGN) and link it against the gtest libraries.
-# It does not register the executable as a test.
+# @details Call add_executable(target ARGN) and link it against the gtest libraries.
+#    It does not register the executable as a test.
 #
-# If gtest is not available the specified target is not being created and
-# therefore the target existence should be checked before being used.
+#    If gtest is not available the specified target is not being created and
+#    therefore the target existence should be checked before being used.
 #
-# :param target: the target name which will also be used as the test name
-# :type target: string
-# :param ARGN: the list of source files
-# :type ARGN: list of strings
-# :param SKIP_LINKING_MAIN_LIBRARIES: if set skip linking against the gtest
-#   main libraries
-# :type SKIP_LINKING_MAIN_LIBRARIES: option
-#
-# @public
+# @param target [NAME]
+#    the target name which will also be used as the test name
+# @param ARGN [NAMES...]
+#    the list of source files
+# @param SKIP_LINKING_MAIN_LIBRARIES
+#    if set skip linking against the gtest
 # ---------------------------------------------------------------------------------------
 macro(ament_add_gtest_executable target)
-  _ament_cmake_gtest_find_gtest()
-  if(GTEST_FOUND)
-    _ament_add_gtest_executable("${target}" ${ARGN})
-  endif()
+
+    # Find GTest
+    _ament_cmake_gtest_find_gtest()
+
+    # On success add test target
+    if(GTEST_FOUND)
+        _ament_add_gtest_executable("${target}" ${ARGN})
+    endif()
+    
 endmacro()
 
 # ---------------------------------------------------------------------------------------
-# Imlementation of the `ament_add_gtest_executable` routine
+# @brief Imlementation of the `ament_add_gtest_executable` routine
 # ---------------------------------------------------------------------------------------
 function(_ament_add_gtest_executable target)
 

@@ -1,16 +1,17 @@
 # ====================================================================================================================================
-# @ Filename: ros2_install.bash
-# @ Author: Krzysztof Pierczyk
-# @ Create Time: 2021-01-02 14:53:45
-# @ Modified time: 2021-01-02 14:53:47
-# @ Source: https://index.ros.org/doc/ros2/Installation/Foxy/Linux-Install-Debians/
-# @ Description:
-#
-#     Setups environment and installs ROS2 Foxy distribution along with recommended tools
-#     
-# @ Note: Before running this script `sourceMe.bash` (under project's home directory) should be sourced by the calling terminal
-# @ Note: Script was tested on Ubuntu 20.0.4 LTS system
-# @ Note: This script should be rather source than executed
+# @file       ros.bash
+# @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+# @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+# @date       Monday, 20th June 2022 1:03:56 pm
+# @modified   Wednesday, 22nd June 2022 12:17:04 pm
+# @project    engineering-thesis
+# @brief      Setups environment and installs ROS2 Foxy distribution along with recommended tools
+# 
+# 
+# @note Before running this script `source_me.bash` (under project's home directory) should be sourced by the calling terminal
+# @note Script was tested on Ubuntu 22.0.4 LTS system
+# @note This script should be rather source than executed
+# @copyright Krzysztof Pierczyk © 2022
 # ====================================================================================================================================
 
 # Setup path to vcstool

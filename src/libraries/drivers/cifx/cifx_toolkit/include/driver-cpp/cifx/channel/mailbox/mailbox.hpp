@@ -3,7 +3,7 @@
  * @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
  * @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
  * @date       Wednesday, 4th May 2022 12:03:11 pm
- * @modified   Monday, 23rd May 2022 6:37:59 pm
+ * @modified   Thursday, 30th June 2022 2:21:51 pm
  * @project    engineering-thesis
  * @brief      Definition of the class wrapping description and providing related API for the 'Mailbox' concept of the CIFX 
  *             Toolkit Framework
@@ -16,6 +16,8 @@
 
 /* =========================================================== Includes =========================================================== */
 
+// CIFX includes
+#include "Hil_Results.h"
 // Private includes
 #include "cifx/common/traits.hpp"
 #include "cifx/channel/mailbox.hpp"
@@ -89,6 +91,54 @@ void Mailbox::exchange_packet(
         request_timeout_ms,
         response_timeout_ms
     );
+}
+
+template<typename RequestT, typename ResponseT>
+void Mailbox::exchange_packet_with_timeout_update(
+    const RequestT &request,
+    ResponseT &response,
+    std::chrono::milliseconds &timeout_ms
+) {
+    constexpr auto context = "[cifx::Mailbox::exchange_packet_with_timeout_update]";
+
+    // Denote start time of the routine
+    auto start_time_point = std::chrono::steady_clock::now();
+
+    // Exchange packet with the CIFX device
+    exchange_packet(request, response, timeout_ms);
+    
+    // Check if transfer aborted
+    if(response.tHead.ulSta != SUCCESS_HIL_OK) {
+        std::stringstream ss;
+        ss << "CIFX device reported error [ulSta: 0x" << std::hex << std::uppercase << response.tHead.ulSta << "]";
+        throw cifx::Error{ CIFX_DEV_FUNCTION_FAILED, context, ss.str() };
+    }
+
+    using namespace std::literals::chrono_literals;
+
+    // Update timeout left
+    timeout_ms -= std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - start_time_point);
+    // If timeout reached, throw error
+    if(timeout_ms <= 0ms)
+        throw cifx::Error{ CIFX_DEV_EXCHANGE_TIMEOUT, context, "Exchange timeouted" };
+}
+
+
+template<typename RequestT, typename ResponseT>
+void Mailbox::exchange_partial_packet(
+    RequestT &request,
+    ResponseT &response,
+    std::chrono::milliseconds &timeout_ms
+) {
+    // Exchange packet
+    exchange_packet_with_timeout_update(
+        request,
+        response,
+        timeout_ms
+    );
+
+    // Set packet's destination ID for the next request the one returned by the CIFX device in the response
+    request.tHead.ulDestId = response.tHead.ulDestId;
 }
 
 /* ================================================ Public methods (Notifications) ================================================ */

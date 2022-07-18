@@ -3,7 +3,7 @@
  * @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
  * @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
  * @date       Thursday, 28th April 2022 12:31:55 pm
- * @modified   Friday, 27th May 2022 6:05:34 pm
+ * @modified   Friday, 1st July 2022 6:37:58 pm
  * @project    engineering-thesis
  * @brief      Definitions of the implementation class for the EtherCAT driver node of WUT Velmwheel robot
  * 
@@ -21,6 +21,7 @@
 #include <malloc.h>
 // Private includes
 #include "velmwheel/ethercat_driver_impl.hpp"
+#include "velmwheel/ethercat_driver_impl/debug_utilities.hpp"
 
 /* ========================================================== Namespaces ========================================================== */
 
@@ -50,25 +51,25 @@ bool EthercatDriverImpl::disable_mmap() {
 
 void EthercatDriverImpl::set_bus_enabled(bool enabled) {
     using namespace std::literals::chrono_literals;
-    channel.set_bus_on(enabled, 100ms);
+    channel.set_bus_on(enabled, 1000ms);
 }
 
 
 bool EthercatDriverImpl::is_bus_enabled() {
     using namespace std::literals::chrono_literals;
-    return channel.is_bus_on(100ms);
+    return channel.is_bus_on(1000ms);
 }
 
 
 void EthercatDriverImpl::set_master_target_state(ethercat::MasterState target_state) {
     using namespace std::literals::chrono_literals;
-    master.set_state(target_state, 100ms);
+    master.set_state(target_state, 1000ms);
 }
 
 
 ethercat::MasterStateInfo EthercatDriverImpl::get_master_state() {
     using namespace std::literals::chrono_literals;
-    return master.get_state_info(100ms);
+    return master.get_state_info(1000ms);
 }
 
 
@@ -95,14 +96,13 @@ void EthercatDriverImpl::set_bus_event_handler(Event event, HandlerT &&handler) 
     }
 }
 
-
 void EthercatDriverImpl::read_bus() {
-    master.read_bus(bus_cycle_ms);
+    master.read_bus(cyclic_io_timeout_ms);
 }
 
 
 void EthercatDriverImpl::write_bus() {
-    master.write_bus(bus_cycle_ms);
+    master.write_bus(cyclic_io_timeout_ms);
 }
 
 /* ================================================================================================================================ */

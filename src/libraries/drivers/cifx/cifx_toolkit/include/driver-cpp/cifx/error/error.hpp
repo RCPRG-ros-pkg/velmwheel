@@ -3,7 +3,7 @@
  * @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
  * @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
  * @date       Monday, 14th February 2022 2:33:20 pm
- * @modified   Tuesday, 14th June 2022 5:05:16 pm
+ * @modified   Thursday, 30th June 2022 2:00:19 pm
  * @project    engineering-thesis
  * @brief      Definitions of helper functions and types associated with CIFX errors system
  * 
@@ -72,19 +72,51 @@ namespace details {
 /* =========================================================== Subtypes =========================================================== */
 
 Error::Error(int32_t code, const std::string &what) :
-    std::runtime_error{ details::to_msg(code, what) },
-    error_code{ code }
+    error_code{ code },
+    msg{ what },
+    what_msg{ details::to_msg(code, what) }
 { }
 
 
 Error::Error(int32_t code, std::string_view context, const std::string &what) :
-    std::runtime_error{ details::to_msg(code, context, what) },
-    error_code{ code }
+    error_code{ code },
+    context{ context },
+    msg{ what },
+    what_msg{ details::to_msg(code, context, what) }
 { }
 
 
-int32_t Error::code() const {
+int32_t Error::get_code() const {
     return error_code;
+}
+
+
+const std::string &Error::get_context() const {
+    return context;
+}
+
+
+const std::string &Error::get_msg() const {
+    return msg;
+}
+
+
+const char *Error::what() const noexcept {
+    return what_msg.c_str();
+}
+
+
+void Error::change_context(std::string_view ctx) {
+    context = ctx;
+    what_msg = ctx.empty() ?
+        details::to_msg(error_code, msg) :
+        details::to_msg(error_code, context, msg);
+}
+
+
+void Error::rethrow_with_context(std::string_view ctx) {
+    change_context(ctx);
+    throw (*this);
 }
 
 /* ================================================================================================================================ */

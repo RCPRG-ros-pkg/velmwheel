@@ -3,15 +3,15 @@
 # @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @date       Friday, 4th March 2022 5:57:12 pm
-# @modified   Thursday, 26th May 2022 12:50:46 am
+# @modified   Monday, 18th July 2022 6:28:28 pm
 # @project    engineering-thesis
 # @brief      Launchfile running the nodes responsible for LIDAR-based odometry
 # @details 
 #
-#                                      ______________________                               ______________________ 
-#                                     |                      |                             |                      |
-#               ---- lidars/scan ---> | laser_scan_converter | ------ lidars/clouds --.--> | laser_scan_assembler |
-#                                     |______________________|                        |    |______________________|
+#                                      ______________________                               _______________________ 
+#                                     |                      |                             |                       |
+#               ---- lidars/scan ---> | laser_scan_converter | ------ lidars/clouds --.--> | point_cloud_assembler |
+#                                     |______________________|                        |    |_______________________|
 #                                                                                   [3/4]              |           
 #               ---- lidar_l/scan ---------------[2]-----------------------------.    |                |           
 #                                                                                |    |                |           
@@ -192,16 +192,16 @@ def laser_scan_converter_description(input_topic, condition):
     }
 
 
-def laser_scan_assembler_description():
+def point_cloud_assembler_description():
 
-    """Produces description of the node assembling point clouds (`laser_scan_assembler` node)"""
+    """Produces description of the node assembling point clouds (`point_cloud_assembler` node)"""
     
     return {
 
         # Node
-        'package': 'laser_scan_assembler',
-        'executable': 'laser_scan_assembler_node',
-        'name': 'laser_scan_assembler',
+        'package': 'point_cloud_assembler',
+        'executable': 'point_cloud_assembler_node',
+        'name': 'point_cloud_assembler',
         'namespace': f'/{ROBOT_NAME}',
         # Output config
         'output': 'both',
@@ -288,6 +288,8 @@ def laser_scan_matcher_description(use_cloud_input, input_remapping, condition):
             ( 'velocity_stamped',        f'/{ROBOT_NAME}/base/velocity'                 ),
             # Outputs
             ( 'odom/laser/pose_stamped', f'/{ROBOT_NAME}/odom/laser/pose'               ),
+            # Services
+            ( 'set_pose', f'/{ROBOT_NAME}/laser_scan_matcher/set_pose'                  ),
 
         ],
 
@@ -308,9 +310,9 @@ laser_scan_converter_descriptions = [
     laser_scan_converter_description(f'/{ROBOT_NAME}/lidar_l/scan', scan_source_condition('left')     )
 ]
 
-# Description of the node assembling point clouds (`laser_scan_assembler` node)
-laser_scan_assembler_descriptions = [
-    laser_scan_assembler_description()
+# Description of the node assembling point clouds (`point_cloud_assembler` node)
+point_cloud_assembler_descriptions = [
+    point_cloud_assembler_description()
 ]
 
 # Description of the `laser_scan_matcher` node
@@ -337,9 +339,9 @@ launch_description = [
     DeclareLaunchArgument(**declare_laser_odom_config_description),
     DeclareLaunchArgument(**declare_laser_odom_reference_description),
     # Nodes
-    *[ Node(**description) for description in laser_scan_converter_descriptions ],
-    *[ Node(**description) for description in laser_scan_assembler_descriptions ],
-    *[ Node(**description) for description in laser_scan_matcher_descriptions   ],
+    *[ Node(**description) for description in laser_scan_converter_descriptions  ],
+    *[ Node(**description) for description in point_cloud_assembler_descriptions ],
+    *[ Node(**description) for description in laser_scan_matcher_descriptions    ],
     
 ]
 

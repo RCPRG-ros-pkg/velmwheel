@@ -3,7 +3,7 @@
  * @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
  * @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
  * @date       Wednesday, 4th May 2022 12:10:47 pm
- * @modified   Wednesday, 25th May 2022 9:38:33 pm
+ * @modified   Wednesday, 29th June 2022 12:01:34 pm
  * @project    engineering-thesis
  * @brief      Definition of the RAII class wrapping description and providing related API for the 'Device's Channel' concept of the CIFX 
  *             Toolkit Framework
@@ -88,6 +88,13 @@ public: /* ------------------------------------------------------ Public types -
     /// Traits of the notification event ( used to define argument type for @ref register_notification(...) )
     template<Event event> struct event_traits : public std::false_type { };
 
+    // Helper RAII class managing host state signalisation
+    class HostGuard;
+    // Helper RAII class managing bus state signalisation
+    class BusGuard;
+    // Helper RAII class managing both host and bus state signalisation
+    class StateGuard;
+
 public: /* ---------------------------------------------------- Public constructors ----------------------------------------------- */
 
     /**
@@ -144,7 +151,7 @@ public: /* ------------------------------------------- Public methods (Firmware 
      * @throws cifx::Error 
      *    on error
      */
-    inline void set_host_ready(bool ready, std::chrono::milliseconds timeout_ms);
+    void set_host_ready(bool ready, std::chrono::milliseconds timeout_ms);
 
     /**
      * @brief Checks current state of the Host driver in the CIFX device
@@ -158,7 +165,7 @@ public: /* ------------------------------------------- Public methods (Firmware 
      * @throws cifx::Error 
      *    on error
      */
-    inline bool is_host_ready(std::chrono::milliseconds timeout_ms);
+    bool is_host_ready(std::chrono::milliseconds timeout_ms);
 
     /**
      * @brief Sets current state of the fieldbus in the CIFX device
@@ -171,7 +178,7 @@ public: /* ------------------------------------------- Public methods (Firmware 
      * @throws cifx::Error 
      *    on error
      */
-    inline void set_bus_on(bool ready, std::chrono::milliseconds timeout_ms);
+    void set_bus_on(bool ready, std::chrono::milliseconds timeout_ms);
 
     /**
      * @brief Checks current state of the fieldbus bus in the CIFX device
@@ -185,7 +192,7 @@ public: /* ------------------------------------------- Public methods (Firmware 
      * @throws cifx::Error 
      *    on error
      */
-    inline bool is_bus_on(std::chrono::milliseconds timeout_ms);
+    bool is_bus_on(std::chrono::milliseconds timeout_ms);
 
 public: /* ------------------------------------------------ Public methods (getters) ---------------------------------------------- */
 
@@ -242,6 +249,122 @@ private: /* ----------------------------------------------- Private member varia
 
     /// Channel's regular process data
     ProcessData regular_process_data;
+
+};
+
+/* ========================================================== RAII Guards ========================================================= */
+
+/**
+ * @brief Auxiliary RAII class providing automatic setup-cleanup mechanism for setting host's (PC)
+ *    readiness in the CIFX channel at construction and destruction of the obejct
+ */
+class Channel::HostGuard {
+public:
+
+    /**
+     * @brief Construct a new HostGuard signalling CIFX @p channel that the host is ready
+     * 
+     * @param channel 
+     *    channel to be guarded
+     * @param timeout 
+     *    timouet for host-state setting action
+     */
+    inline HostGuard(
+        Channel &channel,
+        std::chrono::milliseconds timeout = std::chrono::milliseconds{ 100 }
+    );
+
+    /**
+     * @brief Destroys the HostGuard object signaling CIFX channel that the host is not ready
+     */
+    inline ~HostGuard() noexcept(false);
+
+private:
+
+    /// Reference to the guarded channel
+    Channel &channel;
+    /// I/O timeout
+    std::chrono::milliseconds timeout;
+
+};
+
+/**
+ * @brief Auxiliary RAII class providing automatic setup-cleanup mechanism for setting bus state
+ *    in the CIFX channel at construction and destruction of the obejct
+ * 
+ * @note Enabling the bus via CIFX/netX C Toolkit is an utility that should be used only AFTER
+ *   disabling the bus (not in the system-setup state). At setup, the toolkit automatically enables
+ *   the bus when the configuration is loaded to the interface card. For this reason, the Bus Guard
+ *   does NOT call bus-enable routine at construction. It oly calls it's disabling at destruction
+ *   ( in opposition to the @ref HostGuard )
+ */
+class Channel::BusGuard {
+public:
+
+    /**
+     * @brief Construct a new BusGuard
+     * 
+     * @param channel 
+     *    channel to be guarded
+     * @param timeout 
+     *    timouet for bus-state setting action
+     */
+    inline BusGuard(
+        Channel &channel,
+        std::chrono::milliseconds timeout = std::chrono::milliseconds{ 100 }
+    );
+
+    /**
+     * @brief Destroys the BusGuard object signaling CIFX channel to disable the bus
+     */
+    inline ~BusGuard() noexcept(false);
+
+private:
+
+    /// Reference to the guarded channel
+    Channel &channel;
+    /// I/O timeout
+    std::chrono::milliseconds timeout;
+
+};
+
+/**
+ * @brief Auxiliary RAII class providing automatic setup-cleanup mechanisms of both HustGuard
+ *    and BusGuard classes
+ */
+class Channel::StateGuard {
+public:
+
+    /**
+     * @brief Construct a new StateGuard signalling CIFX @p channel that the host is ready
+     * 
+     * @param channel 
+     *    channel to be guarded
+     * @param bus_timeout 
+     *    timouet for bus-state setting action
+     * @param host_timeout 
+     *    timouet for host-state setting action
+     */
+    inline StateGuard(
+        Channel &channel,
+        std::chrono::milliseconds bus_timeout = std::chrono::milliseconds{ 100 },
+        std::chrono::milliseconds host_timeout = std::chrono::milliseconds{ 100 }
+    );
+
+    /**
+     * @brief Destroys the StateGuard object disabling the bus and signaling CIFX channel to disable 
+     *    the bus
+     */
+    inline ~StateGuard() noexcept(false);
+
+private:
+
+    /// Reference to the guarded channel
+    Channel &channel;
+    /// I/O timeout for bus-state setting action
+    std::chrono::milliseconds bus_timeout;
+    /// I/O timeout for hsot-state setting action
+    std::chrono::milliseconds host_timeout;
 
 };
 

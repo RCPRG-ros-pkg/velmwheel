@@ -3,7 +3,7 @@
 # @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @date       Wednesday, 16th March 2022 4:33:51 pm
-# @modified   Friday, 27th May 2022 5:19:06 pm
+# @modified   Wednesday, 29th June 2022 3:42:40 pm
 # @project    engineering-thesis
 # @brief      CMake file for `velmwheel_ethercat_driver` package
 #    

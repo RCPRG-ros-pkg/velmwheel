@@ -3,7 +3,7 @@
  * @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
  * @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
  * @date       Thursday, 28th April 2022 12:31:55 pm
- * @modified   Wednesday, 15th June 2022 1:55:52 pm
+ * @modified   Tuesday, 28th June 2022 6:36:11 pm
  * @project    engineering-thesis
  * @brief      Definitions of the EtherCAT driver node of WUT Velmwheel robot
  * 
@@ -142,6 +142,7 @@ EthercatDriver::EthercatDriver(const rclcpp::NodeOptions & options) :
     
     // Initialize bus config parameters
     auto eni_source            = node_common::parameters::declare_parameter_and_get(*this, ENI_SOURCE_PARAM_DESCRIPTOR);
+    auto slaves_up_timeout     = node_common::parameters::declare_parameter_and_get(*this, SLAVES_UP_TIMEOUT_PARAM_DESCRIPTOR);
     auto initial_drivers       = node_common::parameters::declare_parameter_and_get(*this, INITIAL_DRIVERS_PARAM_DESCRIPTOR);
     // Initialize Node thread parameters
     auto process_memory_lock             = node_common::parameters::declare_parameter_and_get(*this, PROCESS_MEMORY_LOCK_PARAM_DESCRIPTOR);
@@ -239,6 +240,8 @@ EthercatDriver::EthercatDriver(const rclcpp::NodeOptions & options) :
         .name(GET_BUS_TIMING_SRV_TOPIC_NAME)
         .callback(*this, &EthercatDriver::get_bus_timing_callback);
         
+    RCLCPP_INFO_STREAM(this->get_logger(), "ROS interfaces initialized");
+
     /* ---------------------------- Initialize private data -------------------------- */
 
     // Prepare driver's configuration
@@ -246,6 +249,18 @@ EthercatDriver::EthercatDriver(const rclcpp::NodeOptions & options) :
 
         // Description of the source ENI file
         .eni_source { parse_eni_config_path(*eni_source) },
+        /// Timeout for all slaves being brought into the Operational state
+        .slaves_up_timeout { slaves_up_timeout.has_value() ?
+
+            // If timeout explicitly given, transform it from seconds to milliseconds
+            std::chrono::duration_cast<std::chrono::milliseconds>(
+                std::chrono::duration<double, std::ratio<1>>{ *slaves_up_timeout }
+            ) :
+
+            // Otherwise, use default timeout
+            std::optional<std::chrono::milliseconds>{ }
+
+        },
 
         // Processing thread configuration
         .process_config {
@@ -292,6 +307,8 @@ EthercatDriver::EthercatDriver(const rclcpp::NodeOptions & options) :
     // Construct the driver
     implementation.emplace(*this, driver_config);
 
+    RCLCPP_INFO_STREAM(this->get_logger(), "EtherCAT driver initialized");
+
     /* ---------------------------- Load initial drivers ----------------------------- */
 
     // If initial drivers has been requested
@@ -317,6 +334,8 @@ EthercatDriver::EthercatDriver(const rclcpp::NodeOptions & options) :
 
     }
 
+    RCLCPP_INFO_STREAM(this->get_logger(), "Initial drivers set loaded");
+
     /* --------------------------- Initialize IO waitables --------------------------- */
 
     // Get waitable interface interface of the node
@@ -330,10 +349,10 @@ EthercatDriver::EthercatDriver(const rclcpp::NodeOptions & options) :
     // Register waitables for monitoring
     node_waitables_interface->add_waitable(read_waitable_trigger,  nullptr);
     node_waitables_interface->add_waitable(write_waitable_trigger, nullptr);
+    // Trigger initial bus read
+    read_waitable_trigger->trigger();
 
-    // Configure EtherCAT driver to trigger waitables' conditions when I/O operation is ready
-    implementation->set_bus_event_handler(EthercatDriverImpl::Event::ReadBusReady, [this](){ read_waitable_trigger->trigger();  });
-    implementation->set_bus_event_handler(EthercatDriverImpl::Event::WriteBusRead, [this](){ write_waitable_trigger->trigger(); });
+    RCLCPP_INFO_STREAM(this->get_logger(), "Driver configured");
 
     /* ------------------------------------------------------------------------------- */
     
@@ -640,20 +659,32 @@ void EthercatDriver::list_drivers_callback(
 /* ========================================================= I/O callbacks ======================================================== */
 
 void EthercatDriver::read_io() {
+
+    // Read the bus
     try {
+        RCLCPP_DEBUG_STREAM(this->get_logger(), "Reading data from the bus...");
         implementation->read_bus();
     } catch(std::exception &e) {
-        RCLCPP_WARN_STREAM(this->get_logger(), "Failed to read data from the EtherCAT bus " << e.what());
+        RCLCPP_WARN_STREAM(this->get_logger(), "Failed to read data from the EtherCAT bus (" << e.what() << ")");
     }
+
+    // Schedule bus write
+    write_waitable_trigger->trigger();
 }
 
 
 void EthercatDriver::write_io() {
+
+    // Write the bus
     try {
+        RCLCPP_DEBUG_STREAM(this->get_logger(), "Writting data to the bus...");
         implementation->write_bus();
     } catch(std::exception &e) {
-        RCLCPP_WARN_STREAM(this->get_logger(), "Failed to write data to the EtherCAT bus " << e.what());
+        RCLCPP_WARN_STREAM(this->get_logger(), "Failed to write data to the EtherCAT bus (" << e.what() << ")");
     }
+
+    // Schedule bus read
+    read_waitable_trigger->trigger();
 }
 
 /* ================================================================================================================================ */

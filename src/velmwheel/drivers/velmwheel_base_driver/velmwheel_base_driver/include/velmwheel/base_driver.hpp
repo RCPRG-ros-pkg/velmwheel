@@ -3,7 +3,7 @@
  * @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
  * @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
  * @date       Thursday, 28th April 2022 9:24:14 pm
- * @modified   Tuesday, 14th June 2022 1:27:09 pm
+ * @modified   Monday, 18th July 2022 8:18:55 pm
  * @project    engineering-thesis
  * @brief      Definition of the driver plugin class for the servodriver EtherCAT slaves of the WUT Velmwheel robot
  * 
@@ -27,6 +27,8 @@
 #include "velmwheel/ethercat_slave_driver.hpp"
 #include "ethercat/devices/elmo.hpp"
 #include "node_common.hpp"
+// TF includes
+#include "tf2_ros/static_transform_broadcaster.h"
 // Interface includes
 #include "sensor_msgs/msg/joint_state.hpp"
 #include "velmwheel_msgs/msg/encoders.hpp"
@@ -35,8 +37,11 @@
 #include "velmwheel_msgs/msg/wheel_enum.hpp"
 #include "velmwheel_msgs/msg/wheels.hpp"
 #include "velmwheel_base_driver_msgs/msg/wheels_status.hpp"
-#include "velmwheel_base_driver_msgs/srv/command.hpp"
+#include "velmwheel_base_driver_msgs/srv/enable.hpp"
+#include "velmwheel_base_driver_msgs/srv/get_state.hpp"
 #include "velmwheel_base_driver_msgs/srv/reset_failure.hpp"
+// Private inculdes
+#include "velmwheel/params.hpp"
 
 /* ========================================================== Namespaces ========================================================== */
 
@@ -52,8 +57,12 @@ namespace velmwheel {
  * 
  *       - @b base/status topic broadcasting status of servodrivers
  *       - @b base/reset_fault topic providing service of resetting servodrivers' faults
- *       - @b base/command topic providing binary controll over state of the servodrives 
+ *       - @b base/enable topic providing binary controll over state of the servodrives 
  *           (enabling/disabling drivers)
+ *       - @b base/get_state topic providing service of getting servodrivers' state
+ * 
+ * @warning By default the driver is in 'Disabled' state, i.e. all Elmo drievrs are held in
+ *    disabled state
  */
 class RCLCPP_PUBLIC BaseDriver : public EthercatSlaveDriver {
 
@@ -115,7 +124,9 @@ public: /* ------------------------------------------------ Topic's parameters -
     static constexpr auto STATUS_PUB_TOPIC_NAME = "base/status";
 
     /// Unqualified name of the topic providing a service of enabling/disabling servodrivers
-    static constexpr auto COMMAND_SRV_TOPIC_NAME = "base/command";
+    static constexpr auto ENABLE_SRV_TOPIC_NAME = "base/enable";
+    /// Unqualified name of the topic providing a service of requesting servodrivers abotu its state
+    static constexpr auto GET_STATE_SRV_TOPIC_NAME = "base/get_state";
     /// Unqualified name of the topic providing a service of resetting servodrivers' faults
     static constexpr auto RESET_FAILURE_SRV_TOPIC_NAME = "base/reset_fault";
 
@@ -164,6 +175,16 @@ private: /* ------------------------------------------------- Private types ----
         Num        = static_cast<std::size_t>(velmwheel::params::WHEEL_NUM)
     };
 
+    /**
+     * @brief Polarities of robot's wheels. Left wheels have their polarities reversed
+     */
+    static constexpr std::array<double, Wheels::Num> WheelsPolarities {
+        /* RearLeft   */ -1,
+        /* RearRight  */  1,
+        /* FrontLeft  */ -1,
+        /* FrontRight */  1
+    };
+
 private: /* ---------------------------------------------- Private ROS callbacks ------------------------------------------------- */
     
     /**
@@ -190,9 +211,17 @@ private: /* ---------------------------------------------- Private ROS callbacks
     /**
      * @brief Callback managing service of enabling/disabling servodrivers
      */
-    void command_callback(
-        const velmwheel_base_driver_msgs::srv::Command::Request::SharedPtr req,
-        velmwheel_base_driver_msgs::srv::Command::Response::SharedPtr res
+    void enable_callback(
+        const velmwheel_base_driver_msgs::srv::Enable::Request::SharedPtr req,
+        velmwheel_base_driver_msgs::srv::Enable::Response::SharedPtr res
+    );
+
+    /**
+     * @brief Callback managing service of requesting servodrivers about it's state
+     */
+    void get_state_callback(
+        const velmwheel_base_driver_msgs::srv::GetState::Request::SharedPtr req,
+        velmwheel_base_driver_msgs::srv::GetState::Response::SharedPtr res
     );
     
     /**
@@ -217,9 +246,14 @@ private: /* --------------------------------------------- Private ROS interfaces
     rclcpp::Publisher<velmwheel_base_driver_msgs::msg::WheelsStatus>::SharedPtr status_pub;
 
     /// Service topic providing a service of enabling/disabling servodrivers
-    rclcpp::Service<velmwheel_base_driver_msgs::srv::Command>::SharedPtr command_srv;
+    rclcpp::Service<velmwheel_base_driver_msgs::srv::Enable>::SharedPtr enable_srv;
+    /// Service topic providing a service of requesting servodrivers about its state
+    rclcpp::Service<velmwheel_base_driver_msgs::srv::GetState>::SharedPtr get_state;
     /// Service topic providing a service of resetting servodrivers' faults
     rclcpp::Service<velmwheel_base_driver_msgs::srv::ResetFailure>::SharedPtr reset_failure_srv;
+    
+    /// TF2 publishing object for broadcastign transformation from <base_link> to <velmwheel> frame
+    std::unique_ptr<tf2_ros::StaticTransformBroadcaster> static_tf_broadcaster;
 
 private: /* ------------------------------------------------- Private types ------------------------------------------------------ */
 
@@ -237,7 +271,7 @@ private: /* ------------------------------------------------- Private types ----
         /// Current velocity of the wheel in [rad/s]
         double velocity;
         /// Current status of the servodriver
-        Driver::State state;
+        Driver::State state { Driver::State::NotReadyToSwitchOn };
 
     };
 
@@ -274,7 +308,12 @@ private: /* -------------------------------------------------- Private data ----
 
     /// Measurements
     WheelsMeasurementsSet measurements;
+    /// Counter of initialized measurements skipped before sending first meassage to the ROS system
+    std::size_t initial_measurements_skip_counter { 10 };
     
+    /// Timeout for all drivers to recover from fault after receiving fault-reset signal
+    static constexpr std::chrono::milliseconds FaultRecoveryTimeout{ 10'000 };
+
     /**
      * @brief Enumeration indicating current target state of the driver
      * @details This variable provides quasi 'state machine' to the working principle of the driver.
@@ -286,12 +325,14 @@ private: /* -------------------------------------------------- Private data ----
      *     
      *    @startuml
      * 
-     *    [*]      --> Inactive
-     *    Inactive --> Active : enable request
-     *    Inactive --> Fault : fault condition\n(should nto happen)
-     *    Active   --> Fault : fault condition
-     *    Active   --> Inactive : disable request
-     *    Fault    --> Inactive : fault reset\nrequest
+     *    [*]        --> Inactive
+     *    Inactive   --> Active : enable request
+     *    Inactive   --> Fault : fault condition\n(should nto happen)
+     *    Active     --> Fault : fault condition
+     *    Active     --> Inactive : disable request
+     *    Fault      --> Recovering : fault reset\nrequest
+     *    Recovering --> Fault : recovery\ntimeout
+     *    Recovering --> Inactive : servos\nrecovered
      * 
      *    @enduml
      * 
@@ -300,8 +341,12 @@ private: /* -------------------------------------------------- Private data ----
     enum class State {
         Inactive,
         Active,
-        Fault
+        Fault,
+        Recovering
     } state = State::Inactive;
+
+    // Timestamp of thre recover timeout start
+    rclcpp::Time recovery_start;
 
     /**
      * @brief 4-bit bitset indicating incoming 'Reset Fault' request from the external sourcer
@@ -320,6 +365,9 @@ private: /* -------------------------------------------------- Private data ----
      * @todo If FSM describing the driver becomes any bigger, use boost-sml to describe it's behaviour
      */
     std::bitset<Wheels::Num> fault_reset_request;
+
+    /// Auxiliary bitset denting what drivers have already left fault state
+    std::bitset<Wheels::Num> fault_recovery_status;
 
 };
 

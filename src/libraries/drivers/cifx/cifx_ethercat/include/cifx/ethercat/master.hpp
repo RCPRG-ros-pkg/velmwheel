@@ -3,7 +3,7 @@
  * @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
  * @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
  * @date       Thursday, 26th May 2022 1:22:28 pm
- * @modified   Monday, 13th June 2022 5:32:50 am
+ * @modified   Friday, 1st July 2022 1:22:34 pm
  * @project    engineering-thesis
  * @brief      Definition of the Master class providing API entry for implementing hardware-specific drivers of EtherCAT
  *             master devices
@@ -21,7 +21,7 @@
 #include <chrono>
 // Private includes
 #include "cifx.hpp"
-#include "ethercat/master.hpp"
+#include "ethercat.hpp"
 #include "cifx/ethercat/slave.hpp"
 
 /* ========================================================== Namespaces ========================================================== */
@@ -33,6 +33,11 @@ namespace cifx::ethercat {
 /**
  * @brief Implementation of the @ref ::ethercat::Master driver with the CIFX/netX
  *   C++ Toolkit hardware access layer
+ * 
+ * @note Due to actual implementation of the CIFX EtherCAt master firmware basename of the ENI file, that is
+ *    configured for the device whose channel is used to construct the Master driver, must be exactly 'ethercat.xml'. 
+ *    This is NOT explicitly written in Hillschers documentation. Failing to follow this rule will result in strange
+ *    errors during system bootup.
  */
 class Master : public ::ethercat::Master<Master, Slave> {
 
@@ -50,9 +55,6 @@ public: /* -------------------------------------------------- Public constants -
      * @see 'cifx_toolkit/doc/netx Dual-Port Memory Interface DPM 17 EN.pdf' (p.118/154)
      */
     static constexpr cifx::ProcessData::Area CIFX_PDI_DATA_AREA = cifx::ProcessData::Area::Regular;
-
-    /// Offset of PDI data in the PDI buffer
-    static constexpr std::size_t PDI_DATA_OFFSET = 0;
     
 public: /* ---------------------------------------------------- Public types ------------------------------------------------------ */
 
@@ -155,7 +157,7 @@ public: /* -------------------------------------------------- Public ctors & dto
      * @param channel 
      *    channel to be used for EtherCAT communication
      */
-    inline Master(cifx::Channel &channel);
+    Master(cifx::Channel &channel);
 
     /// Disabled copy semantic
     Master(const Master &rmaster) = delete;
@@ -180,9 +182,9 @@ public: /* ------------------------------------------- Public EtherCAT common me
      * @throws std::range_error
      *    if invalid state identifier has been returned by the CIFX device
      */
-    StateInfo get_state_info(std::chrono::milliseconds timeout = std::chrono::milliseconds{ 100 });
+    StateInfo get_state_info(std::chrono::milliseconds timeout = std::chrono::milliseconds{ 100 }) const;
 
-public: /* -------------------------------------------- Public CIFX-specific methods --------------------------------------------- */
+public: /* ------------------------------------- Public CIFX-specific methods (bus control) -------------------------------------- */
 
     /**
      * @brief Sets target host-bus synchronisation mode
@@ -195,7 +197,7 @@ public: /* -------------------------------------------- Public CIFX-specific met
      * @throws cifx::Error 
      *    on error
      */
-    void set_sync_mode(SyncMode mode, std::chrono::milliseconds timeout = std::chrono::milliseconds{ 100 });
+    void set_sync_mode(SyncMode mode, std::chrono::milliseconds timeout = std::chrono::seconds{ 5 });
 
     /**
      * @brief Measures current timing parameters of the bus
@@ -208,7 +210,115 @@ public: /* -------------------------------------------- Public CIFX-specific met
      * @throws cifx::Error 
      *    on error
      */
-    TimingInfo get_timing_info(std::chrono::milliseconds timeout = std::chrono::seconds{ 5 });
+    TimingInfo get_timing_info(std::chrono::milliseconds timeout = std::chrono::seconds{ 5 }) const;
+
+public: /* ---------------------------------- Public CIFX-specific methods (comm-area mapping) ----------------------------------- */
+
+    /**
+     * @brief CIFX-specific structure holding information about how subsequent regions of Communication Channel I/O Areas
+     *    are used by the driver (i.e. what kind of data is mapped into the regions)
+     * 
+     * @see 'doc/EtherCAT Master V4 Protocol API 06 EN.pdf', p. 149-151
+     */
+    struct CyclicMappingInfo {
+
+        /// Mappin info entry for RX direction
+        struct RxEntry {
+
+            /**
+             * @brief Type of data mapped into the region of the Communication Channel Input I/O Area
+             */
+            enum class Type {
+                
+                // No process data mapping for given direction
+                Unused = VAL_ECM_IF_CYCLIC_CMD_DATATYPE_UNUSED,        
+                // Process data is mapped in given direction
+                ProcessData = VAL_ECM_IF_CYCLIC_CMD_DATATYPE_PROCESS_DATA,        
+                // DC SysTime is mapped (only valid for receive direction)
+                DcSystime = VAL_ECM_IF_CYCLIC_CMD_DATATYPE_DC_SYSTIME,        
+                // Ored ALSTATUS of all slaves (only valid for receive direction)
+                BrdAlstatus = VAL_ECM_IF_CYCLIC_CMD_DATATYPE_BRD_ALSTATUS,        
+                // Ored DcSysTimeDifference register of all slaves (only valid for receive direction)
+                BrdDcSystimeDiff = VAL_ECM_IF_CYCLIC_CMD_DATATYPE_BRD_DC_SYSTIME_DIFF,        
+                // Area of WcState Bits (only valid for receive direction)
+                WCStateBits = VAL_ECM_IF_CYCLIC_CMD_DATATYPE_WCSTATE_BITS,        
+                // Area of ExtSync Status (only valid for receive direction)
+                ExtsyncStatus = VAL_ECM_IF_CYCLIC_CMD_DATATYPE_EXTSYNC_STATUS
+            
+            };
+
+            /**
+             * @returns 
+             *    human-readable name of the mapping type
+             */
+            static constexpr auto type_to_str(Type type);
+
+            /// Type of data mapped in the region
+            Type type;
+            /// Offset of the region in the Area in [B]
+            uint16_t offset;
+            /// Size of the region in [B]
+            uint16_t size;
+
+            /// Placement of received Working Counter (WKC) in receive process data image (if present)
+            std::optional<uint16_t> wkc_compare_received_byte_offset;
+
+        };
+
+        /// Mappin info entry for TX direction
+        struct TxEntry {
+
+            /**
+             * @brief Type of data mapped into the region of the Communication Channel Output I/O Area
+             */
+            enum class Type {
+                
+                // No process data mapping for given direction
+                Unused = VAL_ECM_IF_CYCLIC_CMD_DATATYPE_UNUSED,        
+                // Process data is mapped in given direction
+                ProcessData = VAL_ECM_IF_CYCLIC_CMD_DATATYPE_PROCESS_DATA
+            
+            };
+
+            /**
+             * @returns 
+             *    human-readable name of the mapping type
+             */
+            static constexpr auto type_to_str(Type type);
+
+            /// Type of data mapped in the region
+            Type type;
+            /// Offset of the region in the Area in [B]
+            uint16_t offset;
+            /// Size of the region in [B]
+            uint16_t size;
+
+        };
+
+        /// Descriptors of regions in the RX (Input) I/O Are
+        std::vector<RxEntry> rx;
+        /// Descriptors of regions in the TX (Output) I/O Are
+        std::vector<TxEntry> tx;
+
+        /**
+         * @brief Converts mapping info into the human-readable string
+         */
+        std::string to_str() const;
+
+    };
+
+    /**
+     * @brief Reads informations about mapping of regions of Cyclic Data Areas of the Communciation channel 
+     *    used by the CIFX Firmware
+     * 
+     * @param timeout 
+     *     operation's timeout
+     *    
+     * @see 'doc/EtherCAT Master V4 Protocol API 06 EN.pdf', p. 149-151
+     */
+    CyclicMappingInfo get_cyclic_mapping_info(
+        std::chrono::milliseconds timeout = std::chrono::milliseconds{ 1000 }
+    ) const;
 
 protected: /* -------------------------------- Protected EtherCAT common methods (implementation) --------------------------------- */
 
@@ -225,7 +335,7 @@ protected: /* -------------------------------- Protected EtherCAT common methods
      * @throws std::range_error
      *    if invalid state identifier has been returned by the CIFX device
      */
-    inline State get_state_impl(std::chrono::milliseconds timeout);
+    State get_state_impl(std::chrono::milliseconds timeout) const;
     
     /**
      * @brief Requestes state change of the slave device in the ESM (EtherCAT slave machine)
@@ -255,7 +365,7 @@ protected: /* -------------------------------- Protected EtherCAT I/O methods (i
      * @throws cifx::Error
      *    on failure
      */
-    inline void read_bus_impl(ranges::span<uint8_t> pdi_buffer, std::chrono::milliseconds timeout);
+    inline void read_bus_impl(::ethercat::config::types::Span<uint8_t> pdi_buffer, std::chrono::milliseconds timeout);
 
     /**
      * @brief Writes Output Process Data Image to the bus buffer (firstly updates slave's output PDOs)
@@ -268,12 +378,17 @@ protected: /* -------------------------------- Protected EtherCAT I/O methods (i
      * @throws cifx::Error
      *    on failure
      */
-    inline void write_bus_impl(ranges::span<uint8_t> pdi_buffer, std::chrono::milliseconds timeout);
+    inline void write_bus_impl(::ethercat::config::types::Span<const uint8_t> pdi_buffer, std::chrono::milliseconds timeout);
 
 private: /* --------------------------------------------------- Private data ------------------------------------------------------ */
 
     /// Reference tot he CIFX channel used to communicate with CIFX master device
     cifx::Channel &channel;
+
+    /// Offset of Input PDI data in the Input Cyclical I/O are of the channel
+    std::size_t input_pdi_data_offset { 0 };
+    /// Offset of Input PDI data in the Output Cyclical I/O are of the channel
+    std::size_t output_pdi_data_offset { 0 };
 
 };
 

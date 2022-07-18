@@ -3,7 +3,7 @@
 # @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @date       Thursday, 7th April 2022 6:50:10 am
-# @modified   Wednesday, 25th May 2022 4:44:01 pm
+# @modified   Friday, 24th June 2022 10:34:37 pm
 # @project    engineering-thesis
 # @brief      Launchfile running middleware of the WUT Velmwheel robot's `slam` module
 #    
@@ -36,7 +36,7 @@ component_description = {
     'launch_arguments': {
 
         # Configuration file
-        f'{component_name}_config': get_config_source('velmwheel_middleware_bringup', 'slam.yaml') ,
+        f'{component_name}_config': get_config_source('velmwheel_middleware_bringup', 'slam.yaml')
         
     }.items()
     

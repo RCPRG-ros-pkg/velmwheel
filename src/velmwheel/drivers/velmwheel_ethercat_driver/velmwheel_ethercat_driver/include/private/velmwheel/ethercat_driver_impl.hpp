@@ -3,7 +3,7 @@
  * @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
  * @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
  * @date       Thursday, 28th April 2022 4:00:25 pm
- * @modified   Tuesday, 31st May 2022 2:02:02 pm
+ * @modified   Wednesday, 29th June 2022 12:03:51 pm
  * @project    engineering-thesis
  * @brief      Definition of the class implementing bus-driving routines of the velmwheel_ethercat_driver node
  * 
@@ -18,6 +18,8 @@
 
 // System includes
 #include <type_traits>
+// ROS includes
+#include "pluginlib/class_loader.hpp"
 // Private includes
 #include "cifx/ethercat.hpp"
 #include "velmwheel/ethercat_slave_driver.hpp"
@@ -84,6 +86,9 @@ public: /* --------------------------------------------------- Public types ----
 
         /// Path to the target ENI configuration
         std::filesystem::path eni_source;
+
+        /// Timeout for all slaves being brought into the Operational state
+        std::optional<std::chrono::milliseconds> slaves_up_timeout;
 
         /**
          * @brief Initial configuration of the process
@@ -357,12 +362,18 @@ private: /* -------------------------------------------------- Private data ----
     cifx::Device device;
     /// CIFX communication channel used for EtherCAT communication
     cifx::Channel channel;
+    /// RAII object managing host- and bus-state signalisation to the CIFX channel
+    cifx::Channel::StateGuard state_guard;
 
     /// CIFX-specific implementation of the EtherCAT Master driver
     cifx::ethercat::Master master;
-    /// Cycle of the EtherCAT bus in [ms]
-    std::chrono::milliseconds bus_cycle_ms;
+    /// Timeout for cyclical I/O operations [ms]
+    std::chrono::milliseconds cyclic_io_timeout_ms;
+    /// Timeout for all slaves being brought into the Operational state
+    std::chrono::milliseconds slaves_up_timeout;
 
+    /// Plugins loader
+    pluginlib::ClassLoader<EthercatSlaveDriver> loader;
     /// Unique ID of the next loaded slave
     uint64_t next_unique_id { 0 };
     /// Database of loaded slave drivers

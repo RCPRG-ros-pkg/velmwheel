@@ -1,12 +1,11 @@
 # ====================================================================================================================================
-# @file     common.bash
-# @author   Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
-# @date     Tuesday, 1st March 2022 4:11:56 pm
-# @modified   Tuesday, 14th June 2022 8:01:37 pm
-# @project  engineering-thesis
-# @brief
-#    
-#    Set of handy function and aliases used when dealing with the project
+# @file       common.bash
+# @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+# @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+# @date       Tuesday, 1st March 2022 4:11:56 pm
+# @modified   Monday, 11th July 2022 10:34:02 pm
+# @project    engineering-thesis
+# @brief      Set of handy function and aliases used when dealing with the project
 #    
 # @copyright Krzysztof Pierczyk © 2022
 # ====================================================================================================================================

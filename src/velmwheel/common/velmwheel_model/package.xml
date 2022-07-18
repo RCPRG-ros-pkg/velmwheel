@@ -13,7 +13,7 @@
     <!-- Package's maintainer -->
     <maintainer email="krzysztof.pierczyk@gmail.com">Krzysztof Pierczyk</maintainer>
     <!-- Package's license -->
-    <license>GPLv3</license>
+    <license>MIT</license>
 
     <!-- Package's build dependencies -->
     <buildtool_depend>ament_cmake</buildtool_depend>

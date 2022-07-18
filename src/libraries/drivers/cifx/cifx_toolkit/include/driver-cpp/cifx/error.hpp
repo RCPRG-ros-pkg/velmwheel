@@ -3,7 +3,7 @@
  * @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
  * @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
  * @date       Monday, 14th February 2022 2:33:20 pm
- * @modified   Wednesday, 25th May 2022 9:40:59 pm
+ * @modified   Thursday, 30th June 2022 1:59:52 pm
  * @project    engineering-thesis
  * @brief      Declarations of helper functions and types associated with CIFX errors system
  *     
@@ -58,7 +58,7 @@ inline std::string error_to_str(int32_t error);
 /**
  * @brief Dedicated exception type for the Toolkit-specific errors
  */
-class Error : public std::runtime_error {
+class Error : public std::exception {
 public:
 
     /// Constructs Error with the given @p code and @p what message
@@ -68,12 +68,34 @@ public:
     inline Error(int32_t code, std::string_view context, const std::string &what);
 
     /// Returns error code associated with the exception
-    inline int32_t code() const;
+    inline int32_t get_code() const;
+
+    /// Returns context string of the error
+    inline const std::string &get_context() const;
+
+    /// Returns message string of the error
+    inline const std::string &get_msg() const;
+
+    /// Returns message string of the error
+    inline const char *what() const noexcept override;
+
+    /// Changes context string of the error
+    inline void change_context(std::string_view ctx);
+
+    /// Throws *this with context string changed to @p ctx
+    inline void rethrow_with_context(std::string_view ctx);
 
 private:
 
     /// Code associated with the error
     int32_t error_code;
+    /// Context of the error
+    std::string context;
+    /// Error message
+    std::string msg;
+    
+    /// Compiled erro msg
+    std::string what_msg;
     
 };
 

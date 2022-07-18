@@ -3,7 +3,7 @@
  * @author     Adam Kowalewski
  * @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
  * @date       Thursday, 19th May 2022 9:53:09 am
- * @modified   Wednesday, 25th May 2022 9:47:39 pm
+ * @modified   Monday, 27th June 2022 7:16:24 pm
  * @project    engineering-thesis
  * @brief      CIFX'es locks-related OS functions [implementation]
  * 
@@ -58,7 +58,6 @@ void* OS_CreateLock(void) {
 void OS_EnterLock(void* pvLock) {
 
 	assert(pvLock != NULL);
-	xTraceDebug(context, "Entering the lock...");
 
 	pthread_spinlock_t* lock = (pthread_spinlock_t*) pvLock;
 	const int ec = pthread_spin_lock(lock);
@@ -67,15 +66,12 @@ void OS_EnterLock(void* pvLock) {
 		assert(0);
 		return;
 	}
-
-	xTraceDebug(context, "Lock entered successfully");
 }
 
 
 void OS_LeaveLock(void* pvLock) {
 
 	assert(pvLock != NULL);
-	xTraceDebug(context, "Leaving the lock...");
 
 	pthread_spinlock_t* lock = (pthread_spinlock_t*) pvLock;
 	const int ec = pthread_spin_unlock(lock);
@@ -84,8 +80,6 @@ void OS_LeaveLock(void* pvLock) {
 		assert(0); // This should not happen
 		return;
 	}
-
-	xTraceDebug(context, "Lock leaved successfully");
 }
 
 

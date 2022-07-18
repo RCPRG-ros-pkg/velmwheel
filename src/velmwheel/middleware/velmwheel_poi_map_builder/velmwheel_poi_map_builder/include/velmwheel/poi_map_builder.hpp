@@ -3,7 +3,7 @@
  * @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
  * @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
  * @date       Thursday, 31st March 2022 9:16:44 pm
- * @modified   Thursday, 26th May 2022 12:06:29 am
+ * @modified   Monday, 18th July 2022 6:22:36 pm
  * @project    engineering-thesis
  * @brief      Declaration of the ROS2 component node class building an intensity map of points of interest (POI)
  * 

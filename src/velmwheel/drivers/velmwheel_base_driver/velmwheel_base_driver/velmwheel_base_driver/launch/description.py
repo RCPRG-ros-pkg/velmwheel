@@ -3,7 +3,7 @@
 # @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @date       Thursday, 28th April 2022 11:14:04 pm
-# @modified   Tuesday, 14th June 2022 2:04:27 pm
+# @modified   Monday, 18th July 2022 6:18:38 pm
 # @project    engineering-thesis
 # @brief      
 #    
@@ -21,7 +21,7 @@ from velmwheel_model.params import ROBOT_NAME
 # ============================================================ Constants =========================================================== #
 
 # Name of the plugin
-plugin_name = 'velmwheel_base_driver::BaseDriver'
+plugin_name = 'velmwheel::BaseDriver'
 
 # Path to default parameters file
 default_parameters = str(get_package_share_path('velmwheel_ethercat_driver') / 'config/base_driver.yaml')
@@ -44,6 +44,7 @@ def loader_description(fqn_ethercat_node_name, service_wait_timeout, log_level):
         # Output config
         'output': 'both',
         'emulate_tty': True,
+
         # Node's parameters
         'parameters': [
 
@@ -55,7 +56,7 @@ def loader_description(fqn_ethercat_node_name, service_wait_timeout, log_level):
         ],
 
         # Node's log level
-        'arguments': [ fqn_ethercat_node_name, '--ros-args', '--log-level', log_level ]
+        'arguments': [ fqn_ethercat_node_name, '--ros-args', '--log-level', log_level ],
    
    }
 

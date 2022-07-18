@@ -1,0 +1,31 @@
+# ====================================================================================================================================
+# @file       GetState.srv
+# @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+# @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+# @date       Monday, 13th June 2022 8:39:16 pm
+# @modified   Friday, 1st July 2022 6:08:20 pm
+# @project    engineering-thesis
+# @brief      Service message type describing a request-response model for asking a base driver about it's state
+#    
+#    
+# @copyright Krzysztof Pierczyk © 2022
+# ====================================================================================================================================
+
+---
+
+# Inactive state ID
+uint8 INACTIVE = 0
+# Active state ID
+uint8 ACTIVE = 1
+# Fault state ID
+uint8 FAULT = 2
+# Recovering from fault ID
+uint8 RECOVERING = 3
+
+# State of the driver
+uint8 state
+
+# True if service has been sucesfully served
+bool success
+# Human readable error message if success is @c false, else empty string.
+string error_message

@@ -3,7 +3,7 @@
 # @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @date       Wednesday, 16th March 2022 4:33:51 pm
-# @modified   Wednesday, 25th May 2022 4:44:01 pm
+# @modified   Tuesday, 21st June 2022 6:26:21 pm
 # @project    engineering-thesis
 # @brief      CMake file for `itsy_bitsy` package
 #    
@@ -48,18 +48,6 @@ add_ament_library(
     AMENT_DEPENDENCIES ${LIB_DEPENDENCIES}
     
 )
-
-# ============================================================== Tests ============================================================= #
-
-# Test builds
-if(BUILD_TESTING)
-
-    # Find linter
-    find_package(ament_lint_auto REQUIRED)
-    # Find test dependencies using info from `package.xml`
-    ament_lint_auto_find_test_dependencies()
-
-endif()
 
 # ============================================================== Build ============================================================= #
 

@@ -3,7 +3,7 @@
 # @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @date       Friday, 4th March 2022 5:57:12 pm
-# @modified   Wednesday, 25th May 2022 11:16:44 pm
+# @modified   Friday, 1st July 2022 9:51:15 pm
 # @project    engineering-thesis
 # @brief      Helper launchfile runnig TF static transform publishers setting frame identified with the robot's psoe in the world
 # 
@@ -43,7 +43,16 @@ odom_transform_publisher_description = {
     # Namespace
     'namespace': f'/{ROBOT_NAME}',
     # Arguments
-    'arguments': ['0', '0', '0', '0', '0', '0', robot_at, f'{ROBOT_NAME}'],
+    'arguments': [
+        '--x',     '0',
+        '--y',     '0',
+        '--z',     '0',
+        '--roll',  '0',
+        '--pitch', '0',
+        '--yaw',   '0',
+        '--frame-id', robot_at,
+        '--child-frame-id', f'{ROBOT_NAME}'
+    ],
 
     # Run condition
     'condition': IfCondition( PythonExpression(['"', robot_at, '" != ""']) )

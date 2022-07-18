@@ -3,7 +3,7 @@
 # @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @date       Tuesday, 1st March 2022 4:30:53 pm
-# @modified   Tuesday, 14th June 2022 3:09:09 pm
+# @modified   Friday, 15th July 2022 3:09:11 pm
 # @project    engineering-thesis
 # @brief      Driver plugin for the Velmwheel base EtherCAT slave
 #    
@@ -36,7 +36,9 @@ endif()
 list(APPEND LIB_DEPENDENCIES
     pluginlib
     node_common_cpp
-    elmo_ethercat
+    tf2_ros
+    tf2_geometry_msgs
+    gold_dc_whistle
     velmwheel_ethercat_driver
     velmwheel_model
     velmwheel_msgs
@@ -75,11 +77,9 @@ add_ament_library(
     AMENT_DEPENDENCIES ${LIB_DEPENDENCIES}
     
 )
-target_compile_options(${PROJECT_NAME} PRIVATE -O2)
+
 # Export plugin description file
-pluginlib_export_plugin_description_file(${PROJECT_NAME}
-    plugins.xml
-)
+pluginlib_export_plugin_description_file(velmwheel_ethercat_driver plugins.xml)
 
 # ===================================================== Source (Python nodes) ====================================================== #
 
@@ -89,7 +89,8 @@ install(
     # Auxiliary ROS nodes
     PROGRAMS
         
-        ${PROJECT_NAME}/set_driver_state.py
+        ${PROJECT_NAME}/enable.py
+        ${PROJECT_NAME}/get_state.py
         ${PROJECT_NAME}/reset_fault.py
         
     # Destination

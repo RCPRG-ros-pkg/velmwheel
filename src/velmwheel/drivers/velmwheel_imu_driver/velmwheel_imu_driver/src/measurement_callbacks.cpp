@@ -3,7 +3,7 @@
  * @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
  * @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
  * @date       Monday, 30th May 2022 7:20:04 pm
- * @modified   Tuesday, 31st May 2022 3:49:47 pm
+ * @modified   Tuesday, 28th June 2022 6:25:19 pm
  * @project    engineering-thesis
  * @brief      Definition of callback methods of the ImuDriver class related to measurements processing
  * 
@@ -23,6 +23,8 @@ namespace velmwheel {
 /* =========================================================== Callbacks ========================================================== */
 
 void ImuDriver::imu_callback() {
+
+    RCLCPP_DEBUG_STREAM(node->get_logger(), "Reading cyclical data of [Imu] sensor");
 
     // Read current measurements of the acceleration sensor
     auto acceleration_measurements = driver->get_acceleration_measurements();

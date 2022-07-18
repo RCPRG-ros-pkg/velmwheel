@@ -3,7 +3,7 @@
  * @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
  * @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
  * @date       Wednesday, 16th March 2022 4:37:20 pm
- * @modified   Thursday, 26th May 2022 2:25:43 am
+ * @modified   Monday, 18th July 2022 8:18:15 pm
  * @project    engineering-thesis
  * @brief      ROS2-based class implementing controll node responsible for basic conrol over the Velmwheel's driveline
  * 
@@ -18,6 +18,7 @@
 
 // System includes
 #include <utility>
+#include <optional>
 // ROS includes
 #include "rclcpp/rclcpp.hpp"
 #include "rclcpp/visibility_control.hpp"
@@ -26,6 +27,7 @@
 #include "geometry_msgs/msg/transform_stamped.hpp"
 #include "geometry_msgs/msg/twist_stamped.hpp"
 #include "geometry_msgs/msg/point.hpp"
+#include "geometry_msgs/msg/pose.hpp"
 #include "geometry_msgs/msg/pose_stamped.hpp"
 #include "geometry_msgs/msg/pose_with_covariance.hpp"
 #include "nav_msgs/msg/odometry.hpp"
@@ -136,6 +138,24 @@ private: /* ------------------------------------------------ Callback methods --
 private: /* ----------------------------------------------- Auxiliary methods ----------------------------------------------------- */
 
     /**
+     * @retval true 
+     *    if odometry data has been already initialized
+     * @retval false 
+     *    otherwise
+     */
+    inline bool is_odom_initialized() const;
+
+    /**
+     * @brief Initializes odoemtry measurement state based on the first incoming measurements
+     * 
+     * @param current_angles 
+     *    current encoders' angles
+     * @returns 
+     *    initial positional odometry data
+     */
+    geometry_msgs::msg::Pose initialize_odom(const velmwheel_msgs::msg::Wheels &current_angles);
+
+    /**
      * @brief Calculates current odometry data for the Velmwheel robot
      * 
      * @param current_angles 
@@ -143,7 +163,7 @@ private: /* ----------------------------------------------- Auxiliary methods --
      * @returns 
      *    a new positional odometry data
      */
-    geometry_msgs::msg::PoseWithCovariance update_odom(const velmwheel_msgs::msg::Wheels &current_angles);
+    geometry_msgs::msg::Pose update_odom(const velmwheel_msgs::msg::Wheels &current_angles);
 
 private: /* ------------------------------------------------ Auxiliary types ------------------------------------------------------ */
 
@@ -190,8 +210,8 @@ private: /* -------------------------------------------------- Node's state ----
     nav_msgs::msg::Odometry odom_msg;
     /// Odometry transformation (reused to save time on filling header data)
     geometry_msgs::msg::TransformStamped odom_transform;
-    /// Basic informations needed to be kept between subsequent iterations of odometry calculation
-    OdomKeepup odom_keepup;
+    /// Basic informations needed to be kept between subsequent iterations of odometry calculation (empty until first measurements arrive)
+    std::optional<OdomKeepup> odom_keepup;
 
 };
 

@@ -3,7 +3,7 @@
 # @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @date       Friday, 23rd April 2021 12:29:15 pm
-# @modified   Thursday, 16th June 2022 1:21:31 pm
+# @modified   Monday, 18th July 2022 5:51:30 pm
 # @project    engineering-thesis
 # @brief      Script that should be source before starting working with the directory
 # @details
@@ -39,8 +39,13 @@ export ROS_DOMAIN_ID=0
 export ROS_HOME="$HOME/.ros"
 export ROS_LOG_DIR="$PROJECT_HOME/log/launch"
 
-# Name of the default docker image to be run with commands
-export DFLT_DOCKER_IMG=ros:latest
+# Name of the net interface used for LIDARs communication (unused if empty)
+export LIDAR_INTERFACE_NAME="enp5s0"
+# Static IP of the net interface to be set for LIDARs communication (left non-configured if empty)
+export LIDAR_INTERFACE_IP="192.168.0.1"
+
+# Expected UIO index of the CIFX card (if not given, the CIFX driver will not be installed and configured on the system)
+export NETX_UIO_INDEX=0
 
 # ============================================================= Helpers ============================================================ #
 
@@ -69,6 +74,14 @@ function setup_project() {
     # Install dependencies
     $PROJECT_HOME/scripts/install.bash || {
         log_error "Failed to install dependencies"
+        return 1
+    }
+
+    log_info "Applying required patches..."
+
+    # Apply patches
+    $PROJECT_HOME/scripts/apply_patches.bash || {
+        log_error "Failed to apply patches"
         return 1
     }
 

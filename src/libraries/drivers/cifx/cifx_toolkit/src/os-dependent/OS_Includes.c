@@ -3,7 +3,7 @@
  * @author     Adam Kowalewski
  * @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
  * @date       Thursday, 19th May 2022 9:53:09 am
- * @modified   Wednesday, 15th June 2022 1:39:54 pm
+ * @modified   Monday, 27th June 2022 5:11:38 pm
  * @project    engineering-thesis
  * @brief      CIFX'es files-related OS functions [implementation]
  * 
@@ -79,7 +79,7 @@ void xTraceVa(uint32_t trace_level, const char* format, va_list arg) {
     assert(format != NULL);
 
 	// Check whether global and local copy of trace level match
-	if(g_ulTraceLevel > trace_level)
+	if(!(g_ulTraceLevel & trace_level))
 		return;
 
 	// Get human-readable trace level's description
@@ -191,6 +191,35 @@ void xTraceError(const char *context, const char *format, ...) {
 	va_start(arg, format);
 
 	xTraceErrorVa(context, format, arg);
+
+    // Remove variable list
+	va_end(arg);
+}
+
+
+void xTraceToolkitErrorVa(const char *context, int32_t ec, const char *format, va_list arg) {
+
+    char error_buf  [TRACE_BUF_SIZE / 4];
+    char message_buf[TRACE_BUF_SIZE];
+
+    // Format error
+    xDriverGetErrorDescription(ec, error_buf, TRACE_BUF_SIZE / 4);
+    // Format message
+    snprintf(message_buf, TRACE_BUF_SIZE, "(%s) %s", error_buf, format);
+
+    // Print message
+	message(TRACE_LEVEL_ERROR, LOG_ERROR_COL, context, message_buf, arg);
+	
+}
+
+
+void xTraceToolkitError(const char *context, int32_t ec, const char *format, ...) {
+    
+    // Initialize variable arguments
+    va_list arg;
+	va_start(arg, format);
+
+	xTraceToolkitErrorVa(context, ec, format, arg);
 
     // Remove variable list
 	va_end(arg);

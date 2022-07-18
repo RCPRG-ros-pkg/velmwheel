@@ -3,7 +3,7 @@
  * @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
  * @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
  * @date       Wednesday, 4th May 2022 12:10:47 pm
- * @modified   Wednesday, 25th May 2022 9:35:31 pm
+ * @modified   Thursday, 30th June 2022 1:47:29 pm
  * @project    engineering-thesis
  * @brief      Definition of the class wrapping description and providing related API for the 'Mailbox' concept of the CIFX 
  *             Toolkit Framework
@@ -113,7 +113,7 @@ public: /* ------------------------------------------- Public methods (Asynchron
      * @throws cifx::Error 
      *    on failure
      * 
-     * @note @p packet reference is converted to the CIFX-specifix packet reference
+     * @note @p packet reference is converted to the CIFX-specific packet reference
      *    undethehood
      */
     template<typename PacketT>
@@ -132,7 +132,7 @@ public: /* ------------------------------------------- Public methods (Asynchron
      * @throws cifx::Error 
      *    on failure
      * 
-     * @note @p packet reference is converted to the CIFX-specifix packet reference
+     * @note @p packet reference is converted to the CIFX-specific packet reference
      *    undethehood
      */
     template<typename PacketT>
@@ -155,8 +155,7 @@ public: /* ------------------------------------------- Public methods (Asynchron
      * @throws cifx::Error 
      *    on failure
      * 
-     * @note @p packet reference is converted to the CIFX-specifix packet reference
-     *    undethehood
+     * @note @p packet reference is converted to the CIFX-specific packet reference undethehood
      * @warning This function is not reentrant. It follows two-step process to exchange packet
      *    (putting request into the output mailbox and waiting for receiving packet in the input
      *    mailbox). If another thread triesto receive package after the function put it's request
@@ -201,25 +200,8 @@ public: /* ------------------------------------------- Public methods (Asynchron
      * @throws cifx::Error 
      *    on failure
      * 
-     * @note @p packet reference is converted to the CIFX-specifix packet reference
-     *    undethehood
-     * @warning This function is not reentrant. It follows two-step process to exchange packet
-     *    (putting request into the output mailbox and waiting for receiving packet in the input
-     *    mailbox). If another thread triesto receive package after the function put it's request
-     *    but before it locks on reception, the other thread will receive package that does not
-     *    correspond to it's request. In sucha a case function will throw exception with message
-     *    stating that the response package does not correspond to request type.
-     *    This issue wasn't taken as a problem during initial design phase, as the whole low-level
-     *    communication mechanism provided by the library was intended to be managed by a single 
-     *    thread. However, if the future expririence shows that the reentrant access is required, 
-     *    two-way approach can be taken to enable it:
-     *  
-     *       - (easier) introduce mailbox-synchronisation lock that would ensure that
-     *         packages' exchange is atomic
-     *       - (harder) introduce independent mailbox-handling mechanism based on the
-     *         'notifications' functionality; in such a case, a dedicated thread created 
-     *         in the constructor would manage actual transmission and reception of messages
-     *         on behalf of requesting threads taking advantage of IPC (Intra-Process Communication)
+     * @note @p packet reference is converted to the CIFX-specific packet reference undethehood
+     * @warning See warning for the @ref exchange_packet() method
      */
     template<typename RequestT, typename ResponseT>
     inline void exchange_packet(
@@ -228,6 +210,66 @@ public: /* ------------------------------------------- Public methods (Asynchron
         std::chrono::milliseconds request_timeout_ms,
         std::chrono::milliseconds response_timeout_ms
     );
+
+    /**
+     * @brief Writes request packet to the mailbox and reads the response in an atomic manner. If timeout
+     *    is not reached decreases @p timeout_ms value by time spent on packet exchange
+     * 
+     * @tparam RequestT 
+     *    type of the @p request 
+     * @tparam ResponseT 
+     *    type of the @p response 
+     * @param[in] request 
+     *    packet to be put into the mailbox
+     * @param[out] response 
+     *    packet structure to read incominng package into
+     * @param[inout] imeout_ms 
+     *    timeout of the whole action; on success decreased by actual time spent on exchange action
+     * 
+     * @throws cifx::Error 
+     *    on failure
+     * 
+     * @note @p packet reference is converted to the CIFX-specific packet reference undethehood
+     * @warning See warning for the @ref exchange_packet() method
+     */
+    template<typename RequestT, typename ResponseT>
+    void exchange_packet_with_timeout_update(
+        const RequestT &request,
+        ResponseT &response,
+        std::chrono::milliseconds &timeout_ms
+    );
+
+    /**
+     * @brief Writes request packet to the mailbox and reads the response in an atomic manner. If timeout
+     *    is not reached decreases @p timeout_ms value by time spent on packet exchange. Updates header of the 
+     *    @p request with the @a ulDestId read form the response
+     * 
+     * @note This method is aimed to perform multi-part packets exchange
+     * 
+     * @tparam RequestT 
+     *    type of the @p request 
+     * @tparam ResponseT 
+     *    type of the @p response 
+     * @param[inout] request 
+     *    packet to be put into the mailbox
+     * @param[out] response 
+     *    packet structure to read incominng package into
+     * @param[inout] imeout_ms 
+     *    timeout of the whole action; on success decreased by actual time spent on exchange action
+     * 
+     * @throws cifx::Error 
+     *    on failure
+     * 
+     * @note @p packet reference is converted to the CIFX-specific packet reference undethehood
+     * @warning See warning for the @ref exchange_packet() method
+     */
+    template<typename RequestT, typename ResponseT>
+    inline void exchange_partial_packet(
+        RequestT &request,
+        ResponseT &response,
+        std::chrono::milliseconds &timeout_ms
+    );
+
 
 protected: /* ------------------------------------------------- Protected constructors -------------------------------------------- */
 

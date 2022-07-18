@@ -3,7 +3,7 @@
  * @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
  * @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
  * @date       Wednesday, 16th March 2022 4:37:53 pm
- * @modified   Wednesday, 25th May 2022 11:47:21 pm
+ * @modified   Monday, 18th July 2022 8:22:25 pm
  * @project    engineering-thesis
  * @brief      Definitions of the ROS2 node class implementing Kalman-Filter-based processing mechanism for filtering odometry data
  * 
@@ -184,8 +184,13 @@ OdomFusion::OdomFusion(const rclcpp::NodeOptions & options) :
     // Configure timeout of sensors measurements
     filter.setSensorTimeout( rclcpp::Duration::from_seconds(*sensor_timeout_s) );
 
+    // Init the last measurement time so we don't get a huge initial delta
+    filter.setLastMeasurementTime( this->now() );
+
     // (Optional) Configure output debug log file
-    if(not debug_log_file->empty()) {
+    if(debug_log_file.has_value() and (not debug_log_file->empty())) {
+
+        RCLCPP_INFO_STREAM(this->get_logger(), "Output log file set to '" << *debug_log_file << "'");
 
         // Construct output stream
         debug_out_stream.emplace(*debug_log_file);
@@ -200,7 +205,6 @@ OdomFusion::OdomFusion(const rclcpp::NodeOptions & options) :
     /* ------------------------------------------------------------------------------- */
     
     node_common::node::print_hello(*this);
-
 }
 
 
@@ -370,6 +374,9 @@ void OdomFusion::publish(const rclcpp::Time &now) {
         state(StateYaw)
     );
 
+    // Normalize quaternion
+    orientation.normalize();
+
     /* -------------------------- Publish odometry message --------------------------- */
 
     // Prepare header of the output message
@@ -427,6 +434,8 @@ void OdomFusion::publish(const rclcpp::Time &now) {
     tf_out_msg.transform.rotation.z    = odom_msg.pose.pose.orientation.z;
     tf_out_msg.transform.rotation.w    = odom_msg.pose.pose.orientation.w;
 
+    // Publish transformation
+    tf_broadcaster->sendTransform(tf_out_msg);
 }
 
 /* ================================================================================================================================ */

@@ -4,3 +4,12 @@
 [submodule "extern/ros/sick_scan_xd"]
 	path = extern/ros/sick_scan_xd
 	url = https://github.com/SICKAG/sick_scan_xd
+[submodule "extern/ros/ethercat-lib"]
+	path = extern/ros/ethercat-lib
+	url = https://github.com/kpierczy/ethercat-lib
+[submodule "extern/ros/ros-common"]
+	path = extern/ros/ros-common
+	url = https://github.com/kpierczy/ros-common
+[submodule "extern/ros/scan-tools"]
+	path = extern/ros/scan-tools
+	url = https://github.com/kpierczy/scan-tools

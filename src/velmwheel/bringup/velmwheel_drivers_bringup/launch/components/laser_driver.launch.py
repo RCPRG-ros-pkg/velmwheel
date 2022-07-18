@@ -3,7 +3,7 @@
 # @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @date       Thursday, 7th April 2022 6:50:10 am
-# @modified   Wednesday, 25th May 2022 4:44:01 pm
+# @modified   Thursday, 7th July 2022 3:10:47 pm
 # @project    engineering-thesis
 # @brief      Launchfile running middleware of the WUT Velmwheel robot's `laser_driver` module
 #    
@@ -36,8 +36,11 @@ component_description = {
     'launch_arguments': {
 
         # Configuration file
-        'left_lidar_driver_config':  get_config_source('velmwheel_drivers_bringup', 'left_laser_driver.yaml' ),
-        'right_lidar_driver_config': get_config_source('velmwheel_drivers_bringup', 'right_laser_driver.yaml')
+        'lidar_l_config':  get_config_source('velmwheel_drivers_bringup', 'left_laser_driver.yaml' ),
+        'lidar_r_config': get_config_source('velmwheel_drivers_bringup', 'right_laser_driver.yaml'),
+        # Hard nodes requirements
+        'lidar_l_required' : 'true',
+        'lidar_r_required' : 'true',
         
     }.items()
 }

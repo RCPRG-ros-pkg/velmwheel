@@ -3,7 +3,7 @@
 # @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @date       Wednesday, 13th April 2021 12:43:42 am
-# @modified   Thursday, 26th May 2022 10:30:02 pm
+# @modified   Monday, 11th July 2022 10:24:24 pm
 # @project    engineering-thesis
 # @brief
 #    
@@ -46,7 +46,7 @@ add_compile_options(
 list(APPEND LIB_DEPENDENCIES
     Boost    
     package_common_cpp
-    ethercat
+    ethercat-lib
     cifx_toolkit
 )
 

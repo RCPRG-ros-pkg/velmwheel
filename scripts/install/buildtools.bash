@@ -3,8 +3,8 @@
 # @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @date       Tuesday, 26th October 2021 3:08:37 pm
-# @modified   Thursday, 16th June 2022 12:22:09 pm
-# @project    Winder
+# @modified   Wednesday, 22nd June 2022 12:20:57 pm
+# @project    engineering-thesis
 # @brief      Script checks building-tools dependencies and installs them if required
 #    
 #    

@@ -3,7 +3,7 @@
  * @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
  * @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
  * @date       Wednesday, 16th March 2022 4:37:20 pm
- * @modified   Thursday, 26th May 2022 2:33:00 am
+ * @modified   Monday, 18th July 2022 6:56:34 pm
  * @project    engineering-thesis
  * @brief      Declaration of the ROS2 node class implementing bias estimation algorithm for measurements from the IMU sensor
  * 
@@ -19,6 +19,7 @@
 // System includes
 #include <limits>
 #include <utility>
+#include <optional>
 // Math includes
 #include "tf2_eigen/tf2_eigen.hpp"
 // ROS includes
@@ -235,7 +236,7 @@ public: /* ------------------------------------------------ Topic's parameters -
     static constexpr auto THETA_PUB_TOPIC_NAME = "orientation/filtered";
     
     /// Name of the service topic used to initialize processing of the algorithm
-    static constexpr auto INITIALIZE_SRV_TOPIC_NAME = "initialize";
+    static constexpr auto INITIALIZE_SRV_TOPIC_NAME = "~/initialize";
 
 public: /* ----------------------------------------------- Public ctors & dtors --------------------------------------------------- */
 
@@ -282,7 +283,7 @@ private: /* ----------------------------------------------- Auxiliary methods --
      *        @retval current timepoint
      *        @retval time elapsed between @p last_stamp and current moment
      */
-    inline std::pair<rclcpp::Time, rclcpp::Duration> get_current_time_diff(const rclcpp::Time &last_stamp);
+    inline std::pair<rclcpp::Time, rclcpp::Duration> get_current_time_diff(const std::optional<rclcpp::Time> &last_stamp);
 
     /**
      * @param time_diff 
@@ -332,9 +333,9 @@ private: /* -------------------------------------------------- Node's state ----
     double bias_rad_s { 0.0 };
 
     /// Timestamp of the last IMU callback (initialized with negative value to indicate state before the first callback)
-    rclcpp::Time last_imu_stamp { std::numeric_limits<int64_t>::min() };
+    std::optional<rclcpp::Time> last_imu_stamp;
     /// Timestamp of the last odometry callback (initialized with negative value to indicate state before the first callback)
-    rclcpp::Time last_odom_stamp { std::numeric_limits<int64_t>::min() };
+    std::optional<rclcpp::Time> last_odom_stamp;
 
 };
 

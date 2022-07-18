@@ -3,7 +3,7 @@
  * @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
  * @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
  * @date       Wednesday, 4th May 2022 12:03:11 pm
- * @modified   Wednesday, 25th May 2022 9:33:32 pm
+ * @modified   Wednesday, 29th June 2022 11:59:23 am
  * @project    engineering-thesis
  * @brief      Definition of the RAII class wrapping description and providing related API for the 'Device's Channel' concept 
  *             of the CIFX Toolkit Framework
@@ -118,6 +118,61 @@ ProcessData &Channel::get_process_data(ProcessData::Area area) {
     assert(area == ProcessData::Area::Regular);
 
     return regular_process_data;
+}
+
+/* =========================================================== HostGuard ========================================================== */
+
+Channel::HostGuard::HostGuard(
+    Channel &channel,
+    std::chrono::milliseconds timeout
+) : 
+    channel{ channel },
+    timeout{ timeout }
+{
+    channel.set_host_ready(true, timeout);
+}
+
+
+Channel::HostGuard::~HostGuard() noexcept(false)
+{
+    channel.set_host_ready(false, timeout);
+}
+
+/* =========================================================== BusGuard =========================================================== */
+
+Channel::BusGuard::BusGuard(
+    Channel &channel,
+    std::chrono::milliseconds timeout
+) : 
+    channel{ channel },
+    timeout{ timeout }
+{ }
+
+
+Channel::BusGuard::~BusGuard() noexcept(false)
+{
+    channel.set_bus_on(false, timeout);
+}
+
+/* ========================================================== StateGuard ========================================================== */
+
+Channel::StateGuard::StateGuard(
+    Channel &channel,
+    std::chrono::milliseconds bus_timeout,
+    std::chrono::milliseconds host_timeout
+) : 
+    channel{ channel },
+    bus_timeout{ bus_timeout },
+    host_timeout{ host_timeout }
+{
+    channel.set_host_ready(true, host_timeout);
+}
+
+
+Channel::StateGuard::~StateGuard() noexcept(false)
+{
+    channel.set_bus_on(false, bus_timeout);
+    channel.set_host_ready(false, host_timeout);
 }
 
 /* ================================================================================================================================ */

@@ -4,7 +4,7 @@
 # @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @date       Tuesday, 14th June 2022 3:15:50 pm
-# @modified   Tuesday, 14th June 2022 3:17:22 pm
+# @modified   Friday, 1st July 2022 5:48:50 pm
 # @project    engineering-thesis
 # @brief      Auxiliary ROS2 CLI utility requesting state change in the base driver plugin
 # @details    Usage:
@@ -24,6 +24,7 @@ import sys
 # Private imports
 from velmwheel_base_driver_msgs.srv import ResetFailure
 from package_common_py.requester import Requester
+from velmwheel_model.params import ROBOT_NAME
 
 # ============================================================== Nodes ============================================================= #
 
@@ -46,7 +47,7 @@ class DriverFailureResetter():
             node.get_logger().error(f'Failed to reset failure ({response.error_message})')
         # Else, print success message
         else:
-            node.get_logger().info(f'Succesfully reset driver\'s failure \'{sys.argv[1]}\'')
+            node.get_logger().info(f'Succesfully reset driver\'s failure')
 
 # ============================================================== Main ============================================================== #
 
@@ -54,9 +55,9 @@ def main():
 
     # Create requester
     requester = Requester(
-        node_name   = 'base_driver_failure_resetter',
+        node_name   = f'base_driver_failure_resetter',
         srv_type    = ResetFailure,
-        topic_name  = f'{sys.argv[1]}/base/reset_fault',
+        topic_name  = f'/{ROBOT_NAME}/base/reset_fault',
         srv_handler =  DriverFailureResetter()
     )
 

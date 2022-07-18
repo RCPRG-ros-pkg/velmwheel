@@ -18,7 +18,7 @@
     <!-- Package's maintainer -->
     <maintainer email="krzysztof.pierczyk@gmail.com">Krzysztof Pierczyk</maintainer>
     <!-- Package's license -->
-    <license>BSD</license>
+    <license>MIT</license>
 
     <!-- Package's runtime dependencies -->
     <exec_depend>rclpy</exec_depend>

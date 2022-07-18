@@ -3,7 +3,7 @@
  * @author     Adam Kowalewski
  * @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
  * @date       Wednesday, 13th April 2021 8:03:28 am
- * @modified   Wednesday, 15th June 2022 2:07:16 pm
+ * @modified   Monday, 27th June 2022 5:12:00 pm
  * @project    engineering-thesis
  * @brief      (De)Initialization functions of the CIFX driver [implementation]
  * 
@@ -48,17 +48,28 @@ static const char *context = "cifx_driver";
 static int init_toolkit(const CIFX_LINUX_INIT* init) {
 
 	assert(init != NULL);
-
+    
+    // Reset trace level
+    g_ulTraceLevel = 0;
 	// Set the trace level
-	g_ulTraceLevel = init->trace_level;
-
+    switch(init->trace_level) {
+        case TRACE_LEVEL_DEBUG:   g_ulTraceLevel = (TRACE_LEVEL_DEBUG | TRACE_LEVEL_INFO | TRACE_LEVEL_WARNING | TRACE_LEVEL_ERROR); break;
+        case TRACE_LEVEL_INFO:    g_ulTraceLevel = (                    TRACE_LEVEL_INFO | TRACE_LEVEL_WARNING | TRACE_LEVEL_ERROR); break;
+        case TRACE_LEVEL_WARNING: g_ulTraceLevel = (                                       TRACE_LEVEL_WARNING | TRACE_LEVEL_ERROR); break;
+        case TRACE_LEVEL_ERROR:   g_ulTraceLevel = (                                                             TRACE_LEVEL_ERROR); break;
+        default:
+            xTraceError(context, "Invalid log level requested (%d)", init->trace_level);
+            fflush(stdout);
+            return -1;
+    }
+    
 	// Display initialization message
 	xTraceInfo(context, "Initializing toolkit...");
-
+    
 	// Initialize the toolkit
-	const int ec = cifXTKitInit();
+	const int32_t ec = cifXTKitInit();
 	if(ec != CIFX_NO_ERROR)	{
-		xTraceSystemError(context, ec, "Could not initialize toolkit");
+		xTraceToolkitError(context, ec, "Could not initialize toolkit");
 		return -1;
 	}
     

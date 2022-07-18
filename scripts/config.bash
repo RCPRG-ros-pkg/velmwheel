@@ -3,7 +3,7 @@
 # @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @date       Friday, 13th May 2022 5:23:30 pm
-# @modified   Thursday, 16th June 2022 12:27:48 pm
+# @modified   Monday, 4th July 2022 2:06:25 pm
 # @project    engineering-thesis
 # @brief      Checks for dependencancies of the project in the system and isntalls lacking ones. Sources scripts providing definitions
 #             and functionalities used in the project
@@ -25,3 +25,5 @@ bash $PROJECT_HOME/scripts/config/cifx.bash
 source $PROJECT_HOME/scripts/config/colcon.bash
 # Configure ROS
 source $PROJECT_HOME/scripts/config/ros.bash
+# Configure LIDARs net interface
+bash $PROJECT_HOME/scripts/config/lidars.bash

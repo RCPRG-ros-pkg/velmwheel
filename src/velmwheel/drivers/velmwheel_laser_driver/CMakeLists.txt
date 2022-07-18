@@ -3,7 +3,7 @@
 # @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @date       Tuesday, 1st March 2022 4:30:53 pm
-# @modified   Wednesday, 25th May 2022 4:44:01 pm
+# @modified   Tuesday, 5th July 2022 6:10:15 am
 # @project    engineering-thesis
 # @brief      CMake file for `velmwheel_laser_driver` package
 #    
@@ -20,9 +20,56 @@ project(velmwheel_laser_driver)
 
 # ========================================================== Dependencies ========================================================== #
 
+# Librarie's dependencies
+list(APPEND DEPENDENCIES
+    lms1xx
+    rclcpp
+    rclcpp_components
+    node_common_cpp
+    sensor_msgs
+    tf2_eigen
+)
+
+# Common dependencies
+find_package(cmake_common REQUIRED)
 # Ament dependency (always present)
-find_package(ament_cmake REQUIRED)
-find_package(ament_cmake_python REQUIRED)
+find_packages(
+
+    # Ament dependencies
+    ament_cmake
+    ament_cmake_python
+    # Find dependencies
+    ${DEPENDENCIES}
+
+)
+
+# ============================================================= Source ============================================================= #
+
+# Set lib target names
+STRING(REPLACE "velmwheel_" "" LIB_TARGET ${PROJECT_NAME})
+# Set executable target names
+set(EXEC_TARGET ${PROJECT_NAME})
+
+# Add node
+add_ros_component_node(
+
+    # Library target
+    LIBRARY_NAME ${LIB_TARGET}
+    # Plugin target
+    PLUGIN_NAME "velmwheel::LaserDriver"
+    # Executable target
+    EXECUTABLE_NAME ${EXEC_TARGET}
+
+    # Sources
+    SOURCES
+        src/laser_driver.cpp
+        src/callbacks.cpp
+        src/configuration.cpp
+
+    # Ament dependencies
+    AMENT_DEPENDENCIES ${DEPENDENCIES}
+    
+)
 
 # ========================================================== Python nodes ========================================================== #
 

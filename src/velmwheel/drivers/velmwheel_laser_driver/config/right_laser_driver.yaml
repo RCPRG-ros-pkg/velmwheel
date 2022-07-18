@@ -3,12 +3,11 @@
 # @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @date       Tuesday, 22nd March 2022 3:12:52 am
-# @modified   Thursday, 26th May 2022 2:28:12 am
+# @modified   Thursday, 7th July 2022 5:59:09 pm
 # @project    engineering-thesis
 # @brief      Default configuration for the velmwheel_laser_driver of the right LIDAR sensor
 #    
 #    
-# @note Configuration has been based on the <sick_scan>/launch/sick_lms_1xx.launch launch file
 # @copyright Krzysztof Pierczyk © 2022
 # ====================================================================================================================================
 
@@ -17,46 +16,15 @@
     # Parameters
     ros__parameters:
 
-        # Hostname of the sensor
-        hostname: 192.168.0.2
-        
-        # If true, the internal Software PLL is fored to sync the scan generation time stamp to a system timestamp
-        sw_pll_only_publish: true
+        # IP of the host
+        hostname: '192.168.0.1'
+        # IP of the sensor
+        devicename: '192.168.0.3'
 
-        # Whether to start ROS service for cola commands
-        start_services: True
-        # Whether to activate field monitoring by lferec messages
-        activate_lferec: True
-        # Whether to activate field monitoring by lidoutputstate messages
-        activate_lidoutputstate: True
-        # Whether to activate field monitoring by lidinputstate messages
-        activate_lidinputstate: True
-        # Set range of scans intensities to infinity, if intensity < min_intensity (default: 0)
-        min_intensity: 0.0
-        
-        # Supported values are "0.25" and "0.50"
-        ang_res: 0.5
-        # Supported values are "25" and "50"
-        scan_freq: 50
+        # Scan frequency (25 or 50)
+        scan_frequency: 50
+        # Angular resolution (0.25 or 0.5)
+        angular_resolution: 0.25
 
-        # -------------------------------------------------------------------------------------------------------
-        # @note : angular resolution and scanning frequency of a LMS111 can be configured by parameter "ang_res" 
-        #   (values "0.25" or "0.5") and "scan_freq"  (values "25" or "50"). After setting "ang_res" and 
-        #   "scan_freq", it takes ca. 30 seconds until the pointcloud is published. Recommendation: It is 
-        #   recommended to specify the desired angular resolution and scan rate in this launch file. In this 
-        #   case, it is necessary to wait approx. 30 sec. until the Lidar changes to status "OK". Alternatively,
-        #   these settings can be configured in SOPAS-ET, transferred to the EEProm of the lidar and then 
-        #   permanently stored. In this case, the explicit specification of scan rate and angular resolution
-        #   can be omitted and the waiting time can be avoided. -
-        # -------------------------------------------------------------------------------------------------------
-
-        # Enable message monitoring with reconnect+reinit in case of timeouts, default: true
-        message_monitoring_enabled: True
-        # 5 sec read timeout in operational mode (measurement mode), default: 5000 milliseconds
-        read_timeout_millisec_default: 5000
-        # 120 sec read timeout during startup (sensor may be starting up, which can take up to 120 sec.), default: 120000 milliseconds
-        read_timeout_millisec_startup: 120000
-        # 150 sec pointcloud timeout, ros node will be killed if no point cloud published within the last 150 sec., default: 150000 milliseconds
-        read_timeout_millisec_kill_node: 150000
-        # Default password for client authorization
-        client_authorization_pw: F4724744
+        # NTP usage
+        use_ntp: true

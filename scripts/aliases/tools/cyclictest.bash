@@ -3,11 +3,9 @@
 # @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @date       Friday, 29th April 2022 1:30:25 pm
-# @modified   Friday, 29th April 2022 6:38:15 pm
+# @modified   Monday, 11th July 2022 10:33:34 pm
 # @project    engineering-thesis
-# @brief
-#    
-#    Set of handy command line tools working around `cyclictest`
+# @brief      Set of handy command line tools working around `cyclictest`
 #    
 # @copyright Krzysztof Pierczyk © 2022
 # ====================================================================================================================================

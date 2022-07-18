@@ -4,14 +4,14 @@
 # @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @date       Thursday, 28th April 2022 1:05:25 pm
-# @modified   Tuesday, 14th June 2022 3:18:09 pm
+# @modified   Friday, 1st July 2022 5:45:55 pm
 # @project    engineering-thesis
 # @brief      Auxiliary ROS2 CLI utility requesting the running EtherCAT driver node for setting master state
 # @details    Usage:
 #
 #      ros2 run velmwheel_ethercat_driver master_state_setter                        \
 #          <fully_qualified_driver_node_name>                                        \
-#             --ros-param                                                            \
+#             --ros-args                                                             \
 #             -p master_state:=<state>                                               \
 #             -p service_wait_timeout:=<timeout_of_service_registration:default=1.0>
 #

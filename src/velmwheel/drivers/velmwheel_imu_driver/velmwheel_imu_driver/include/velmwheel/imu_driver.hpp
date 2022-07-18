@@ -3,7 +3,7 @@
  * @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
  * @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
  * @date       Thursday, 28th April 2022 9:24:14 pm
- * @modified   Monday, 13th June 2022 8:58:33 pm
+ * @modified   Monday, 18th July 2022 6:19:52 pm
  * @project    engineering-thesis
  * @brief      Definition of the driver plugin class for the IMU EtherCAT slave
  * 
@@ -82,7 +82,8 @@ public: /* ------------------------------------------------ Node's parameters --
         .read_only              = true,
         .dynamic_typing         = false,
         .default_value          = 150,
-        .description            = "Initial configuration of the gyro range as [+/- deg/s] limit",
+        .description            = "Initial configuration of the gyro range as [+/- deg/s] limit. At the moment, this parameter is unused. "\
+                                  "For details see comment notes to the [ethercat::devices::Imu] class in the [imu_ethercat] package",
         .additional_constraints = "One of [75, 150, 300]"
     };
 
@@ -101,44 +102,44 @@ public: /* ------------------------------------------------ Topic's parameters -
     /* ------ Measurement bias configruation services ------ */
 
     /// Name of the service topic used to read current bias offsets of acceleration sensors
-    static constexpr auto GET_ACCELERATION_BIAS_OFFSETS_SRV_TOPIC_NAME = "get_acceleration_bias_offsets";
+    static constexpr auto GET_ACCELERATION_BIAS_OFFSETS_SRV_TOPIC_NAME = "imu/get_acceleration_bias_offsets";
     /// Name of the service topic used to set current bias offsets of acceleration sensors
-    static constexpr auto SET_ACCELERATION_BIAS_OFFSETS_SRV_TOPIC_NAME = "set_acceleration_bias_offsets";
+    static constexpr auto SET_ACCELERATION_BIAS_OFFSETS_SRV_TOPIC_NAME = "imu/set_acceleration_bias_offsets";
     /// Name of the service topic used to read current bias offsets of gyro sensors
-    static constexpr auto GET_GYRO_BIAS_OFFSETS_SRV_TOPIC_NAME = "get_gyro_bias_offsets";
+    static constexpr auto GET_GYRO_BIAS_OFFSETS_SRV_TOPIC_NAME = "imu/get_gyro_bias_offsets";
     /// Name of the service topic used to set current bias offsets of gyro sensors
-    static constexpr auto SET_GYRO_BIAS_OFFSETS_SRV_TOPIC_NAME = "set_gyro_bias_offsets";
+    static constexpr auto SET_GYRO_BIAS_OFFSETS_SRV_TOPIC_NAME = "imu/set_gyro_bias_offsets";
     /// Name of the service topic used to read current bias offsets of both acceleration and gyro sensors
-    static constexpr auto GET_BIAS_OFFSETS_SRV_TOPIC_NAME = "get_bias_offsets";
+    static constexpr auto GET_BIAS_OFFSETS_SRV_TOPIC_NAME = "imu/get_bias_offsets";
     /// Name of the service topic used to set current bias offsets of both acceleration and gyro sensors
-    static constexpr auto SET_BIAS_OFFSETS_SRV_TOPIC_NAME = "set_bias_offsets";
+    static constexpr auto SET_BIAS_OFFSETS_SRV_TOPIC_NAME = "imu/set_bias_offsets";
 
     /* ------ Digital filter configruation services ------ */
 
     /// Name of the service topic used to read current configuration of digital filter of the sensor
-    static constexpr auto GET_DIGITAL_FILTER_SRV_TOPIC_NAME = "get_digital_filter";
+    static constexpr auto GET_DIGITAL_FILTER_SRV_TOPIC_NAME = "imu/get_digital_filter";
     /// Name of the service topic used to set current configuration of digital filter of the sensor
-    static constexpr auto SET_DIGITAL_FILTER_SRV_TOPIC_NAME = "set_digital_filter";
+    static constexpr auto SET_DIGITAL_FILTER_SRV_TOPIC_NAME = "imu/set_digital_filter";
 
     /* ------ Gyro range configruation services ------ */
 
     /// Name of the service topic used to read current configuration of range limit of gyro sensors
-    static constexpr auto GET_GYRO_RANGE_SRV_TOPIC_NAME = "get_gyro_range";
+    static constexpr auto GET_GYRO_RANGE_SRV_TOPIC_NAME = "imu/get_gyro_range";
     /// Name of the service topic used to set current configuration of range limit of gyro sensors
-    static constexpr auto SET_GYRO_RANGE_SRV_TOPIC_NAME = "set_gyro_range";
+    static constexpr auto SET_GYRO_RANGE_SRV_TOPIC_NAME = "imu/set_gyro_range";
 
     /* ------ General configruation services ------ */
 
     /// Name of the service topic used to trigger calibration of the gyro bias offsets
-    static constexpr auto CALIBRATE_GYRO_BIAS_SRV_TOPIC_NAME = "calibrate_gyro_bias";
+    static constexpr auto CALIBRATE_GYRO_BIAS_SRV_TOPIC_NAME = "imu/calibrate_gyro_bias";
     /// Name of the service topic used to trigger precise calibration of the gyro bias offsets
-    static constexpr auto CALIBRATE_PRECISE_GYRO_BIAS_SRV_TOPIC_NAME = "calibrate_precise_gyro_bias";
+    static constexpr auto CALIBRATE_PRECISE_GYRO_BIAS_SRV_TOPIC_NAME = "imu/calibrate_precise_gyro_bias";
     /// Name of the service topic used to read current temperatures of gyro sensors
-    static constexpr auto GET_GYRO_TEMPERATURES_SRV_TOPIC_NAME = "get_gyro_temperatures";
+    static constexpr auto GET_GYRO_TEMPERATURES_SRV_TOPIC_NAME = "imu/get_gyro_temperatures";
     /// Name of the service topic used to read product info of the sensor
-    static constexpr auto GET_PRODUCT_INFO_SRV_TOPIC_NAME = "get_product_info";
+    static constexpr auto GET_PRODUCT_INFO_SRV_TOPIC_NAME = "imu/get_product_info";
     /// Name of the service topic used to restore factory calibration of sensor's parameters
-    static constexpr auto RESTORE_FACTORY_CALIBRATION_SRV_TOPIC_NAME = "restore_factory_calibration";
+    static constexpr auto RESTORE_FACTORY_CALIBRATION_SRV_TOPIC_NAME = "imu/restore_factory_calibration";
 
 public: /* ------------------------------------------------- Public ctors & dtors ------------------------------------------------ */
 

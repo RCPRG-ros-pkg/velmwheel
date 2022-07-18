@@ -3,7 +3,7 @@
 # @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @date       Thursday, 7th April 2022 5:18:37 am
-# @modified   Wednesday, 15th June 2022 10:23:57 pm
+# @modified   Thursday, 7th July 2022 3:04:36 pm
 # @project    engineering-thesis
 # @brief      Set of helper functions utilized by launchfile across ecosystem of the WUT Velmwheel robot
 #    
@@ -77,7 +77,7 @@ def generate_component_launch_descriptor(
     additional_conditions : list, optional
         additional conditions for the node to be run given as a list passed to PythonExpression
         substitution type (e.g. ["'", config_ref, " == 'true'"])
-    default_required : bool
+    default_required : str, optional
         each node will have it's dedicated *_required launch option that - if set to true -
         will trigger Shutdown() action 'on_exit'; this parameter sets default value for the
         argument
@@ -175,7 +175,7 @@ def generate_component_launch_descriptor(
                 # Predefined run condition
                 *condition, " and ",
                 # Additonal run condition
-                *additional_conditions
+                "(", *additional_conditions, ")"
                 
             ])),
 
@@ -266,7 +266,7 @@ def generate_component_launch_description(
         list of node's remaps to be passed to `launch_ros.actions.Node`
     additional_node_config : dict, optional
         dictionary of additional key-values settings to be passed to 
-        `launch_ros.actions.Node` (appended at the endo of the Node's descriptor)
+        `launch_ros.actions.Node` (appended at the end of the Node's descriptor)
     additional_node_args : list, optional
         additional execution arguments that will be **appended** to the default list
     prefix : str

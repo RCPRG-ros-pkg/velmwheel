@@ -3,7 +3,7 @@
  * @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
  * @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
  * @date       Thursday, 28th April 2022 9:24:14 pm
- * @modified   Monday, 13th June 2022 10:52:21 pm
+ * @modified   Friday, 15th July 2022 3:10:53 pm
  * @project    engineering-thesis
  * @brief      Definition of the driver plugin class for the servodriver EtherCAT slaves of the WUT Velmwheel robot
  * 
@@ -13,6 +13,9 @@
 
 /* =========================================================== Includes =========================================================== */
 
+// External includes
+#include "tf2/LinearMath/Quaternion.h"
+#include "tf2_geometry_msgs/tf2_geometry_msgs.hpp"
 // Private includes
 #include "velmwheel/base_driver.hpp"
 
@@ -53,13 +56,16 @@ std::vector<std::string> BaseDriver::initialize(rclcpp::Node &node) {
 
     /* -------------------------------- Parse parameters ---------------------------- */
 
+    std::vector<std::string> ret(4);
+
+    // Fill vector of slave's names
+    ret[Wheels::RearLeft  ] = *rear_left_wheel_name;
+    ret[Wheels::RearRight ] = *rear_right_wheel_name;
+    ret[Wheels::FrontLeft ] = *front_left_wheel_name;
+    ret[Wheels::FrontRight] = *front_right_wheel_name;
+
     // Return device name
-    return std::vector<std::string>{ 
-        *rear_left_wheel_name,
-        *rear_right_wheel_name,
-        *front_left_wheel_name,
-        *front_right_wheel_name
-    };
+    return ret;
 
 }
 
@@ -82,11 +88,9 @@ void BaseDriver::configure(std::vector<cifx::ethercat::Slave*> slaves) {
         .motor_rate_current{ 11 }      /// 11A rated current of motors
     };
 
-    // Construct driver's implementation ( must match order of entries of vector returned from @ref initialize )
-    drivers.emplace_back(*slaves[Wheels::RearLeft  ], config);
-    drivers.emplace_back(*slaves[Wheels::RearRight ], config);
-    drivers.emplace_back(*slaves[Wheels::FrontLeft ], config);
-    drivers.emplace_back(*slaves[Wheels::FrontRight], config);
+    // Construct driver's implementation
+    for(std::size_t i = 0; i < Wheels::Num; ++i)
+        drivers.emplace_back(*slaves[i], config);
 
     /* ------------------------- Verify devices' configuration ----------------------- */
 
@@ -120,11 +124,22 @@ void BaseDriver::configure(std::vector<cifx::ethercat::Slave*> slaves) {
 
     /* -------------------------------- Configure drivers ---------------------------- */
 
+    ethercat::devices::elmo::config::PolarityConfig left_wheels_pol_config = {
+        .position_polarity = ethercat::devices::elmo::config::Polarity::Reversed,
+        .velocity_polarity = ethercat::devices::elmo::config::Polarity::Reversed
+    };
+
+    // Invert polarity of left motors so that all wheels have the same 'positive' direction
+    drivers[Wheels::RearLeft  ].write_polarity(left_wheels_pol_config);
+    drivers[Wheels::FrontLeft ].write_polarity(left_wheels_pol_config);
+
     // Register input-data-handlers for all drivers
     drivers[Wheels::RearLeft  ].set_input_handler(make_driver_callback(Wheels::RearLeft  ));
     drivers[Wheels::RearRight ].set_input_handler(make_driver_callback(Wheels::RearRight ));
     drivers[Wheels::FrontLeft ].set_input_handler(make_driver_callback(Wheels::FrontLeft ));
     drivers[Wheels::FrontRight].set_input_handler(make_driver_callback(Wheels::FrontRight));
+
+    RCLCPP_INFO_STREAM(node->get_logger(), "Configured [Base] driver");
 
     /* ----------------------------- Initialize subscribers -------------------------- */
             
@@ -153,16 +168,45 @@ void BaseDriver::configure(std::vector<cifx::ethercat::Slave*> slaves) {
     
     /* ------------------------------ Initialize services ---------------------------- */
 
-    *make_service_builder(command_srv)
+    *make_service_builder(enable_srv)
         .node(*(this->node))
-        .name(COMMAND_SRV_TOPIC_NAME)
-        .callback(*this, &BaseDriver::command_callback);
+        .name(ENABLE_SRV_TOPIC_NAME)
+        .callback(*this, &BaseDriver::enable_callback);
+
+    *make_service_builder(get_state)
+        .node(*(this->node))
+        .name(GET_STATE_SRV_TOPIC_NAME)
+        .callback(*this, &BaseDriver::get_state_callback);
 
     *make_service_builder(reset_failure_srv)
         .node(*(this->node))
         .name(RESET_FAILURE_SRV_TOPIC_NAME)
         .callback(*this, &BaseDriver::reset_failure_callback);
+
+    /* ---------------------------- Initialize TF interfaces ------------------------- */
     
+    static_tf_broadcaster = std::make_unique<tf2_ros::StaticTransformBroadcaster>(*(this->node));
+
+    /* ----------------------- Provide static TF transformations --------------------- */
+
+    geometry_msgs::msg::TransformStamped tf_model_transform_msg;
+
+    // Prepare header of the robot's world-position's transformation message
+    tf_model_transform_msg.header.stamp    = node->get_clock()->now();
+    tf_model_transform_msg.header.frame_id = velmwheel::params::ROBOT_NAME;
+    tf_model_transform_msg.child_frame_id  = "base_link";
+    // Fill the body of the robot's world-position's transformation message
+    tf_model_transform_msg.transform.translation.x = 0;
+    tf_model_transform_msg.transform.translation.y = 0;
+    tf_model_transform_msg.transform.translation.z = 0;
+    // Set identity rotation
+    tf_model_transform_msg.transform.rotation = tf2::toMsg(tf2::Quaternion::getIdentity());
+    // Update robot's world-position's transformation
+    static_tf_broadcaster->sendTransform(tf_model_transform_msg);
+    
+    /* ------------------------------------------------------------------------------- */
+    
+    RCLCPP_INFO_STREAM(node->get_logger(), "Registered ROS interfaces for [Base] driver");
 }
 
 /* ================================================================================================================================ */

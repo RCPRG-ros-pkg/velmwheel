@@ -3,7 +3,7 @@
  * @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
  * @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
  * @date       Wednesday, 18th May 2022 9:50:06 am
- * @modified   Monday, 13th June 2022 5:36:50 am
+ * @modified   Tuesday, 28th June 2022 4:01:14 pm
  * @project    engineering-thesis
  * @brief      Definition of inline methods and methods templates of the Slave class representing slave device on the EtherCAT bus
  * 
@@ -23,6 +23,25 @@
 
 namespace cifx::ethercat {
 
+/* ===================================================== Public static methods ==================================================== */
+
+constexpr std::string_view Slave::state_to_str(ExtendedState state) {
+    switch(state) {
+        case ExtendedState::Init:      return "Init";
+        case ExtendedState::Preop:     return "Preop";
+        case ExtendedState::Boot:      return "Boot";
+        case ExtendedState::Safeop:    return "Safeop";
+        case ExtendedState::Op:        return "Op";
+        case ExtendedState::Busoff:    return "Busoff";
+        case ExtendedState::InitErr:   return "InitErr";
+        case ExtendedState::PreopErr:  return "PreopErr";
+        case ExtendedState::BootErr:   return "BootErr";
+        case ExtendedState::SafeopErr: return "SafeopErr";
+        default:
+            return "<Unknown>";
+    }
+}
+
 /* ==================================================== Protected ctors & dtors =================================================== */
 
 Slave::Slave(
@@ -40,12 +59,6 @@ Slave::Slave(
     // Initialize implementation-dependent elements
     channel{ channel }
 { }
-
-/* ====================================== Protected EtherCAT common methods (implementations) ===================================== */
-
-Slave::State Slave::get_state_impl(std::chrono::milliseconds timeout) {
-    return get_state_info(timeout).current_state;
-}
 
 /* ================================================================================================================================ */
 

@@ -3,7 +3,7 @@
  * @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
  * @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
  * @date       Thursday, 28th April 2022 9:24:14 pm
- * @modified   Monday, 13th June 2022 9:13:06 pm
+ * @modified   Wednesday, 29th June 2022 4:55:00 pm
  * @project    engineering-thesis
  * @brief      Definition of configruation methods of the ImuDriver class
  * 
@@ -53,7 +53,7 @@ std::vector<std::string> ImuDriver::initialize(rclcpp::Node &node) {
 }
 
 void ImuDriver::configure(std::vector<cifx::ethercat::Slave*> slaves) {
-    
+
     // Check if valid slave interfaces has been given
     if(slaves.size() != 1)
         throw std::runtime_error{ "[velmwhee::imu_driver] Driver has been configrued with invalid list of slave devices" };
@@ -83,15 +83,22 @@ void ImuDriver::configure(std::vector<cifx::ethercat::Slave*> slaves) {
 
     // Configure initial digital filter constant
     driver->write_digital_filter(static_cast<uint16_t>(*init_filter_seettings));
-    // Confiugre initial gyro range config
-    switch(*init_gyro_range) {
-        case 75:  driver->write_gyro_range(Driver::GyroRange::Range75);  break;
-        case 150: driver->write_gyro_range(Driver::GyroRange::Range150); break;
-        case 300: driver->write_gyro_range(Driver::GyroRange::Range300); break;
-        default: /* Should not happen */
-            std::runtime_error{ "[velmwheel::ImuDriver::initialize] Invalid gyro range parsed [BUG]" };
-    }
+
+    /**
+     * Confiugre initial gyro range config (impossible at the moment)
+     * 
+     * @note For details see comment notes to the @ref ethercat::devices::Imu class in the [imu_ethercat] package
+     */
+    // switch(*init_gyro_range) {
+    //     case 75:  driver->write_gyro_range(Driver::GyroRange::Range75);  break;
+    //     case 150: driver->write_gyro_range(Driver::GyroRange::Range150); break;
+    //     case 300: driver->write_gyro_range(Driver::GyroRange::Range300); break;
+    //     default: /* Should not happen */
+    //         std::runtime_error{ "[velmwheel::ImuDriver::initialize] Invalid gyro range parsed [BUG]" };
+    // }
     
+    RCLCPP_INFO_STREAM(node->get_logger(), "Configured [Imu] driver");
+
     /* ----------------------------- Initialize publishers --------------------------- */
             
     *make_publisher_builder(imu_pub)
@@ -185,6 +192,7 @@ void ImuDriver::configure(std::vector<cifx::ethercat::Slave*> slaves) {
         .name(RESTORE_FACTORY_CALIBRATION_SRV_TOPIC_NAME)
         .callback(*this, &ImuDriver::restore_factory_calibration_callback);
 
+    RCLCPP_INFO_STREAM(node->get_logger(), "Registered ROS interfaces for [Imu] driver");
 }
 
 /* ================================================================================================================================ */

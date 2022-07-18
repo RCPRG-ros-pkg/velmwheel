@@ -3,7 +3,7 @@
 # @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @date       Tuesday, 1st March 2022 4:30:53 pm
-# @modified   Monday, 13th June 2022 10:41:32 am
+# @modified   Monday, 11th July 2022 10:07:55 pm
 # @project    engineering-thesis
 # @brief      Driver plugin for the IMU EtherCAT slave
 #    
@@ -36,7 +36,7 @@ endif()
 list(APPEND LIB_DEPENDENCIES
     pluginlib
     node_common_cpp
-    imu_ethercat
+    imu
     velmwheel_ethercat_driver
     velmwheel_imu_driver_msgs
     sensor_msgs
@@ -76,11 +76,9 @@ add_ament_library(
     AMENT_DEPENDENCIES ${LIB_DEPENDENCIES}
     
 )
-target_compile_options(${PROJECT_NAME} PRIVATE -O2)
+
 # Export plugin description file
-pluginlib_export_plugin_description_file(${PROJECT_NAME}
-    plugins.xml
-)
+pluginlib_export_plugin_description_file(velmwheel_ethercat_driver plugins.xml)
 
 # ======================================================== Source (Python) ========================================================= #
 

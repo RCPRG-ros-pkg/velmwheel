@@ -3,7 +3,7 @@
  * @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
  * @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
  * @date       Wednesday, 16th March 2022 4:37:53 pm
- * @modified   Thursday, 26th May 2022 2:25:07 am
+ * @modified   Monday, 18th July 2022 8:18:05 pm
  * @project    engineering-thesis
  * @brief      Definition of methods of the ROS2-based class implementing controll node responsible for basic conrol over the 
  *             Velmwheel's driveline
@@ -19,6 +19,7 @@
 #include "node_common/node.hpp"
 // Private includes
 #include "velmwheel/base_controller.hpp"
+#include "velmwheel/common.hpp"
 
 /* ========================================================== Namespaces ========================================================== */
 
@@ -98,6 +99,12 @@ BaseController::~BaseController() {
     node_common::node::print_goodbye(*this);   
 }
 
+/* ============================================================ Helpers =========================================================== */
+
+bool BaseController::is_odom_initialized() const {
+    return odom_keepup.has_value();
+}
+
 /* =========================================================== Callbacks ========================================================== */
 
 void BaseController::encoders_measurement_callback(const velmwheel_msgs::msg::EncodersStamped &msg) {
@@ -135,7 +142,7 @@ void BaseController::encoders_measurement_callback(const velmwheel_msgs::msg::En
     odom_msg.header.stamp = now;
     // Fill message's body
     odom_msg.twist.twist = velocity_msg.twist;
-    odom_msg.pose        = update_odom(wheel_angles);
+    odom_msg.pose.pose   = is_odom_initialized() ? update_odom(wheel_angles) : initialize_odom(wheel_angles);
     // Public the message
     odom_pub->publish(odom_msg);
 
@@ -172,7 +179,41 @@ void BaseController::velocity_setpoint_callback(const geometry_msgs::msg::Twist 
 
 /* ============================================================ Helpers =========================================================== */
 
-geometry_msgs::msg::PoseWithCovariance BaseController::update_odom(const velmwheel_msgs::msg::Wheels &current_angles) {    
+geometry_msgs::msg::Pose BaseController::initialize_odom(const velmwheel_msgs::msg::Wheels &current_angles) {    
+    
+    odom_keepup.emplace();
+
+    /* ------------------------- Calculate current odometry -------------------------- */
+
+    geometry_msgs::msg::Pose pose;
+
+    // Compute current orientation
+    pose.orientation = tf2::toMsg(tf2::Quaternion(tf2::Vector3{0, 0, 1}, 0.0));
+    // Compute current position
+    pose.position.x = 0;
+    pose.position.y = 0;
+    pose.position.z = 0;
+    
+    /* --------------- Keep odom informations for the next iteration ----------------- */
+
+    // Update odometry info
+    odom_keepup->previous_position = pose.position;
+    odom_keepup->previous_z_angle  = 0.0;
+    odom_keepup->previous_angles   = current_angles;
+
+    /* ------------------------------------------------------------------------------- */
+    
+    RCLCPP_INFO_STREAM(this->get_logger(), "Odometry state initialized with angles: ");
+    RCLCPP_INFO_STREAM(this->get_logger(), " - rear-left:   " << current_angles.values[wheel_id(Wheel::RearLeft)  ]);
+    RCLCPP_INFO_STREAM(this->get_logger(), " - rear-right:  " << current_angles.values[wheel_id(Wheel::RearRight) ]);
+    RCLCPP_INFO_STREAM(this->get_logger(), " - front-left:  " << current_angles.values[wheel_id(Wheel::FrontLeft) ]);
+    RCLCPP_INFO_STREAM(this->get_logger(), " - front-right: " << current_angles.values[wheel_id(Wheel::FrontRight)]);
+
+    return pose;
+}
+
+
+geometry_msgs::msg::Pose BaseController::update_odom(const velmwheel_msgs::msg::Wheels &current_angles) {    
     
     /* ------------------------- Calculate current odometry -------------------------- */
 
@@ -180,7 +221,7 @@ geometry_msgs::msg::PoseWithCovariance BaseController::update_odom(const velmwhe
 
     // Calculate differences in angles
     for(unsigned i = 0; i < velmwheel_msgs::msg::WheelEnum::NUM; ++i)
-        angles_diff.values[i] = current_angles.values[i] - odom_keepup.previous_angles.values[i];
+        angles_diff.values[i] = current_angles.values[i] - odom_keepup->previous_angles.values[i];
     // Estimated rotation and translation since the last iteration 
     geometry_msgs::msg::Twist diff = velmwheel::math::wheels_to_twist(angles_diff);
 
@@ -192,28 +233,28 @@ geometry_msgs::msg::PoseWithCovariance BaseController::update_odom(const velmwhe
      *    simple, linearized-integration-based odometry does.
      */
 
-    geometry_msgs::msg::PoseWithCovariance pose;
+    geometry_msgs::msg::Pose pose;
 
     // Calculate current Z angle
-    double z_angle = odom_keepup.previous_z_angle + diff.angular.z;
+    double z_angle = odom_keepup->previous_z_angle + diff.angular.z;
     // Transform displacement into the vector
     tf2::Vector3 displacement = tf2::Vector3{ diff.linear.x, diff.linear.y, diff.linear.z };
     // Transform displacement to the global frame of reference by rotating it by robot's orientation quaternion
     displacement = displacement.rotate(tf2::Vector3{0, 0, 1}, z_angle);
 
     // Compute current orientation
-    pose.pose.orientation = tf2::toMsg(tf2::Quaternion(tf2::Vector3{0, 0, 1}, z_angle));
+    pose.orientation = tf2::toMsg(tf2::Quaternion(tf2::Vector3{0, 0, 1}, z_angle));
     // Compute current position
-    pose.pose.position.x = odom_keepup.previous_position.x + displacement.x();
-    pose.pose.position.y = odom_keepup.previous_position.y + displacement.y();
-    pose.pose.position.z = 0;
+    pose.position.x = odom_keepup->previous_position.x + displacement.x();
+    pose.position.y = odom_keepup->previous_position.y + displacement.y();
+    pose.position.z = 0;
     
     /* --------------- Keep odom informations for the next iteration ----------------- */
 
     // Update odometry info
-    odom_keepup.previous_position = pose.pose.position;
-    odom_keepup.previous_z_angle  = z_angle;
-    odom_keepup.previous_angles   = current_angles;
+    odom_keepup->previous_position = pose.position;
+    odom_keepup->previous_z_angle  = z_angle;
+    odom_keepup->previous_angles   = current_angles;
 
     /* ------------------------------------------------------------------------------- */
     

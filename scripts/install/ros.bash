@@ -3,7 +3,7 @@
 # @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @date       Thursday, 2nd January 2021 2:53:45 pm
-# @modified   Thursday, 16th June 2022 1:01:33 pm
+# @modified   Monday, 27th June 2022 6:55:25 pm
 # @project    engineering-thesis
 # @brief      Setups environment and installs ROS2 distribution along with recommended tools
 # 
@@ -59,24 +59,6 @@ main() {
         ros-${ROS2_DISTRO}-navigation2
         ros-${ROS2_DISTRO}-nav2-bringup
 
-        # Auxiliary ROS packages (mainly for testing)
-        ros-${ROS2_DISTRO}-turtlebot3
-        ros-${ROS2_DISTRO}-turtlebot3-bringup
-        ros-${ROS2_DISTRO}-turtlebot3-cartographer
-        ros-${ROS2_DISTRO}-turtlebot3-description
-        ros-${ROS2_DISTRO}-turtlebot3-example
-        ros-${ROS2_DISTRO}-turtlebot3-fake-node
-        ros-${ROS2_DISTRO}-turtlebot3-fake-node-dbgsym
-        ros-${ROS2_DISTRO}-turtlebot3-gazebo
-        ros-${ROS2_DISTRO}-turtlebot3-gazebo-dbgsym
-        ros-${ROS2_DISTRO}-turtlebot3-msgs
-        ros-${ROS2_DISTRO}-turtlebot3-msgs-dbgsym
-        ros-${ROS2_DISTRO}-turtlebot3-navigation2
-        ros-${ROS2_DISTRO}-turtlebot3-node
-        ros-${ROS2_DISTRO}-turtlebot3-node-dbgsym
-        ros-${ROS2_DISTRO}-turtlebot3-simulations
-        ros-${ROS2_DISTRO}-turtlebot3-teleop
-
     )
 
     # Install ROS dependencies
@@ -85,7 +67,10 @@ main() {
     rosdep install                                 \
         --rosdistro=${ROS2_DISTRO}                 \
         --from-paths /opt/ros/${ROS2_DISTRO}/share \
-        --ignore-src -y
+        --ignore-src -y &>/dev/null                          &&
+        log_info "All required rosdeps installed sucesfully" ||
+        log_error "Failed to install required rosdeps"
+    
 }
 
 # ============================================================= Script ============================================================= #

@@ -3,7 +3,7 @@
 # @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @date       Tuesday, 22nd March 2022 3:12:52 am
-# @modified   Tuesday, 31st May 2022 1:59:34 pm
+# @modified   Tuesday, 28th June 2022 4:55:42 pm
 # @project    engineering-thesis
 # @brief      Default configuration for the velmwheel_ethercat_driver node
 #    
@@ -40,11 +40,20 @@
         # @note Given ENI file is not cached in the node's memory. It is reread every time the node need to 
         #    access ENI data (e.g. when loading slave driver). Location of the file must be valid for the entire
         #    node's lifetime
+        # @note Due to way that the `cifx_toolkit` package is currently implemented, basename of the ENI file
+        #    must be no longer than 15 characters
+        #
+        # @note Due to actual implementation of the CIFX EtherCAt master firmware basename of the ENI file must
+        #    be exactly 'ethercat.xml'. This is NOT explicitly written in Hillschers documentation. Failing to
+        #    follow this rule will result in strange errors during system bootup.
         # -------------------------------------------------------------------------------------------------------
-        eni_source: [ 'velmwheel_twincat', 'eni', 'default_config.xml' ]
+        eni_source: [ 'velmwheel_twincat', 'eni', 'ethercat.xml' ]
+
+        # Timeout for all slaves being brought into the Operational state in [s]
+        # slaves_up_timeout: 20.0
 
         # List of driver plugins that should be loaded on construction
-        initial_drivers: []
+        # initial_drivers: []
 
         # ========================================== Process config =========================================== #
       

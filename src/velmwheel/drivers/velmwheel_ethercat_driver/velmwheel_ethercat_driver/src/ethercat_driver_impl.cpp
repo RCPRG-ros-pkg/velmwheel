@@ -3,7 +3,7 @@
  * @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
  * @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
  * @date       Thursday, 28th April 2022 12:31:55 pm
- * @modified   Monday, 13th June 2022 10:41:54 pm
+ * @modified   Thursday, 30th June 2022 2:17:30 pm
  * @project    engineering-thesis
  * @brief      Definitions of the implementation class for the EtherCAT driver node of WUT Velmwheel robot
  * 
@@ -13,8 +13,6 @@
 
 /* =========================================================== Includes =========================================================== */
 
-// ROS includes
-#include "pluginlib/class_loader.hpp"
 // Private includes
 #include "cifx/utilities.hpp"
 #include "cifx/ethercat/utilities.hpp"
@@ -47,6 +45,7 @@ EthercatDriverImpl::EthercatDriverImpl(
 ) :
     // Handle to the ROS interface
     node{ node },
+    
     // CIFX Driver interfaces
     driver{ cifx::Driver::Config {
         .cos_polling_interval_ms   = config.driver_config.cos_polling_interval,
@@ -63,11 +62,96 @@ EthercatDriverImpl::EthercatDriverImpl(
     }},
     // CIFX communication channel
     channel{ device, CIFX_COMMUNICATION_CHANNEL_USED },
+    // Host state guard
+    state_guard{ channel },
+
     // EtherCAT master driver
     master{ channel },
-    // Calculate bus cycle in [ms]
-    bus_cycle_ms{ std::chrono::duration_cast<std::chrono::milliseconds>(master.get_bus_cycle()) }
+    // Calculate cyclic I/O timeout [ms] (use value slightly higher than the bus cycle to given CIFX toolkit time buffer for processing)
+    cyclic_io_timeout_ms{ 
+        std::chrono::duration_cast<std::chrono::milliseconds>(
+            std::chrono::microseconds{
+                static_cast<int64_t>(master.get_bus_cycle().count() * 1.2)
+            }
+        ) 
+    },
+
+    /**
+     * @todo Does setting @a cyclic_io_timeout_ms to 1.2 [cycle-time] makes sense? Should it be rather
+     *    0.5 [cycle-time]? The latter approach would skip input data that are not fed from the bus into 
+     *    the buffer in time.
+     */
+
+    //  Slaves UP timeout
+    slaves_up_timeout{ config.slaves_up_timeout.has_value() ?
+
+        // If timeout given explicitly, set it
+        *config.slaves_up_timeout :
+
+        /**
+         * Otherwise, set default timeout
+         * 
+         * @note This default value is choosen based on results of some practical tests
+         */
+        std::chrono::duration_cast<std::chrono::milliseconds>(master.get_bus_cycle()) * 2'500
+        
+    },
+
+    // Create class loader for drivers plugins
+    loader{ "velmwheel_ethercat_driver", "velmwheel::EthercatSlaveDriver" }
 {
+    /* --------------------------------- Configure bus ------------------------------- */
+
+    // Configure CIFX synchronisation mode to IO2
+    master.set_sync_mode(cifx::ethercat::Master::SyncMode::IO2, std::chrono::seconds{ 5 });
+
+    // Get list of all slaves names
+    auto slaves_names = master.list_slaves();
+    // Get list of all slaves
+    auto slaves = master.get_slaves();
+    
+    // Calculate end of period available to slaves for booting up into the Operational state
+    auto state_wait_end = node.get_clock()->now() + slaves_up_timeout;
+
+    // Wait for all slaves to be brought into the Operational state
+    while(true){
+
+        // Time between subsequent checks of slaves' states
+        constexpr std::chrono::seconds STATE_CHECK_PERIOD{ 2 };
+
+        std::vector<cifx::ethercat::Slave::State> states(slaves.size());
+
+        // Read state of all slaves
+        std::transform(slaves.begin(), slaves.end(), states.begin(),
+            [](auto const &slave) { return slave->get_state(); }
+        );
+
+        // Check whether all slaves has been brough to the Operation state
+        bool all_slaves_up = std::all_of(states.begin(), states.end(),
+            [](auto const &st) { return (st == cifx::ethercat::Slave::State::Op); }
+        );
+
+        // If all slaves up, break loop
+        if(all_slaves_up)
+            break;
+
+        // If timeout occurred, throw error
+        if(node.get_clock()->now() > state_wait_end) {
+            RCLCPP_ERROR_STREAM(node.get_logger(), "Not all slaves has been brought into the Operational slaves before configured timeout");
+            throw std::runtime_error{ "Not all slaves has been brought into the Operational slaves before configured timeout" };
+        }
+
+        // Otherwise, print log and wait for the next check iteration
+        RCLCPP_INFO_STREAM(node.get_logger(), "Waiting " << STATE_CHECK_PERIOD.count() << " [sec] for slave devices enter Operational state. Current states:");
+        for(std::size_t i = 0; i < states.size(); ++i)
+            RCLCPP_INFO_STREAM(node.get_logger(), " - " << slaves_names[i] << ": " << cifx::ethercat::Slave::state_to_str(states[i]));
+        // Wait for the next iteration
+        std::this_thread::sleep_for(STATE_CHECK_PERIOD);
+
+    };
+
+    /* ------------------------ Configure process parameters ------------------------- */
+
     // Configue initial memory lock
     lock_memory(config.process_config.memory_allocation.lock_scheme);
     // Disable memory trimming, if requested
@@ -78,15 +162,13 @@ EthercatDriverImpl::EthercatDriverImpl(
 
     // Configure processing thread's paramaters
     cifx::set_thread_params(config.process_config.processing_thread);
+
 }
 
 /* ================================================ Public methods (configuration) ================================================ */
 
 
 uint64_t EthercatDriverImpl::load_driver(std::string_view plugin) {
-
-    // Create plugins-loader object
-    pluginlib::ClassLoader<EthercatSlaveDriver> loader("velmwheel_ethercat_driver", "velmwheel::EthercatSlaveDriver");
 
     // Load the plugin
     std::shared_ptr<EthercatSlaveDriver> plugin_instance = loader.createSharedInstance(std::string{ plugin });

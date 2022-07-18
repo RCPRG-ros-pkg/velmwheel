@@ -3,7 +3,7 @@
  * @author     Adam Kowalewski
  * @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
  * @date       Thursday, 19th May 2022 9:53:09 am
- * @modified   Wednesday, 25th May 2022 9:47:39 pm
+ * @modified   Tuesday, 28th June 2022 4:17:53 pm
  * @project    engineering-thesis
  * @brief      CIFX'es interrupt-handling functions [implementation]
  * 
@@ -105,7 +105,6 @@ static int wait_for_uio_interrupt(CIFX_OSDEPENDENT* osdep, bool* timeout_error) 
 
 	assert(osdep != NULL);
 	assert(timeout_error != NULL);
-	xTraceDebug(context, "Waiting for and UIO interrupt...");
 
 	// Set the hardcoded timeout (!)
 	struct timeval timeout;
@@ -123,7 +122,6 @@ static int wait_for_uio_interrupt(CIFX_OSDEPENDENT* osdep, bool* timeout_error) 
 		}
 
 		// Timeout
-		xTraceDebug(context, "Timeout during waiting for UIO interrupt");
 		*timeout_error = true;
 		return -1;
 	}

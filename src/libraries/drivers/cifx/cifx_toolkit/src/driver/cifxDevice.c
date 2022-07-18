@@ -3,7 +3,7 @@
  * @author     Adam Kowalewski
  * @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
  * @date       Wednesday, 13th April 2021 7:51:3 am
- * @modified   Wednesday, 15th June 2022 9:54:53 pm
+ * @modified   Monday, 27th June 2022 6:13:55 pm
  * @project    engineering-thesis
  * @brief      Set of functions used to configure CIFX card [implementation]
  * 
@@ -273,6 +273,8 @@ static void set_uio_dev_instance_dpm_data(DEVICEINSTANCE* dev_instance, struct u
 	const int dpm_index = uio_get_map_index_by_name(uio_device, supported_uio_device_dpm_memory_map_name);
 	assert(dpm_index != -1);
 
+    xTraceDebug(context, "Found DPM map in the UIO subsystem with index (%d)", dpm_index);
+
 	// Get pointer to the DPM mapping
 	void* dpm_ptr = uio_get_mem_map(uio_device, dpm_index);
 	assert(dpm_ptr != NULL);
@@ -284,6 +286,8 @@ static void set_uio_dev_instance_dpm_data(DEVICEINSTANCE* dev_instance, struct u
 	// Map DPM memory mapping into CIFX device structure in the Toolkit
 	dev_instance->pbDPM = dpm_ptr;
 	dev_instance->ulDPMSize = dpm_size;
+
+    xTraceDebug(context, "Mapped DPM memory buffer at %p (%zuB)", dpm_ptr, dpm_size);
 }
 
 
@@ -305,6 +309,8 @@ static void set_uio_dev_instance_dma_data(DEVICEINSTANCE* dev_instance, struct u
 	if(dma_index == -1)	{
 		return;
 	}
+
+    xTraceDebug(context, "Found DMA map in the UIO subsystem with index (%d)", dma_index);
 
 	// Get DMA buffer's virtual address (cast to char * type for pointers arithmetics)
 	char* dma_ptr = (char*) uio_get_mem_map(uio_device, dma_index);
@@ -331,7 +337,10 @@ static void set_uio_dev_instance_dma_data(DEVICEINSTANCE* dev_instance, struct u
 
 		dma_ptr += DMA_BUFFER_SIZE;
 		dma_addr += DMA_BUFFER_SIZE;
+
+        xTraceDebug(context, "Mapped DMA memory buffer (%d) at %p (%zuB)", j, dma_ptr, (size_t) DMA_BUFFER_SIZE);
 	}
+
 }
 
 
@@ -480,9 +489,9 @@ static int add_uio_dev_instance_to_toolkit(DEVICEINSTANCE* dev_instance) {
 	assert(dev_instance != NULL);
 	xTraceInfo(context, "Adding UIO dev instance to toolkit...");
 
-	const int ec = cifXTKitAddDevice(dev_instance);
+	const int32_t ec = cifXTKitAddDevice(dev_instance);
 	if(ec != CIFX_NO_ERROR)	{
-		xTraceSystemError(context, ec, "Could not add device to toolkit");
+		xTraceToolkitError(context, ec, "Could not add device to toolkit");
 		return -1;
 	}
 
@@ -517,9 +526,9 @@ static void remove_uio_dev_instance_from_toolkit(DEVICEINSTANCE* dev_instance) {
 
 	// Remove device from the toolkit
 	char* board_name = dev_instance->szName;
-	const int ec = cifXTKitRemoveDevice(board_name, true);
+	const int32_t ec = cifXTKitRemoveDevice(board_name, true);
 	if(ec != CIFX_NO_ERROR)	{
-		xTraceSystemError(context, ec, "Could not remove device from toolkit: %s");
+		xTraceToolkitError(context, ec, "Could not remove device from toolkit: %s");
 		return;
 	}
 
@@ -559,6 +568,11 @@ int xDeviceInit(const CIFX_DEVICE_INIT* device_info) {
 		strncpy(firmware_f, device_info->firmware_file, PATH_BUFF_SIZE);
 	if(device_info->config_file != NULL)
 		strncpy(config_f, device_info->config_file, PATH_BUFF_SIZE);
+
+    xTraceDebug(context, "Configuration:");
+    xTraceDebug(context, " - bootloader:  %s", bootloader_f);
+    xTraceDebug(context, " - firmware:    %s", firmware_f);
+    xTraceDebug(context, " - config file: %s", config_f);
     
     /**
      * @warning Reset 'errno' to @c 0 manually to make sure that the libuio will not fail

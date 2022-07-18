@@ -3,7 +3,7 @@
  * @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
  * @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
  * @date       Wednesday, 4th May 2022 12:03:11 pm
- * @modified   Monday, 23rd May 2022 6:38:20 pm
+ * @modified   Tuesday, 28th June 2022 2:12:47 pm
  * @project    engineering-thesis
  * @brief      Definition of the class wrapping description and providing related API for the 'Process Data' concept of the CIFX 
  *             Toolkit Framework
@@ -39,8 +39,8 @@ namespace details {
 
     template<ProcessData::Event event>
     constexpr inline uint32_t event_to_cifx(ProcessData::Area area) {
-             if constexpr( event == ProcessData::Event::Input  ) return area == ProcessData::Area::Regular  ? CIFX_NOTIFY_PD0_IN  : CIFX_NOTIFY_PD1_IN;
-        else if constexpr( event == ProcessData::Event::Output ) return area == ProcessData::Area::Priority ? CIFX_NOTIFY_PD0_OUT : CIFX_NOTIFY_PD1_OUT;
+             if constexpr( event == ProcessData::Event::Input  ) return area == ProcessData::Area::Regular ? CIFX_NOTIFY_PD0_IN  : CIFX_NOTIFY_PD1_IN;
+        else if constexpr( event == ProcessData::Event::Output ) return area == ProcessData::Area::Regular ? CIFX_NOTIFY_PD0_OUT : CIFX_NOTIFY_PD1_OUT;
         else process_data_event_no_match();
     }
 

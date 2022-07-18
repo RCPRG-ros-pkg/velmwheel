@@ -3,11 +3,10 @@
 # @author     Dirk Thomas
 # @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @date       Wednesday, 27th April 2022 6:50:23 pm
-# @modified   Wednesday, 27th April 2022 7:53:51 pm
+# @modified   Monday, 11th July 2022 3:56:45 pm
 # @project    engineering-thesis
-# @brief
-#    
-#    Modified version of the `ament_add_gtest_test` function providing ability to add prefix and suffix strings to the test run command
+# @brief      Modified version of the `ament_add_gtest_test` function providing ability to add prefix and suffix strings to the test 
+#             run command
 #    
 # Copyright 2014-2016 Open Source Robotics Foundation, Inc.
 #
@@ -25,33 +24,30 @@
 # ====================================================================================================================================
 
 # ---------------------------------------------------------------------------------------
-# Add an existing executable using gtest as a test.
+# @brief Add an existing executable using gtest as a test.
 #
-# Register an executable created with ament_add_gtest_executable() as a test.
-# If the specified target does not exist the registration is skipped.
+# @details Register an executable created with ament_add_gtest_executable() as a test.
+#    If the specified target does not exist the registration is skipped.
 #
-# :param target: the target name which will also be used as the test name
-# :type target: string
-# :param RUNNER: the path to the test runner script (default: see ament_add_test).
-# :type RUNNER: string
-# :param TIMEOUT: the test timeout in seconds,
-#   default defined by ``ament_add_test()``
-# :type TIMEOUT: integer
-# :param WORKING_DIRECTORY: the working directory for invoking the
-#   executable in, default defined by ``ament_add_test()``
-# :type WORKING_DIRECTORY: string
-# :param SKIP_TEST: if set mark the test as being skipped
-# :type SKIP_TEST: option
-# :param ENV: list of env vars to set; listed as ``VAR=value``
-# :type ENV: list of strings
-# :param APPEND_ENV: list of env vars to append if already set, otherwise set;
-#   listed as ``VAR=value``
-# :type APPEND_ENV: list of strings
-# :param APPEND_LIBRARY_DIRS: list of library dirs to append to the appropriate
-#   OS specific env var, a la LD_LIBRARY_PATH
-# :type APPEND_LIBRARY_DIRS: list of strings
-#
-# @public
+# @param target [NAME]
+#    the target name which will also be used as the test name
+# @param RUNNER [STR]
+#    the path to the test runner script (default: see ament_add_test).
+# @param TIMEOUT [INT]
+#    the test timeout in seconds
+# @param WORKING_DIRECTORY [PATH]
+#    the working directory for invoking the executable in, default defined by 
+#    ``ament_add_test()``
+# @param SKIP_TEST
+#    if set mark the test as being skipped
+# @param ENV [NAME=VALUE...]
+#    list of env vars to set; listed as ``VAR=value``
+# @param APPEND_ENV [NAME=VALUE...]
+#    list of env vars to append if already set, otherwise set;
+#    listed as ``VAR=value``
+# @param APPEND_LIBRARY_DIRS [NAMES...]
+#    list of library dirs to append to the appropriate
+#    OS specific env var, a la LD_LIBRARY_PATH
 #
 # @added
 #

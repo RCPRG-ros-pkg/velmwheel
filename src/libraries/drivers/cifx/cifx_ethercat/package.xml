@@ -17,7 +17,7 @@
     <!-- Package's maintainer -->
     <maintainer email="krzysztof.pierczyk@gmail.com">Krzysiek Pierczyk</maintainer>
     <!-- Package's license -->
-    <license>BSD</license>
+    <license>MIT</license>
     
     <!-- Build tool dependencies -->
     <buildtool_depend>ament_cmake</buildtool_depend>
@@ -25,21 +25,21 @@
     <buildtool_depend>doc_common</buildtool_depend>
     <!-- Package's build export dependencies -->
     <build_export_depend>package_common_cpp</build_export_depend>
-    <build_export_depend>ethercat</build_export_depend>
+    <build_export_depend>ethercat-lib</build_export_depend>
     <build_export_depend>cifx_toolkit</build_export_depend>
     <!-- Package's build export dependencies (external libraries) -->
     <build_export_depend>libboost-dev</build_export_depend>
     <build_export_depend>librange-v3-dev</build_export_depend>
     <!-- Dependencies -->
     <build_depend>package_common_cpp</build_depend>
-    <build_depend>ethercat</build_depend>
+    <build_depend>ethercat-lib</build_depend>
     <build_depend>cifx_toolkit</build_depend>
     <!-- Package's build dependencies (external libraries) -->
     <build_depend>libboost-dev</build_depend>
     <build_depend>librange-v3-dev</build_depend>
     <!-- Runtime dependencies -->
     <exec_depend>package_common_cpp</exec_depend>
-    <exec_depend>ethercat</exec_depend>
+    <exec_depend>ethercat-lib</exec_depend>
     <exec_depend>cifx_toolkit</exec_depend>
     <!-- Package's runtime dependencies (external libraries) -->
     <exec_depend>librange-v3</exec_depend>

@@ -3,7 +3,7 @@
 # @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @date       Tuesday, 22nd March 2022 3:12:52 am
-# @modified   Tuesday, 14th June 2022 4:39:10 pm
+# @modified   Friday, 1st July 2022 4:20:38 pm
 # @project    engineering-thesis
 # @brief      Default configuration for the velmwheel_base_driver plugin
 #    
@@ -19,9 +19,20 @@
         # Dedicated namespace for base driver
         base:
             
+            # ---------------------------------------------------------------------------
             # Names of the servo slave used in the ENI configuration
+            #
+            # @warning When ENI configruation for WUT Velmwheel robot has been being
+            #    done, a mistake has been introduced. Naming of front-left and 
+            #    front-right wheels has been mistaken. For this reason, current 
+            #    configruation of the base driver requires these names to be reversed.
+            #
+            # @todo Fix ENI configruation in the [velmwheel_twincat] package next
+            #    time TwinCAT software will be in use in context of the WUT Velmwheel
+            #    robot
+            # ---------------------------------------------------------------------------
             eni_wheel_names:
                 rear_left:   'WheelRearLeft'
                 rear_right:  'WheelRearRight'
-                front_left:  'WheelFrontLeft'
-                front_right: 'WheelFrontRight'
+                front_left:  'WheelFrontRight'
+                front_right: 'WheelFrontLeft'

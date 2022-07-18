@@ -3,7 +3,7 @@
  * @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
  * @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
  * @date       Thursday, 28th April 2022 4:00:25 pm
- * @modified   Tuesday, 31st May 2022 2:00:01 pm
+ * @modified   Tuesday, 28th June 2022 4:54:42 pm
  * @project    engineering-thesis
  * @brief      Definition of the class implementing bus-driving velmwheel_ethercat_driver Node
  * 
@@ -88,6 +88,14 @@ public: /* ------------------------------------------ Node's parameters (bus con
                           "Given ENI file is not cached in the node's memory. It is reread every time the  \n"
                           "node need to access ENI data (e.g. when loading slave driver). Location of the  \n"
                           "file must be valid for the entire node's lifetime                                 "
+    };
+
+    /// Description of the parameter defining timeout for all slaves being brought into the Operational state
+    static constexpr node_common::parameters::ParamDescriptor<double> SLAVES_UP_TIMEOUT_PARAM_DESCRIPTOR {
+        .name                   = "slaves_up_timeout",
+        .read_only              = true,
+        .dynamic_typing         = false,
+        .description            = "Timeout for all slaves being brought into the Operational state in [s]"
     };
 
     /// Description of the parameter defining list of driver plugins that should be loaded on construction
@@ -298,6 +306,8 @@ private: /* ------------------------------------------ Callback methods (bus con
      *    request structure containing target state
      * @param res 
      *    reference to the response structure
+     * 
+     * @note By default the bus is enabled
      */
     void set_bus_state_callback(
         const velmwheel_ethercat_driver_msgs::srv::SetBusState::Request::SharedPtr req,

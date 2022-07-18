@@ -3,7 +3,7 @@
  * @author     Adam Kowalewski
  * @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
  * @date       Thursday, 19th May 2022 9:53:09 am
- * @modified   Friday, 20th May 2022 8:16:15 pm
+ * @modified   Friday, 24th June 2022 4:54:05 pm
  * @project    engineering-thesis
  * @brief      Definitions of the USER-dependant functions of the CIFX/netX Toolkit [implementation]
  * 
@@ -28,6 +28,11 @@
 #include <libgen.h>
 #include "cifXToolkit.h"
 #include "cifXErrors.h"
+
+/* ========================================================== Static Data ========================================================= */
+
+/// File's context
+static const char *context = "user";
 
 /* ========================================================= Declarations ========================================================= */
 
@@ -132,6 +137,8 @@ uint32_t USER_GetConfigurationFileCount(PCIFX_DEVICE_INFORMATION ptDevInfo) {
     // Only first slot supported
     assert(ptDevInfo->ptDeviceInstance->ulSlotNumber == 0);
     
+	xTraceDebug(context, "Returning count of configruation files");
+
     if(ptDevInfo->ulChannel == 0 && strcmp(config_f, "none") != 0)
         return 1;
     else
@@ -164,8 +171,14 @@ int32_t USER_GetConfigurationFile(PCIFX_DEVICE_INFORMATION ptDevInfo, uint32_t u
     // Only one configuration file supported
     assert(ulIdx == 0);
 
+    xTraceDebug(context, "Returning configuration file number %u", ulIdx);
+
     // If default path used
     if(config_f[0] == '\0') {
+
+        xTraceDebug(context, " - full name:  %s",          DEFAULT_CONFIGURATION_PATH );
+        xTraceDebug(context, " - short name: %s", basename(DEFAULT_CONFIGURATION_PATH));
+        
         const char *short_name = basename(DEFAULT_CONFIGURATION_PATH);
         assert(sizeof(ptFileInfo->szShortFileName) > strlen(short_name));
         strcpy(ptFileInfo->szShortFileName, short_name);
@@ -175,6 +188,10 @@ int32_t USER_GetConfigurationFile(PCIFX_DEVICE_INFORMATION ptDevInfo, uint32_t u
     } 
     // If custom path used
     else if(strcmp(config_f, "none") != 0) {
+
+        xTraceDebug(context, " - full name:  %s",          config_f );
+        xTraceDebug(context, " - short name: %s", basename(config_f));
+
         const char *short_name = basename(config_f);
         assert(sizeof(ptFileInfo->szShortFileName) > strlen(short_name));
         strcpy(ptFileInfo->szShortFileName, short_name);
@@ -305,7 +322,7 @@ void USER_Trace(PDEVICEINSTANCE ptDevInstance, uint32_t ulTraceLevel, const char
     va_start(vaList, szFormat);
 
     // Print tarce log
-    xTrace(ulTraceLevel, szFormat, vaList);
+    xTraceVa(ulTraceLevel, szFormat, vaList);
 
     // Remove variable list
     va_end(vaList);

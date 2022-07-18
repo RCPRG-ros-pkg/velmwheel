@@ -161,6 +161,34 @@ void xTraceErrorVa(const char *context, const char *format, va_list arg);
 void xTraceError(const char *context, const char *format, ...);
 
 /**
+ * @brief Prints toolkit error message to the stdout
+ * 
+ * @param context 
+ *    message's context; not used when NULL
+ * @param ec 
+ *   toolkit error code
+ * @param format 
+ *    message's format (printf-like)
+ * @param arg
+ *    format-dependent arguments
+ */
+void xTraceToolkitErrorVa(const char *context, int32_t ec, const char *format, va_list arg);
+
+/**
+ * @brief Prints toolkit error message to the stdout
+ * 
+ * @param context 
+ *    message's context; not used when NULL
+ * @param ec 
+ *   toolkit error code
+ * @param format 
+ *    message's format (printf-like)
+ * @param ...
+ *    format-dependent arguments
+ */
+void xTraceToolkitError(const char *context, int32_t ec, const char *format, ...);
+
+/**
  * @brief Prints system error message to the stdout
  * 
  * @param context 

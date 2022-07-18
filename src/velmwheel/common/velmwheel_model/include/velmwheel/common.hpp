@@ -3,7 +3,7 @@
  * @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
  * @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
  * @date       Sunday, 13th March 2022 10:34:29 pm
- * @modified   Monday, 13th June 2022 10:49:13 pm
+ * @modified   Friday, 15th July 2022 4:35:12 pm
  * @project    engineering-thesis
  * @brief      Set of common enties related to the WUT Velmwheel robot
  * 
@@ -52,6 +52,13 @@ constexpr inline std::string_view wheel_to_str(Wheel wheel) {
         default:
             return "<unknown>";
     }
+}
+
+/**
+ * @brief Converts @p wheel to human-readable string
+ */
+constexpr inline std::size_t wheel_id(Wheel wheel) {
+    return static_cast<std::size_t>(wheel);
 }
 
 /* ================================================================================================================================ */

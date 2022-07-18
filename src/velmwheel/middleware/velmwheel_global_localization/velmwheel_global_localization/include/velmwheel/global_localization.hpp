@@ -3,7 +3,7 @@
  * @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
  * @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
  * @date       Thursday, 31st March 2022 11:42:25 pm
- * @modified   Thursday, 26th May 2022 2:41:33 am
+ * @modified   Monday, 18th July 2022 6:21:12 pm
  * @project    engineering-thesis
  * @brief      Declarations of the ROS2 node class implementing global localization node for the WUT Velmwheel robot based on matching
  *             of characteristic points from the robot's environment
@@ -169,7 +169,7 @@ public: /* ------------------------------------------------ Topic's parameters -
 	static constexpr auto POSE_PUB_TOPIC_NAME = "pose";
 
 	/// Name of the service interface used to change node's mode
-	static constexpr auto CHANGE_MODE_SRV_TOPIC_NAME = "change_mode";
+	static constexpr auto CHANGE_MODE_SRV_TOPIC_NAME = "~/change_mode";
 
 public: /* --------------------------------------------------- TF parameters ------------------------------------------------------ */
 

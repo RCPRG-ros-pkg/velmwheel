@@ -43,9 +43,9 @@ namespace conversions {
             .uio_num           = config.uio_num,
             .name              = name.data(),
             .irq_thread_params = to_c(config.irq_thread_params),
-            .bootloader_file   = config.bootloader_file.string().data(),
-            .firmware_file     = config.firmware_file.string().data(),
-            .config_file       = config.config_file.string().data()
+            .bootloader_file   = config.bootloader_file.c_str(),
+            .firmware_file     = config.firmware_file.c_str(),
+            .config_file       = config.config_file.c_str()
         };
     }
 

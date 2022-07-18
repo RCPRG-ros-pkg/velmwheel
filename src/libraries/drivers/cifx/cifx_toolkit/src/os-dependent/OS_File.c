@@ -78,12 +78,12 @@ static int get_file_length(FILE* file, uint32_t* file_length)
 void* OS_FileOpen(char* szFile, uint32_t* pulFileLen) {
 
 	assert(pulFileLen != NULL);
-	xTraceDebug(context, "Opening file %s...", szFile);
+	xTraceDebug(context, "Opening file '%s'...", szFile);
 
 	// Open the file
 	FILE* file = fopen(szFile, "rb");
 	if(file == NULL) {
-		xTraceGlobalSystemError(context, "Could not open file");
+		xTraceGlobalSystemError(context, "Could not open '%s' file", szFile);
 		return NULL;
 	}
 

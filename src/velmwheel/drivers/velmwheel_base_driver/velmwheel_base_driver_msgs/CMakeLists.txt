@@ -3,7 +3,7 @@
 # @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @date       Monday, 13th June 2022 8:33:54 pm
-# @modified   Thursday, 16th June 2022 12:49:42 pm
+# @modified   Friday, 1st July 2022 5:21:58 pm
 # @project    engineering-thesis
 # @brief      Minimal CMake file for the 'velmwheel_base_driver_msgs' package
 #    
@@ -47,7 +47,8 @@ rosidl_generate_interfaces(
         # Messages
         "msg/WheelsStatus.msg"
         # Services
-        "srv/Command.srv"
+        "srv/Enable.srv"
+        "srv/GetState.srv"
         "srv/ResetFailure.srv"
 
     # Dependencies

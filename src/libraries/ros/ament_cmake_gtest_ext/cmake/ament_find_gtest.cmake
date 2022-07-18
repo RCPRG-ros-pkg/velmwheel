@@ -1,4 +1,13 @@
-# Copyright 2014 Open Source Robotics Foundation, Inc.
+# ====================================================================================================================================
+# @file       ament_find_gtest.cmake
+# @author     Dirk Thomas
+# @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+# @date       Wednesday, 27th April 2022 6:50:23 pm
+# @modified   Monday, 11th July 2022 3:56:56 pm
+# @project    engineering-thesis
+# @brief      Modified version of the `ament_find_gtest` macro
+#    
+# Copyright 2014-2015 Open Source Robotics Foundation, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -11,24 +20,31 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+# ====================================================================================================================================
 
+# ---------------------------------------------------------------------------------------
+# @brief Find gtest.
+# @details Set the variables:
 #
-# Find gtest.
+#   - ``GTEST_FOUND``
+#   - ``GTEST_INCLUDE_DIRS``
+#   - ``GTEST_LIBRARIES``
+#   - ``GTEST_MAIN_LIBRARIES``
+#   - ``GTEST_BOTH_LIBRARIES``
 #
-# Set the variables ``GTEST_FOUND``, ``GTEST_INCLUDE_DIRS``,
-# ``GTEST_LIBRARIES``, ``GTEST_MAIN_LIBRARIES`` and
-# ``GTEST_BOTH_LIBRARIES``.
-#
-# Note: you should always link against ``GTEST_LIBRARIES`` and optionally
-# additionally against ``GTEST_MAIN_LIBRARIES``.
-#
-# @public
-#
+# @note You should always link against ``GTEST_LIBRARIES`` and optionally additionally 
+#    against ``GTEST_MAIN_LIBRARIES``.
+# ---------------------------------------------------------------------------------------
 macro(ament_find_gtest)
-  set(_ARGN "${ARGN}")
-  if(_ARGN)
-    message(FATAL_ERROR
-      "ament_find_gtest() called with unused arguments: ${_ARGN}")
-  endif()
-  _ament_cmake_gtest_find_gtest()
+    
+    set(_ARGN "${ARGN}")
+
+    # Check if unused parameters given
+    if(_ARGN)
+        message(FATAL_ERROR "ament_find_gtest() called with unused arguments: ${_ARGN}")
+    endif()
+
+    # Find the GTest
+    _ament_cmake_gtest_find_gtest()
+    
 endmacro()

@@ -4,14 +4,14 @@
 # @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @date       Thursday, 28th April 2022 1:05:25 pm
-# @modified   Tuesday, 14th June 2022 3:17:53 pm
+# @modified   Friday, 1st July 2022 5:45:43 pm
 # @project    engineering-thesis
 # @brief      Auxiliary ROS2 CLI utility unloading requesed driver plugin from the running EtherCAT driver node
 # @details    Usage
 #
 #      ros2 run velmwheel_ethercat_driver driver_unloader                            \
 #          <fully_qualified_driver_node_name>                                        \
-#             --ros-param                                                            \
+#             --ros-args                                                             \
 #             -p id:=<unique_id_of_loaded_driver>                                    \
 #             -p service_wait_timeout:=<timeout_of_service_registration:default=1.0>
 #

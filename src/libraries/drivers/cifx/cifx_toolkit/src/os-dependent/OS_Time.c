@@ -3,7 +3,7 @@
  * @author     Adam Kowalewski
  * @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
  * @date       Thursday, 19th May 2022 9:53:09 am
- * @modified   Wednesday, 25th May 2022 9:47:34 pm
+ * @modified   Monday, 27th June 2022 7:27:20 pm
  * @project    engineering-thesis
  * @brief      CIFX'es time-related OS functions [implementation]
  * 
@@ -37,8 +37,6 @@ static const char *context = "os_time";
  */
 static struct timespec get_clock_time(int clock) {
 
-	xTraceDebug(context, "Getting timer from #%d clock ...", clock);
-
 	struct timespec ts;
 	if(clock_gettime(clock, &ts) == -1)	{
 		xTraceGlobalSystemError(context, "Could not get millisecond counter value");
@@ -65,24 +63,20 @@ static inline uint32_t timespec_to_ms(const struct timespec* ts) {
 
 void OS_Sleep(uint32_t ulSleepTimeMs) {
 
-	xTraceDebug(context, "Sleeping for %u msecs...", ulSleepTimeMs);
+    if(ulSleepTimeMs >= 200)
+	    xTraceDebug(context, "Sleeping for %u msecs...", ulSleepTimeMs);
 
 	const useconds_t usecs = ulSleepTimeMs * 1000;
 	if(usleep(usecs) == -1)
 		xTraceGlobalSystemError(context, "Could not sleep");
-
-	xTraceDebug(context, "Sleep success");
 }
 
 
 uint32_t OS_GetMilliSecCounter(void) {
 
-	xTraceDebug(context, "Getting millis counter value...");
-
 	const struct timespec clock_time = get_clock_time(CLOCK_MONOTONIC);
 	const uint32_t ms = timespec_to_ms(&clock_time);
 
-	xTraceDebug(context, "Millis counter value is %u", ms);
 	return ms;
 }
 
@@ -90,7 +84,6 @@ uint32_t OS_GetMilliSecCounter(void) {
 uint32_t OS_Time(uint32_t *ptTime) {
 
 	assert(ptTime != NULL);
-	xTraceDebug(context, "Getting system time...");
 
 	time_t t;
 	t = time(&t);

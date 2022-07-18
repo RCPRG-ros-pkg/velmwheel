@@ -3,7 +3,7 @@
 # @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @date       Friday, 4th March 2022 5:57:12 pm
-# @modified   Wednesday, 25th May 2022 11:51:48 pm
+# @modified   Tuesday, 5th July 2022 5:17:28 am
 # @project    engineering-thesis
 # @brief      Launchfile running Gazebo-specific roslaunch file for spawning robot's model in the simulated world
 # 
@@ -13,12 +13,14 @@
 
 # ============================================================= Imports ============================================================ #
 
+# ROS launch imports
 from launch import LaunchDescription
 from launch_ros.actions import Node
 from launch.actions import DeclareLaunchArgument
 from launch.conditions import IfCondition
 from launch.substitutions import LaunchConfiguration, PythonExpression
 from launch.launch_context import LaunchContext
+# Private imports
 from velmwheel_model.params import ROBOT_NAME
 from launch_common.arguments import declare_launch_argument
 
@@ -29,7 +31,7 @@ declare_base_plugin_config_description, base_plugin_config = declare_launch_argu
     'name':          'base_plugin',
     'default_value': 'real',
     'description':   'Sets version of the robot\'s base plugin to be loaded',
-    'choices': [ 'real', 'ideal' ]
+    'choices':       [ 'real', 'ideal' ]
 })
 
 # Launch argument: output mode of the LIDAR drivers
@@ -37,7 +39,7 @@ declare_laser_output_mode_config_description, laser_output_mode_config = declare
     'name':          'laser_output_mode',
     'default_value': 'separate',
     'description':   'Publishing mode of the node indicating what topics it publishes to (@see lidar_gazebo.hpp)',
-    'choices': [ 'separate', 'common', 'both' ]
+    'choices':       [ 'separate', 'common', 'both' ]
 })
 
 # Launch argument: Configuration of the LIDARs rays visualization
@@ -45,7 +47,7 @@ declare_laser_visualize_config_description, laser_visualize_config = declare_lau
     'name':          'laser_visualize',
     'default_value': 'false',
     'description':   'Configuration of the LIDARs rays visualization',
-    'choices': [ 'true', 'false' ]
+    'choices':       [ 'true', 'false' ]
 })
 
 # ========================================================== Configuration ========================================================= #

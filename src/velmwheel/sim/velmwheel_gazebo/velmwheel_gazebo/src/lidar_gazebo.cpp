@@ -3,7 +3,7 @@
  * @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
  * @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
  * @date       Tuesday, 8th March 2022 5:16:22 pm
- * @modified   Wednesday, 25th May 2022 11:47:21 pm
+ * @modified   Tuesday, 5th July 2022 3:19:36 am
  * @project    engineering-thesis
  * @brief      Implementation of the LIDAR sensor's Gazebo plugin for WUT Velmobil robot
  * 
@@ -13,7 +13,7 @@
 
 /* =========================================================== Includes =========================================================== */
 
-// System includes
+// Standard includes
 #include <regex>
 #include <ignition/math/Quaternion.hh>
 // Private includes

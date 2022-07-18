@@ -1,12 +1,11 @@
 # ====================================================================================================================================
-# @file     building.bash
-# @author   Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
-# @date     Tuesday, 1st March 2022 4:11:56 pm
-# @modified   Tuesday, 14th June 2022 3:49:53 pm
-# @project  engineering-thesis
-# @brief
-#    
-#    Set of handy function and aliases used when dealing with the project
+# @file       building.bash
+# @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+# @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
+# @date       Tuesday, 1st March 2022 4:11:56 pm
+# @modified   Monday, 11th July 2022 10:50:35 pm
+# @project    engineering-thesis
+# @brief      Set of handy function and aliases used when dealing with the project
 #    
 # @copyright Krzysztof Pierczyk © 2022
 # ====================================================================================================================================
@@ -22,6 +21,8 @@ function colbuild_base() {
 
     local COLCON_FLAGS=""
     local COLCON_BUILD_FLAGS=""
+
+    enable_word_splitting_locally
 
     # Add colcon flags
     COLCON_FLAGS+="--log-base ${PROJECT_HOME}/log/build "
@@ -74,9 +75,12 @@ function colbuild_src() {
 }
 
 # ---------------------------------------------------------------------------------------
-# @brief Build packages in the source directories and sources setup.bash
+# @brief Build packages in the source extern directories
+# 
+# @param ... 
+#    parameters passed to the `colbuild` command
 # ---------------------------------------------------------------------------------------
-function colbuild_prj() {
+function colbuild_extern() {
 
     log_info "Building extern/ros directory..."
 
@@ -92,9 +96,17 @@ function colbuild_prj() {
     }
 
     log_info "Extern directory built"
-    
-    # Build src
-    colbuild_src
+}
+
+# ---------------------------------------------------------------------------------------
+# @brief Build packages in the source directories and extern directories
+# 
+# @param ... 
+#    parameters passed to the `colbuild` command
+# ---------------------------------------------------------------------------------------
+function colbuild_prj() {
+    colbuild_extern "$@"
+    colbuild_src "$@"
 }
 
 # ---------------------------------------------------------------------------------------
@@ -144,4 +156,12 @@ function build_doxygen_doc() {
     touch $PROJECT_HOME/log/doc/doxygen.log
     # Run doxygen
     doxygen Doxyfile
+}
+
+
+# ---------------------------------------------------------------------------------------
+# @brief Deletes __pycache__ directories from src/ and extern/ subdirectories
+# ---------------------------------------------------------------------------------------
+function clear_pycaches() {
+    find ./extern ./src -name *__pycache__* -exec rm -rf {} +
 }

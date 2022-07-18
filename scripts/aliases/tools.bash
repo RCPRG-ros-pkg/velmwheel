@@ -3,11 +3,9 @@
 # @author     Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @maintainer Krzysztof Pierczyk (krzysztof.pierczyk@gmail.com)
 # @date       Friday, 29th April 2022 1:30:25 pm
-# @modified   Friday, 29th April 2022 5:11:33 pm
+# @modified   Monday, 11th July 2022 10:35:12 pm
 # @project    engineering-thesis
-# @brief
-#    
-#    Set of handy command line tools
+# @brief      Set of handy command line tools
 #    
 # @copyright Krzysztof Pierczyk © 2022
 # ====================================================================================================================================
