@@ -13,3 +13,6 @@
 [submodule "extern/ros/scan-tools"]
 	path = extern/ros/scan-tools
 	url = https://github.com/kpierczy/scan-tools
+[submodule "extern/ros/gazebo_world_p109"]
+	path = extern/ros/gazebo_world_p109
+	url = https://github.com/Dangield/gazebo_world_p109
