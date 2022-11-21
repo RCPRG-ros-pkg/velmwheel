@@ -35,6 +35,10 @@ has been well-documented using doxygen/sphinx convention. The following list pro
 
 # Usage
 
+| :warning: WARNING :warning: : If you intend to use this branch along with real realsense cameras, please [install](https://github.com/IntelRealSense/librealsense/blob/master/doc/distribution_linux.md#installing-the-packages) or [build](https://github.com/IntelRealSense/librealsense/blob/master/doc/installation.md) librealsense2 library beforehand.|
+| --- |
+
+
 Repository provides system of *bash* utilities automating setup of the development environment based on the open-source 
 [bash-utils](https://github.com/kpierczy/bash-utils) library. All of these can be run by:
 
