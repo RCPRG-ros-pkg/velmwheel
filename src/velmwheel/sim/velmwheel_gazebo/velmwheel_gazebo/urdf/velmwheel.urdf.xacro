@@ -143,6 +143,7 @@
     <!-- Include Gazebo subdescriptions -->
     <xacro:include filename="$(find velmwheel_gazebo)/urdf/imu.urdf.xacro"/>
     <xacro:include filename="$(find velmwheel_gazebo)/urdf/lidar.urdf.xacro"/>
+    <xacro:include filename="$(find velmwheel_gazebo)/urdf/camera.urdf.xacro" />
     
     <!-- ========================================================================================================================= -->
 

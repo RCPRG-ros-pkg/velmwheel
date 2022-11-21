@@ -171,7 +171,9 @@ def spawn_velmwheel_node_description():
             '-timeout',         '45.0',
             '-entity',          'velmwheel',
             '-robot_namespace', f'/{ROBOT_NAME}',
-            '-topic',           f'/{ROBOT_NAME}/{SDF_ROBOT_DEXCRIPTION_TOPIC}'
+            '-topic',           f'/{ROBOT_NAME}/{SDF_ROBOT_DEXCRIPTION_TOPIC}',
+            '-x',                '3.0',
+            '-y',                '2.0'
         ],
         # Output configuration
         'output': 'screen',

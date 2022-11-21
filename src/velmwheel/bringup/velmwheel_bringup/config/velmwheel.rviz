@@ -6,10 +6,11 @@ Panels:
       Expanded:
         - /Odometry1
         - /Lasers1
+        - /Cameras1
         - /Mapping1
         - /Simulation1
       Splitter Ratio: 0.5
-    Tree Height: 719
+    Tree Height: 539
   - Class: rviz_common/Selection
     Name: Selection
   - Class: rviz_common/Views
@@ -21,7 +22,7 @@ Panels:
     Experimental: false
     Name: Time
     SyncMode: 0
-    SyncSource: Both LIDARs combined
+    SyncSource: ""
 Visualization Manager:
   Class: ""
   Displays:
@@ -70,6 +71,120 @@ Visualization Manager:
           Alpha: 1
           Show Axes: false
           Show Trail: false
+        camera_b_accel_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        camera_b_accel_optical_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        camera_b_bottom_screw_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        camera_b_color_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        camera_b_color_optical_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        camera_b_depth_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        camera_b_depth_optical_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        camera_b_gyro_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        camera_b_gyro_optical_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        camera_b_infra1_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        camera_b_infra1_optical_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        camera_b_infra2_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        camera_b_infra2_optical_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        camera_b_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        camera_f_accel_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        camera_f_accel_optical_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        camera_f_bottom_screw_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        camera_f_color_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        camera_f_color_optical_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        camera_f_depth_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        camera_f_depth_optical_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        camera_f_gyro_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        camera_f_gyro_optical_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        camera_f_infra1_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        camera_f_infra1_optical_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        camera_f_infra2_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        camera_f_infra2_optical_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        camera_f_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
         centre_link:
           Alpha: 1
           Show Axes: false
@@ -162,6 +277,9 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
+      Mass Properties:
+        Inertia: false
+        Mass: false
       Name: RobotModel
       TF Prefix: ""
       Update Interval: 0
@@ -538,6 +656,38 @@ Visualization Manager:
       Name: Lasers
     - Class: rviz_common/Group
       Displays:
+        - Class: rviz_default_plugins/Image
+          Enabled: false
+          Max Value: 1
+          Median window: 5
+          Min Value: 0
+          Name: Front Color
+          Normalize Range: true
+          Topic:
+            Depth: 5
+            Durability Policy: Volatile
+            History Policy: Keep Last
+            Reliability Policy: Reliable
+            Value: /velmwheel/camera_f/color/image_raw
+          Value: false
+        - Class: rviz_default_plugins/Image
+          Enabled: false
+          Max Value: 1
+          Median window: 5
+          Min Value: 0
+          Name: Back Color
+          Normalize Range: true
+          Topic:
+            Depth: 5
+            Durability Policy: Volatile
+            History Policy: Keep Last
+            Reliability Policy: Reliable
+            Value: /velmwheel/camera_b/color/image_raw
+          Value: false
+      Enabled: true
+      Name: Cameras
+    - Class: rviz_common/Group
+      Displays:
         - Alpha: 0.699999988079071
           Class: rviz_default_plugins/Map
           Color Scheme: map
@@ -651,18 +801,22 @@ Visualization Manager:
       Yaw: 0.7853981852531433
     Saved: ~
 Window Geometry:
+  Back Color:
+    collapsed: false
   Displays:
     collapsed: false
-  Height: 1016
+  Front Color:
+    collapsed: false
+  Height: 836
   Hide Left Dock: false
   Hide Right Dock: false
-  QMainWindow State: 000000ff00000000fd0000000400000000000001600000035afc0200000008fb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c006100790073010000003d0000035a000000c900fffffffb0000001200530065006c0065006300740069006f006e0000000312000000850000005c00fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261000000010000010f0000035afc0200000003fb0000000a00560069006500770073010000003d0000035a000000a400fffffffb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e10000019700000003000007380000003efc0100000002fb0000000800540069006d0065010000000000000738000002eb00fffffffb0000000800540069006d00650100000000000004500000000000000000000004bd0000035a00000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd000000040000000000000160000002a6fc020000000afb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c006100790073010000003d000002a6000000c900fffffffb0000001200530065006c0065006300740069006f006e0000000312000000850000005c00fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb00000014004200610063006b00200043006f006c006f00720000000228000000bb0000002800fffffffb0000001600460072006f006e007400200043006f006c006f00720000000228000000bb0000002800ffffff000000010000010f000002a6fc0200000003fb0000000a00560069006500770073010000003d000002a6000000a400fffffffb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e10000019700000003000005f60000003efc0100000002fb0000000800540069006d00650100000000000005f6000002fb00fffffffb0000000800540069006d006501000000000000045000000000000000000000037b000002a600000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   Selection:
     collapsed: false
   Time:
     collapsed: false
   Views:
     collapsed: false
-  Width: 1848
-  X: 72
+  Width: 1526
+  X: 74
   Y: 27

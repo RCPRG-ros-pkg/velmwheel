@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!-- =================================================================================================================================
+  - @file       camera.urdf.xacro
+  - @author     Daniel Giełdowski (daniel.gieldowski.dokt@pw.edu.pl)
+  - @maintainer Krzysztof Pierczyk (daniel.gieldowski.dokt@pw.edu.pl)
+  - @date       Wednesday, 16th November 2022 12:00:00 pm
+  - @modified   Wednesday, 16th November 2022 12:00:00 pm
+  - @brief      URDF model of the camera sensor of the WUT Velmwheel robot
+  - 
+  - 
+  - @copyright Daniel Giełdowski © 2022
+  - ================================================================================================================================== -->
+<robot name="camera" xmlns:xacro="http://www.ros.org/wiki/xacro">
+	
+    <xacro:include filename="$(find realsense2_description)/urdf/_d435.urdf.xacro"/>
+    <xacro:include filename="$(find realsense2_description)/urdf/_d435i_imu_modules.urdf.xacro"/>
+
+	<xacro:macro name="camera_sensor" params="name x_offset z_offset z_rot use_nominal_extrinsics use_mesh">
+
+        <xacro:sensor_d435 parent="centre_link" name="${name}" use_nominal_extrinsics="${use_nominal_extrinsics}" use_mesh="${use_mesh}">
+            <origin xyz="${x_offset} 0 ${z_offset}" rpy="0 0 ${z_rot}"/>
+        </xacro:sensor_d435>
+        <xacro:d435i_imu_modules name="${name}" use_nominal_extrinsics="${use_nominal_extrinsics}"/>
+
+    </xacro:macro>
+
+</robot>

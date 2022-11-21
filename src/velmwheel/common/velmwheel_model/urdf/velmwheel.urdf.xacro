@@ -22,6 +22,7 @@
     <xacro:include filename="$(find velmwheel_model)/urdf/imu.urdf.xacro"/>
     <xacro:include filename="$(find velmwheel_model)/urdf/lidar.urdf.xacro"/>
     <xacro:include filename="$(find velmwheel_model)/urdf/kinect.urdf.xacro"/>
+    <xacro:include filename="$(find velmwheel_model)/urdf/camera.urdf.xacro"/>
 
     <!-- ====================================================== Parameters ======================================================= -->
 
@@ -203,6 +204,10 @@
         <child link="imu_centre"/>
         <origin xyz="${imu_centre_ofset}"/>
     </joint>
+
+    <!-- Camera sensor -->
+    <xacro:camera_sensor name="camera_f" x_offset="0.02" z_offset="0.5" z_rot="0" use_nominal_extrinsics="true" use_mesh="false"/>
+    <xacro:camera_sensor name="camera_b" x_offset="-0.02" z_offset="0.5" z_rot="3.14" use_nominal_extrinsics="true" use_mesh="false"/>
 
     <!-- Rear right wheel -->
     <xacro:wheel dir="r" side="r" wheel_model="l" side_reflect="-1" parent="base" wheel_x_offset="${wheel_r_base_x_offset}"/>

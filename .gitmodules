@@ -16,3 +16,6 @@
 [submodule "extern/ros/gazebo_world_p109"]
 	path = extern/ros/gazebo_world_p109
 	url = https://github.com/Dangield/gazebo_world_p109
+[submodule "extern/ros/realsense-ros"]
+	path = extern/ros/realsense-ros
+	url = https://github.com/IntelRealSense/realsense-ros
