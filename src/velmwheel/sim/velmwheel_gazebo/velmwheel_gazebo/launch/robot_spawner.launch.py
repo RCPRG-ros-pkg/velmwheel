@@ -50,6 +50,20 @@ declare_laser_visualize_config_description, laser_visualize_config = declare_lau
     'choices':       [ 'true', 'false' ]
 })
 
+# Launch argument: Spawning position of the Velmwheel robot in x axis
+declare_velm_pos_x_config_description, velm_pos_x_config = declare_launch_argument({
+    'name':          'velm_pos_x',
+    'default_value': '0.0',
+    'description':   'Spawning position of the Velmwheel robot in x axis',
+})
+
+# Launch argument: Spawning position of the Velmwheel robot in x axis
+declare_velm_pos_y_config_description, velm_pos_y_config = declare_launch_argument({
+    'name':          'velm_pos_y',
+    'default_value': '0.0',
+    'description':   'Spawning position of the Velmwheel robot in y axis',
+})
+
 # ========================================================== Configuration ========================================================= #
 
 # Topic broadcasting SDF-tuned version of the robot description
@@ -172,8 +186,8 @@ def spawn_velmwheel_node_description():
             '-entity',          'velmwheel',
             '-robot_namespace', f'/{ROBOT_NAME}',
             '-topic',           f'/{ROBOT_NAME}/{SDF_ROBOT_DEXCRIPTION_TOPIC}',
-            '-x',                '3.0',
-            '-y',                '2.0'
+            '-x',                velm_pos_x_config,
+            '-y',                velm_pos_y_config
         ],
         # Output configuration
         'output': 'screen',
@@ -201,6 +215,8 @@ launch_description = [
     DeclareLaunchArgument(**declare_base_plugin_config_description),
     DeclareLaunchArgument(**declare_laser_output_mode_config_description),
     DeclareLaunchArgument(**declare_laser_visualize_config_description),
+    DeclareLaunchArgument(**declare_velm_pos_x_config_description),
+    DeclareLaunchArgument(**declare_velm_pos_y_config_description),
 
     # Nodes
     *[ Node(**description) for description in fine_tunner_node     ],
