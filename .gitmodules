@@ -19,3 +19,7 @@
 [submodule "extern/ros/realsense-ros"]
 	path = extern/ros/realsense-ros
 	url = https://github.com/IntelRealSense/realsense-ros
+[submodule "extern/ros/gazebo_ros_pkgs"]
+	path = extern/ros/gazebo_ros_pkgs
+	url = https://github.com/Dangield/gazebo_ros_pkgs
+	branch = ros2
