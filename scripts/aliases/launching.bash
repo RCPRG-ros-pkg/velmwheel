@@ -16,11 +16,13 @@
 function kill_system() {
 
     # Kill gazebo client/srver
-    pkill gzserver
-    pkill gzclient
+    pkill -9 gzserver
+    pkill -9 gzclient
     
     # Kill all related processes
-    pkill -f ".*velmwheel_.*"
+    pkill -9 -f ".*velmwheel_.*"
+    pkill -9 -f ".*/velmwheel/install/*"
+    pkill -9 -f "/opt/ros/humble/*"
 
     return 0
 }
