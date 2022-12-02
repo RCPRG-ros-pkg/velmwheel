@@ -47,8 +47,6 @@ class PCCollector(Node):
             self.collected = np.concatenate([self.collected, np.expand_dims(points, axis=0)], axis=0)
 
         print(f'Samples collected: {self.collected.shape[0]}')
-        with open('samples.npz', 'wb') as f:
-            np.save(f, self.collected)
 
 def main(args=None):
     print('Hi from pc_collector.')
@@ -62,8 +60,10 @@ def main(args=None):
         rclpy.spin(subscriber)
     except:
         pass
+    with open('samples.npz', 'wb') as f:
+        np.savez_compressed(f, subscriber.collected)
     dataset = np.load('samples.npz')
-    print(dataset.shape)
+    print(dataset['arr_0'].shape)
     # Deinitialize rlc
     rclpy.shutdown()
 
