@@ -104,7 +104,7 @@ rviz = {
 
 # Standard-frames transform publishers
 map_transform_publisher   = { 'launch_description_source': get_launch_source('velmwheel_bringup', 'helpers/map_at.launch.py'   ) }
-odom_transform_publisher  = { 'launch_description_source': get_launch_source('velmwheel_bringup', 'helpers/odom_at.launch.py'  ) }
+#odom_transform_publisher  = { 'launch_description_source': get_launch_source('velmwheel_bringup', 'helpers/odom_at.launch.py'  ) }
 robot_transform_publisher = { 'launch_description_source': get_launch_source('velmwheel_bringup', 'helpers/robot_at.launch.py' ) }
 
 # =========================================================== Description ========================================================== #

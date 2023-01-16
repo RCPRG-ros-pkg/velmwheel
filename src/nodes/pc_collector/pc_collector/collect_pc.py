@@ -28,17 +28,17 @@ class PCCollector(Node):
         points = read_points_numpy(msg, field_names=['x', 'y', 'z'], reshape_organized_cloud = True)
         # print(points.shape)
         # points = points[240:,:]
-        # points = points[::4,::4]
+        points = points[::4,::4]
         # print(points.shape)
         # print('Test')
 
-        # fig = plt.figure()
-        # ax = fig.add_subplot(projection='3d')
-        # ax.scatter(points[:,:,0], points[:,:,2], -points[:,:,1], s = 0.7,color = 'k')
-        # ax.set_xlabel('X Label')
-        # ax.set_ylabel('Y Label')
-        # ax.set_zlabel('Z Label')
-        # plt.show()
+        fig = plt.figure()
+        ax = fig.add_subplot(projection='3d')
+        ax.scatter(points[:,:,0], points[:,:,2], -points[:,:,1], s = 0.7,color = 'k')
+        ax.set_xlabel('X Label')
+        ax.set_ylabel('Y Label')
+        ax.set_zlabel('Z Label')
+        plt.show()
         # print('Test')
 
         if self.collected is None:
@@ -60,8 +60,8 @@ def main(args=None):
         rclpy.spin(subscriber)
     except:
         pass
-    with open('samples.npz', 'wb') as f:
-        np.savez_compressed(f, subscriber.collected)
+    # with open('samples.npz', 'wb') as f:
+    #     np.savez_compressed(f, subscriber.collected)
     dataset = np.load('samples.npz')
     print(dataset['arr_0'].shape)
     # Deinitialize rlc
