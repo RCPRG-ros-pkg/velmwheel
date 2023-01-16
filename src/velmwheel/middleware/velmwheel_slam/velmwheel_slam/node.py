@@ -103,6 +103,7 @@ def generate_scans_converter_descriptor():
 
 def generate_slam_component_launch_description(
     executable,
+    # default_config_file = 'mapper_params_online_async.yaml'
     default_config_file = None
 ):
 
