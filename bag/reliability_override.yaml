@@ -1,0 +1,4 @@
+/clock:
+  reliability: reliable
+  history: keep_last
+  depth: 3
