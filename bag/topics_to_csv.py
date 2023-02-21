@@ -75,32 +75,32 @@ class TopicsToCsv(Node):
         self.data['cam_f_color'] = []
         self.f_color = None
 
-        # self.subs['cam_f_depth'] = self.create_subscription(Image, '/velmwheel/camera_f/depth/image_rect_raw', self.msg_callback_cam_f_depth, 1000,)
-        # self.data['cam_f_depth'] = []
+        self.subs['cam_f_depth'] = self.create_subscription(Image, '/velmwheel/camera_f/depth/image_rect_raw', self.msg_callback_cam_f_depth, 1000,)
+        self.data['cam_f_depth'] = []
 
-        # self.subs['cam_f_points'] = self.create_subscription(PointCloud2, '/velmwheel/camera_f/depth/color/points', self.msg_callback_cam_f_points, 1000,)
-        # self.data['cam_f_points'] = []
-        # self.f_points = None
+        self.subs['cam_f_points'] = self.create_subscription(PointCloud2, '/velmwheel/camera_f/depth/color/points', self.msg_callback_cam_f_points, 1000,)
+        self.data['cam_f_points'] = []
+        self.f_points = None
 
-        # self.subs['cam_b_color'] = self.create_subscription(Image, '/velmwheel/camera_b/color/image_raw', self.msg_callback_cam_b_col, 1000,)
-        # self.data['cam_b_color'] = []
-        # self.b_color = None
+        self.subs['cam_b_color'] = self.create_subscription(Image, '/velmwheel/camera_b/color/image_raw', self.msg_callback_cam_b_col, 1000,)
+        self.data['cam_b_color'] = []
+        self.b_color = None
 
-        # self.subs['cam_b_depth'] = self.create_subscription(Image, '/velmwheel/camera_b/depth/image_rect_raw', self.msg_callback_cam_b_depth, 1000,)
-        # self.data['cam_b_depth'] = []
+        self.subs['cam_b_depth'] = self.create_subscription(Image, '/velmwheel/camera_b/depth/image_rect_raw', self.msg_callback_cam_b_depth, 1000,)
+        self.data['cam_b_depth'] = []
 
-        # self.subs['cam_b_points'] = self.create_subscription(PointCloud2, '/velmwheel/camera_b/depth/color/points', self.msg_callback_cam_b_points, 1000,)
-        # self.data['cam_b_points'] = []
-        # self.b_points = None
+        self.subs['cam_b_points'] = self.create_subscription(PointCloud2, '/velmwheel/camera_b/depth/color/points', self.msg_callback_cam_b_points, 1000,)
+        self.data['cam_b_points'] = []
+        self.b_points = None
 
         print('Hi from topics_to_csv node.')
 
-        self.cam_f_color = None
-        self.cam_f_depth = None
-        self.cam_f_points = None
-        self.cam_b_color = None
-        self.cam_b_depth = None
-        self.cam_b_points = None
+        # self.cam_f_color = None
+        # self.cam_f_depth = None
+        # self.cam_f_points = None
+        # self.cam_b_color = None
+        # self.cam_b_depth = None
+        # self.cam_b_points = None
         self.field_names = ['time']
         self.period = 1/30
         self.rows_to_save = []
@@ -274,8 +274,6 @@ class TopicsToCsv(Node):
             'nanosec':msg.header.stamp.nanosec,
             'ranges':msg.ranges,
             })
-        # for i in range(len(msg.ranges)):
-        #     self.data['lidar_l'][-1][f'range{i}'] = msg.ranges[i]
 
     def msg_callback_lidar_r(self,msg):
         self.data['lidar_r'].append({
@@ -283,8 +281,6 @@ class TopicsToCsv(Node):
             'nanosec':msg.header.stamp.nanosec,
             'ranges':msg.ranges,
             })
-        # for i in range(len(msg.ranges)):
-        #     self.data['lidar_r'][-1][f'range{i}'] = msg.ranges[i]
 
     def msg_callback_lidars(self,msg):
         self.data['lidars'].append({
@@ -292,8 +288,6 @@ class TopicsToCsv(Node):
             'nanosec':msg.header.stamp.nanosec,
             'ranges':msg.ranges,
             })
-        # for i in range(len(msg.ranges)):
-        #     self.data['lidars'][-1][f'range{i}'] = msg.ranges[i]
 
     def msg_callback_cam_f_col(self,msg):
         self.f_color = self.br.imgmsg_to_cv2(msg)
@@ -301,12 +295,8 @@ class TopicsToCsv(Node):
         self.data['cam_f_color'].append({
             'sec':msg.header.stamp.sec,
             'nanosec':msg.header.stamp.nanosec,
-            # 'image':self.f_color[:]
+            'image':self.f_color[:]
             })
-        if len(self.data['cam_f_color']) == 1:
-            self.cam_f_color = np.expand_dims(self.f_color, axis=0)
-        else:
-            self.cam_f_color = np.append(self.cam_f_color, [self.f_color], axis = 0)
         # print(self.f_color.shape)
         # cv2.imshow("camera", self.f_color)
         # cv2.waitKey(1)
@@ -315,13 +305,8 @@ class TopicsToCsv(Node):
         self.data['cam_f_depth'].append({
             'sec':msg.header.stamp.sec,
             'nanosec':msg.header.stamp.nanosec,
-            # 'image':self.br.imgmsg_to_cv2(msg)
+            'image':self.br.imgmsg_to_cv2(msg)
             })
-        if len(self.data['cam_f_depth']) == 1:
-            self.cam_f_depth = np.expand_dims(self.br.imgmsg_to_cv2(msg), axis=0)
-        else:
-            self.cam_f_depth = np.append(self.cam_f_depth, [self.br.imgmsg_to_cv2(msg)], axis = 0)
-        # current_frame = self.br.imgmsg_to_cv2(msg)
         # plt.figure()
         # print(current_frame.shape)
         # plt.imshow(current_frame)
@@ -333,12 +318,8 @@ class TopicsToCsv(Node):
         self.data['cam_f_points'].append({
             'sec':msg.header.stamp.sec,
             'nanosec':msg.header.stamp.nanosec,
-            # 'points':self.f_points[:]
+            'points':self.f_points[:]
             })
-        if len(self.data['cam_f_points']) == 1:
-            self.cam_f_points = np.expand_dims(self.f_points, axis=0)
-        else:
-            self.cam_f_points = np.append(self.cam_f_points, [self.f_points], axis = 0)
         # fig = plt.figure()
         # ax = fig.add_subplot(projection='3d')
         # # ax.scatter(points[:,:,0], points[:,:,2], -points[:,:,1], s = 0.7,color = 'k')
@@ -354,23 +335,15 @@ class TopicsToCsv(Node):
         self.data['cam_b_color'].append({
             'sec':msg.header.stamp.sec,
             'nanosec':msg.header.stamp.nanosec,
-            # 'image':self.b_color[:]
+            'image':self.b_color[:]
             })
-        if len(self.data['cam_b_color']) == 1:
-            self.cam_b_color = np.expand_dims(self.b_color, axis=0)
-        else:
-            self.cam_b_color = np.append(self.cam_b_color, [self.b_color], axis = 0)
 
     def msg_callback_cam_b_depth(self,msg):
         self.data['cam_b_depth'].append({
             'sec':msg.header.stamp.sec,
             'nanosec':msg.header.stamp.nanosec,
-            # 'image':self.br.imgmsg_to_cv2(msg)
+            'image':self.br.imgmsg_to_cv2(msg)
             })
-        if len(self.data['cam_b_depth']) == 1:
-            self.cam_b_depth = np.expand_dims(self.br.imgmsg_to_cv2(msg), axis=0)
-        else:
-            self.cam_b_depth = np.append(self.cam_b_depth, [self.br.imgmsg_to_cv2(msg)], axis = 0)
 
     def msg_callback_cam_b_points(self,msg):
         self.b_points = read_points_numpy(msg, field_names=['x', 'y', 'z'], reshape_organized_cloud = True)
@@ -378,12 +351,8 @@ class TopicsToCsv(Node):
         self.data['cam_b_points'].append({
             'sec':msg.header.stamp.sec,
             'nanosec':msg.header.stamp.nanosec,
-            # 'points':self.b_points[:]
+            'points':self.b_points[:]
             })
-        if len(self.data['cam_b_points']) == 1:
-            self.cam_b_points = np.expand_dims(self.b_points, axis=0)
-        else:
-            self.cam_b_points = np.append(self.cam_b_points, [self.b_points], axis = 0)
 
     def gather_field_names(self):
         for msg in self.data.keys():
@@ -443,7 +412,7 @@ class TopicsToCsv(Node):
 
         print(f'Rows in dataset after preprocessing: {len(self.rows_to_save)}')
 
-        with open('dataset_' + str(self.rows_to_save[-1]['time']), 'w', newline='') as file:
+        with open('dataset_' + str(len(self.rows_to_save)) + '_' + str(self.rows_to_save[-1]['time']), 'w', newline='') as file:
             writer = csv.DictWriter(file, fieldnames = self.field_names)
             writer.writeheader()
             writer.writerows(self.rows_to_save)
@@ -451,53 +420,51 @@ class TopicsToCsv(Node):
 
     def save_cam_f_color(self):
 
-        with open('cam_f_color_' + str(self.rows_to_save[-1]['time']) + '.npz', 'wb') as f:
-            np.savez_compressed(f, self.cam_f_color)
+        f =  open('cam_f_color_' + str(len(self.rows_to_save)) + '_' + str(self.rows_to_save[-1]['time']) + '.npz', 'wb')
+        for image in self.data['cam_f_color']:
+            np.savez_compressed(f, image['image'])
 
         f.close()
-        del self.cam_f_color
 
     def save_cam_f_depth(self):
 
-        with open('cam_f_depth_' + str(self.rows_to_save[-1]['time']) + '.npz', 'wb') as f:
-            np.savez_compressed(f, self.cam_f_depth)
+        f = open('cam_f_depth_' + str(len(self.rows_to_save)) + '_' + str(self.rows_to_save[-1]['time']) + '.npz', 'wb')
+        for image in self.data['cam_f_depth']:
+            np.savez_compressed(f, image['image'])
 
         f.close()
-        del self.cam_f_depth
 
     def save_cam_f_points(self):
 
-        with open('cam_f_points_' + str(self.rows_to_save[-1]['time']) + '.npz', 'wb') as f:
-            np.savez_compressed(f, self.cam_f_points)
+        f = open('cam_f_points_' + str(len(self.rows_to_save)) + '_' + str(self.rows_to_save[-1]['time']) + '.npz', 'wb')
+        for image in self.data['cam_f_points']:
+            np.savez_compressed(f, image['points'])
 
         f.close()
-        del self.cam_f_points
 
     def save_cam_b_color(self):
 
-        with open('cam_b_color_' + str(self.rows_to_save[-1]['time']) + '.npz', 'wb') as f:
-            np.savez_compressed(f, self.cam_b_color)
+        f = open('cam_b_color_' + str(len(self.rows_to_save)) + '_' + str(self.rows_to_save[-1]['time']) + '.npz', 'wb')
+        for image in self.data['cam_b_color']:
+            np.savez_compressed(f, image['image'])
 
         f.close()
-        del self.cam_b_color
 
     def save_cam_b_depth(self):
 
-        with open('cam_b_depth_' + str(self.rows_to_save[-1]['time']) + '.npz', 'wb') as f:
-            np.savez_compressed(f, self.cam_b_depth)
+        f = open('cam_b_depth_' + str(len(self.rows_to_save)) + '_' + str(self.rows_to_save[-1]['time']) + '.npz', 'wb')
+        for image in self.data['cam_b_depth']:
+            np.savez_compressed(f, image['image'])
 
         f.close()
-        del self.cam_b_depth
 
     def save_cam_b_points(self):
 
-        with open('cam_b_points_' + str(self.rows_to_save[-1]['time']) + '.npz', 'wb') as f:
-            np.savez_compressed(f, self.cam_b_points)
+        f = open('cam_b_points_' + str(len(self.rows_to_save)) + '_' + str(self.rows_to_save[-1]['time']) + '.npz', 'wb')
+        for image in self.data['cam_b_points']:
+            np.savez_compressed(f, image['points'])
 
         f.close()
-        del self.cam_b_points
-
-
 
 def main(args=None):
 
@@ -522,12 +489,11 @@ def main(args=None):
     node.gather_field_names()
     node.save_data()
     node.save_cam_f_color()
-    # node.save_cam_f_depth()
-    # node.save_cam_f_points()
-    # node.save_cam_b_color()
-    # node.save_cam_b_depth()
-    # node.save_cam_b_points()
-
+    node.save_cam_f_depth()
+    node.save_cam_f_points()
+    node.save_cam_b_color()
+    node.save_cam_b_depth()
+    node.save_cam_b_points()
 
     # Deinitialize rlc
     # rclpy.shutdown()
