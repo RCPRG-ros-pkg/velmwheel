@@ -20,7 +20,8 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'gather_data = odometry_anomaly_detector.gather_data:main'
+            'gather_data = odometry_anomaly_detector.gather_data:main',
+            'train_autoencoder = odometry_anomaly_detector.train_autoencoder:main'
         ],
     },
 )

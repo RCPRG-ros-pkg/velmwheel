@@ -5,10 +5,6 @@ from sensor_msgs.msg import Imu
 from geometry_msgs.msg import Twist
 from nav_msgs.msg import Odometry
 from velmwheel_msgs.msg import EncodersStamped
-
-# import tensorflow as tf
-# from tensorflow.keras import Sequential, layers, losses
-# from tensorflow.keras.models import Model
 from tensorflow.data import Dataset
 
 from ament_index_python.packages import get_package_prefix
@@ -16,23 +12,6 @@ import numpy as np
 import math
 from datetime import datetime
 import csv
-
-# class Autoencoder(Model):
-#     """docstring for Autoencoder"""
-#     def __init__(self, latent_dim = 8, input_size = 27):
-#         super(Autoencoder, self).__init__()
-#         self.latent_dim = latent_dim
-#         self.input_size = input_size
-#         self.encoder = Sequential([
-#             layers.Dense(self.latent_dim, activation = 'relu')
-#         ])
-#         self.decoder = Sequential([
-#             layers.Dense(self.input_size, activation = 'relu')
-#         ])
-
-#     def call(self, x):
-#         return self.decoder(self.encoder(x))
-
  
 def euler_from_quaternion(x, y, z, w):
     """
@@ -65,11 +44,6 @@ class DataCollector(Node):
         self.timer = self.create_timer(1/30, self.timer_callback)
         self.state = []
         self.state_buffer = []
-        # self.filename = f'odometry_anomaly_detector_set_{datetime.now()}'
-        # self.file = open(self.filename, 'w', newline = '')
-        # self.0.0= csv.writer(self.file)
-        # self.autoencoder = Autoencoder()
-        # self.autoencoder.compile(optimizer = 'adam', loss = losses.MeanSquaredError())
 
         self.encoders_subscriber = self.create_subscription(EncodersStamped, '/velmwheel/base/encoders', self.msg_callback_base_encoders, 10,)
         self.encoders_wheel_angles = []
@@ -105,6 +79,7 @@ class DataCollector(Node):
             [self.setpoint_angular_velocity] + self.setpoint_linear_velocity
 
         if len(self.state) < 27:
+            print('State not full.')
             return
 
         if math.inf in self.state or -math.inf in self.state:
@@ -123,18 +98,8 @@ class DataCollector(Node):
             # for element in dataset:
             #     print(element)
             #     break
-            dataset.save(f'odometry_anomaly_detector/odometry_anomaly_detector_set_{datetime.now()}')
+            dataset.save(f'odometry_anomaly_detector/sets/odometry_anomaly_detector_set_{datetime.now()}')
             self.state_buffer = []
-
-        # if self.state_buffer.shape == (0,):
-        #     self.state_buffer = np.array([self.state])
-        # else:
-        #     self.state_buffer = np.append(self.state_buffer, [self.state], axis = 0)
-        # print(self.state_buffer.shape)
-        # self.writer.writerow(self.state)
-        # msg = 0.0()
-        # msg.data = 'test'
-        # self.publisher.publish(msg)
 
     def msg_callback_base_encoders(self, msg):
         self.encoders_wheel_angles = [msg.encoders[i].angle for i in range(4)]
