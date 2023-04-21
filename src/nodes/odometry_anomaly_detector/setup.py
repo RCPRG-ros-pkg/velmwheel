@@ -21,7 +21,8 @@ setup(
     entry_points={
         'console_scripts': [
             'gather_data = odometry_anomaly_detector.gather_data:main',
-            'train_autoencoder = odometry_anomaly_detector.train_autoencoder:main'
+            'test_autoencoder_architectures = odometry_anomaly_detector.test_autoencoder_architectures:main',
+            'train_and_test_ae = odometry_anomaly_detector.train_and_test_ae:main'
         ],
     },
 )

@@ -102,29 +102,29 @@ class DataCollector(Node):
             self.state_buffer = []
 
     def msg_callback_base_encoders(self, msg):
-        self.encoders_wheel_angles = [msg.encoders[i].angle for i in range(4)]
-        self.encoders_wheel_angular_velocity = [msg.encoders[i].velocity for i in range(4)]
+        self.encoders_wheel_angles = [msg.encoders[i].angle for i in range(4)] # 0-3
+        self.encoders_wheel_angular_velocity = [msg.encoders[i].velocity for i in range(4)] # 4-7
 
     def msg_callback_odom_enc(self, msg):
-        self.odometry_encoders_position = [msg.pose.pose.position.x, msg.pose.pose.position.y]
-        self.odometry_encoders_linear_velocity = [msg.twist.twist.linear.x, msg.twist.twist.linear.y]
-        self.odometry_encoders_angle = euler_from_quaternion(msg.pose.pose.orientation.x, msg.pose.pose.orientation.y, msg.pose.pose.orientation.z, msg.pose.pose.orientation.w)[2]
-        self.odometry_encoders_angular_velocity = msg.twist.twist.angular.z
+        self.odometry_encoders_position = [msg.pose.pose.position.x, msg.pose.pose.position.y] # 8-9
+        self.odometry_encoders_linear_velocity = [msg.twist.twist.linear.x, msg.twist.twist.linear.y] # 10-11
+        self.odometry_encoders_angle = euler_from_quaternion(msg.pose.pose.orientation.x, msg.pose.pose.orientation.y, msg.pose.pose.orientation.z, msg.pose.pose.orientation.w)[2] # 12
+        self.odometry_encoders_angular_velocity = msg.twist.twist.angular.z # 13
 
     def msg_callback_odom_laser(self, msg):
-        self.odometry_laser_position = [msg.pose.pose.position.x, msg.pose.pose.position.y]
-        self.odometry_laser_linear_velocity = [msg.twist.twist.linear.x, msg.twist.twist.linear.y]
-        self.odometry_laser_angle = euler_from_quaternion(msg.pose.pose.orientation.x, msg.pose.pose.orientation.y, msg.pose.pose.orientation.z, msg.pose.pose.orientation.w)[2]
-        self.odometry_laser_angular_velocity = msg.twist.twist.angular.z
+        self.odometry_laser_position = [msg.pose.pose.position.x, msg.pose.pose.position.y] # 14-15
+        self.odometry_laser_linear_velocity = [msg.twist.twist.linear.x, msg.twist.twist.linear.y] # 16-17
+        self.odometry_laser_angle = euler_from_quaternion(msg.pose.pose.orientation.x, msg.pose.pose.orientation.y, msg.pose.pose.orientation.z, msg.pose.pose.orientation.w)[2] # 18
+        self.odometry_laser_angular_velocity = msg.twist.twist.angular.z # 19
 
     def msg_callback_imu(self, msg):
-        self.imu_angle = euler_from_quaternion(msg.orientation.x, msg.orientation.y, msg.orientation.z, msg.orientation.w)[2]
-        self.imu_angular_velocity = msg.angular_velocity.z
-        self.imu_linear_acceleration = [msg.linear_acceleration.x, msg.linear_acceleration.y]
+        self.imu_angle = euler_from_quaternion(msg.orientation.x, msg.orientation.y, msg.orientation.z, msg.orientation.w)[2] # 20
+        self.imu_angular_velocity = msg.angular_velocity.z # 21
+        self.imu_linear_acceleration = [msg.linear_acceleration.x, msg.linear_acceleration.y] # 22-23
 
     def msg_callback_base_vel_setpoint(self, msg):
-        self.setpoint_angular_velocity = msg.angular.z
-        self.setpoint_linear_velocity = [msg.linear.x, msg.linear.y]
+        self.setpoint_angular_velocity = msg.angular.z # 24
+        self.setpoint_linear_velocity = [msg.linear.x, msg.linear.y] # 25-26
 
 def main():
     # Initialize rlc

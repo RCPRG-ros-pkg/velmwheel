@@ -29,3 +29,5 @@
 !.gitignore
 !bag/
 !bag/**
+!odometry_anomaly_detector/
+!odometry_anomaly_detector/**
