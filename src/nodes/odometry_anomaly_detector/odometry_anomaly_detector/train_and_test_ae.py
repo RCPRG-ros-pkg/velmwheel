@@ -9,6 +9,7 @@ from datetime import datetime
 import matplotlib.pyplot as plt
 import gc
 from odometry_anomaly_detector.detector_models import Autoencoder, LSTMAutoencoder
+from copy import copy
 
 BATCH_SIZE = 32
 EPOCHS = 200
@@ -55,6 +56,7 @@ def main():
 
     # divide into train and test dataset
     train_ds.shuffle(ds_size)
+    # test_ds = copy(train_ds)
     test_ds = train_ds.skip(int(SPLIT * ds_size))
     train_ds = train_ds.take(int(SPLIT * ds_size))
 
@@ -67,11 +69,11 @@ def main():
         train_ds = train_ds.map(lambda window: (window, window))
 
     if MODE == 'AE':
-        output_folder = datetime.now().strftime(f'odometry_anomaly_detector/models/autoencoder/{len(list(train_ds))}_{len(list(test_ds))}_E{EPOCHS}_B{BATCH_SIZE}_L{LATENT_DIM}_E{ENC_LAYERS}_D{DEC_LAYERS}_%Y%m%d_%H%M%S/')
+        output_folder = datetime.now().strftime(f'odometry_anomaly_detector/models/autoencoder/{len(list(train_ds))}_{len(list(test_ds))}_E{EPOCHS}_B{BATCH_SIZE}_L{LATENT_DIM}_E{str(ENC_LAYERS)[1:-1]}_D{str(DEC_LAYERS)[1:-1]}_%Y%m%d_%H%M%S/')
         autoencoder = Autoencoder(latent_dim = LATENT_DIM, enc_layers = ENC_LAYERS, dec_layers = DEC_LAYERS, input_size = 22)
 
     elif MODE == 'LSTM':
-        output_folder = datetime.now().strftime(f'odometry_anomaly_detector/models/lstmautoencoder/{len(list(train_ds))}_{len(list(test_ds))}_E{EPOCHS}_W{WINDOW_SIZE}_B{BATCH_SIZE}_L{LATENT_DIM}_E{ENC_LAYERS}_D{DEC_LAYERS}_%Y%m%d_%H%M%S/')
+        output_folder = datetime.now().strftime(f'odometry_anomaly_detector/models/lstmautoencoder/{len(list(train_ds))}_{len(list(test_ds))}_E{EPOCHS}_W{WINDOW_SIZE}_B{BATCH_SIZE}_L{LATENT_DIM}_E{str(ENC_LAYERS)[1:-1]}_D{str(DEC_LAYERS)[1:-1]}_%Y%m%d_%H%M%S/')
         autoencoder = LSTMAutoencoder(latent_dim = LATENT_DIM, window = WINDOW_SIZE, enc_layers = ENC_LAYERS, dec_layers = DEC_LAYERS, input_size = 22)
 
     try:
@@ -80,7 +82,7 @@ def main():
         pass
 
     with open(output_folder + 'maximum.txt', 'w') as f:
-        f.write(''.join((f'{maximum}'[1:-1]).split('\n')))
+        f.write(' '.join([str(m) for m in maximum]))
 
     train_ds.save(output_folder + 'train_ds')
     test_ds.save(output_folder + 'test_ds')

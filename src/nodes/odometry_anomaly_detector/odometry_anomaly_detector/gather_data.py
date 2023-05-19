@@ -44,6 +44,7 @@ class DataCollector(Node):
         self.timer = self.create_timer(1/30, self.timer_callback)
         self.state = []
         self.state_buffer = []
+        self.full = False
 
         self.encoders_subscriber = self.create_subscription(EncodersStamped, '/velmwheel/base/encoders', self.msg_callback_base_encoders, 10,)
         self.encoders_wheel_angles = []
@@ -81,6 +82,10 @@ class DataCollector(Node):
         if len(self.state) < 27:
             print('State not full.')
             return
+
+        if not self.full:
+            print('State full')
+            self.full = True
 
         if math.inf in self.state or -math.inf in self.state:
             self.state = [0.0 if substate in [math.inf, -math.inf] else substate for substate  in self.state]
