@@ -28,10 +28,11 @@ endif
 
 PWD := $(shell pwd)
 default:
-	$(MAKE) -C $(TMPKDIR) M=$(PWD) KBUILD_EXTRA_SYMBOLS=$(TMPSYMVERS) modules
+	$(MAKE) -C $(TMPKDIR) M=$(PWD) modules
 
 clean:
 	rm -f *.o *.ko *.order *.mod* Module.symvers
 
 modules_install:
 	$(MAKE) INSTALL_MOD_DIR=$(TMPINSTALLPATH) -C $(TMPKDIR) M=$(PWD) modules_install
+
