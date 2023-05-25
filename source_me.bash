@@ -34,7 +34,7 @@ export PROJECT_HOME="$(dirname "$(readlink -f "$BASH_SOURCE")")"
 # Set distro of the ROS2 to be used
 export PROJECT_ROS_DISTRO=humble
 # Domain ID for ROS2 DDS middleware
-export ROS_DOMAIN_ID=69
+export ROS_DOMAIN_ID=0
 # ROS home and logs [default values at the moment]
 export ROS_HOME="$HOME/.ros"
 export ROS_LOG_DIR="$PROJECT_HOME/log/launch"
