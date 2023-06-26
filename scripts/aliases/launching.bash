@@ -115,7 +115,7 @@ function bringup() {
     # Configure log level
     launch_params+=( velmwheel_log_level:=info )
     # Configure RVIZ to be run
-    launch_params+=( with_rviz:=true )
+    launch_params+=( with_rviz:=false )
 
     # Configure laser drivers
     launch_params+=( with_lidar_l:=true )
@@ -127,7 +127,7 @@ function bringup() {
     launch_params+=( laser_output_mode:=both )
     # Configure static transformation for key frames
     launch_params+=( map_at:=world       )
-    launch_params+=( odom_at:=map        )
+    # launch_params+=( odom_at:=map        )
     launch_params+=( robot_at:=odom_pose )
     # Configure components to be run/not-run
     launch_params+=( with_base_controller:=true      )
@@ -137,7 +137,7 @@ function bringup() {
     launch_params+=( with_bias_estimator:=true       )
     launch_params+=( with_poi_map_builder:=false     )
     launch_params+=( with_global_localization:=false )
-    launch_params+=( with_slam:=true                 )
+    launch_params+=( with_slam:=true                )
     
     # Run simulation
     ros2 launch velmwheel_bringup launch.py "${launch_params[@]}" "${@:2}"

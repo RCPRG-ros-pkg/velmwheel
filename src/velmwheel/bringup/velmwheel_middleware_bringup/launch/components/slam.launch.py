@@ -31,7 +31,7 @@ component_name = 'slam'
 component_description = {
 
     # Source file
-    'launch_description_source': get_launch_source(f'velmwheel_{component_name}', 'online_sync.launch.py'),
+    'launch_description_source': get_launch_source(f'velmwheel_{component_name}', 'online_async.launch.py'),
     # Arguments
     'launch_arguments': {
 
