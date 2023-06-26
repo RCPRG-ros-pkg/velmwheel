@@ -52,6 +52,9 @@ def main():
 
     # divide by maximum for each column
     print(f'Absolute maximum: {maximum}')
+    for i,m in enumerate(maximum):
+        if m == 0:
+            maximum[i] = 1.0
     train_ds = train_ds.map(lambda window: window/maximum)
 
     # divide into train and test dataset
