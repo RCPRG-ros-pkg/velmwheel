@@ -55,7 +55,7 @@ function bringup_sim() {
     launch_params+=( laser_output_mode:=both )
     # Configure static transformation for key frames
     launch_params+=( map_at:=world       )
-    launch_params+=( odom_at:=map        )
+    # launch_params+=( odom_at:=map        )
     launch_params+=( robot_at:=odom_pose )
     # Configure components to be run/not-run
     launch_params+=( with_base_controller:=true      )
