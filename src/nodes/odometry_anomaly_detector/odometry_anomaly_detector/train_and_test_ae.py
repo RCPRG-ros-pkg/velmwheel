@@ -33,6 +33,7 @@ def main():
         if maximum.size > 0:
             new_maximum = np.absolute(np.array(list(new_ds))).max(axis = 0)
             maximum = np.array([maximum, new_maximum]).max(axis = 0)
+            del new_maximum
         else:
             maximum = np.absolute(np.array(list(new_ds))).max(axis = 0)
         # sort into windows
@@ -44,12 +45,12 @@ def main():
             train_ds = new_ds
         else:
             train_ds = train_ds.concatenate(new_ds)
-        ds_size = len(list(train_ds))
-        print(f'New dataset size: {ds_size}')
         del new_ds
         gc.collect()
         # break
 
+    ds_size = len(list(train_ds))
+    print(f'New dataset size: {ds_size}')
     # divide by maximum for each column
     print(f'Absolute maximum: {maximum}')
     for i,m in enumerate(maximum):
@@ -58,6 +59,7 @@ def main():
     train_ds = train_ds.map(lambda window: window/maximum)
 
     # divide into train and test dataset
+    print(f'Shuffling dataset...')
     train_ds.shuffle(ds_size)
     # test_ds = copy(train_ds)
     test_ds = train_ds.skip(int(SPLIT * ds_size))
@@ -117,7 +119,7 @@ def main():
 
     plt.figure()
     plt.hist(test_loss[None, :], bins=50)
-    plt.title(f'MAE of test samples, anomaly threashold: {threshold}')
+    plt.title(f'MAE of test samples, anomaly threashold: {threshold}, mean:{np.mean(test_loss)}, std dev:{np.std(test_loss)}')
     plt.xlabel("Test loss")
     plt.ylabel("No of examples")
     plt.savefig(output_folder + 'test_samples.eps')

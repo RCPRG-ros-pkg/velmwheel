@@ -30,6 +30,7 @@ setup(
             'test_ae_on_saved_data = odometry_anomaly_detector.test_ae_on_saved_data:main',
             'perform_random_moves = odometry_anomaly_detector.perform_random_moves:main',
             'drive_square = odometry_anomaly_detector.drive_square:main',
+            'train_imu_gan = odometry_anomaly_detector.train_imu_gan:main',
         ],
     },
 )
